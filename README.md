@@ -7,3 +7,9 @@
 ```bash
 docker build -t bluespice/wiki:latest .
 ```
+
+## DEV build
+
+```bash
+docker build --build-arg dev=1 -t bluespice/wiki:dev .
+```

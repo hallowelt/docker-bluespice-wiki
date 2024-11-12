@@ -11,6 +11,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 	&& apt-get --only-upgrade install zlib1g
 
 FROM base AS bluespice-main
+ARG dev
 RUN apt-get -y --no-install-recommends install \
 	cron \
 	openssl \
@@ -36,6 +37,7 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	python3 \
 	librsvg2-bin \
+	&& if [ "$dev" = "1" ]; then apt-get -y --no-install-recommends install php-xdebug; phpdismod xdebug; fi \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
