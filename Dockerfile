@@ -34,6 +34,7 @@ RUN apt-get -y --no-install-recommends install \
 	php-gd \
 	php-gmp \
 	poppler-utils \
+	php-excimer \
 	python3 \
 	librsvg2-bin \
 	&& apt-get clean \
