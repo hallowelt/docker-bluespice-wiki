@@ -20,9 +20,9 @@ backupDest=/data/backup
 		mkdir -p $backupDest
 	fi
 
-if [ $minute == 1 ]; then
+if [ $minute == 01 ]; then
 	##mediawiki-adm is not able to get Systemvariables from /app/conf/LocalSettings.php
-	TempSettingsFile=/data/bluespice/LocalSettings.local.php 
+	TempSettingsFile=/tmp/LocalSettings.local.php 
 	echo "<?php" > $TempSettingsFile
 	echo "\$wgSitename = \"${WIKI_NAME}\";" | tee  -a  $TempSettingsFile
 	substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
@@ -30,7 +30,6 @@ if [ $minute == 1 ]; then
 			wiki-backup \
 			--mediawiki-root $mediaWikiRoot \
 			--dest $backupDest \
-			--max-backup-files 5\
 	        --profile /app/bin/config/mediawiki_adm_backup_conf.json
 
 	if [ ! -d "$instancesRoot" ]; then
@@ -63,5 +62,4 @@ if [ $minute == 1 ]; then
 	done < "$BSDIRLIST" &
 	rm -fr $BSDIRLIST
 	rm -fr $TempSettingsFile
-	sleep 60
 fi
