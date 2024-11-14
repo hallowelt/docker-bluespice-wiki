@@ -134,4 +134,6 @@ $GLOBALS['wgMathoidCli'] = [
 	'http://formula:10044'
 ];
 
+$GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
+
 require_once '/data/bluespice/post-init-settings.php';

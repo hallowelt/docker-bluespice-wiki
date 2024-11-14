@@ -74,20 +74,21 @@ server {
 		rewrite /webdav/.* /w/webdav.php;
 	}
 
-	location ~ ^/_sp(/.+)$ {
-		if (!-f /data/simplesamlphp/saml_idp_metadata.xml) {
-			return 301 /wiki;
-		}
-	}
+	location ^~ /_sp {
+			alias /app/simplesamlphp/public;
+        		location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
+            			include          fastcgi_params;
+				fastcgi_pass unix:/var/run/php/php-fpm.sock;
+            			fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
 
-	location ~ ^/_sp/(index|logout|module|errorreport)\.php(/.+?)$ {
-		include fastcgi.conf;
-		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
-		fastcgi_param PATH_INFO $fastcgi_path_info;
-		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-		fastcgi_pass unix:/var/run/php/php-fpm.sock;
-		break;
-	}
+            			# Must be prepended with the baseurlpath
+            			fastcgi_param SCRIPT_NAME /_sp/$phpfile;
+
+        	    		fastcgi_param PATH_INFO $pathinfo if_not_empty;
+        			}
+			break;
+		}
+
 
 	location ~ ^/w/resources/(assets|lib|src) {
 		add_header Cache-Control "public";

@@ -5,5 +5,5 @@
 ## Build
 
 ```bash
-./buildImage.sh
+docker build -t bluespice/wiki:latest .
 ```

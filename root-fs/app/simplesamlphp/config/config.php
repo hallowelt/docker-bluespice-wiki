@@ -33,6 +33,7 @@ $customConfig = [
 	'admin.checkforupdates' => false,
 	'session.cookie.secure' => true,
 	'enable.http_post' => true,
+	'secretsalt' => getenv('INTERNAL_SIMPLESAMLPHP_SECRET_SALT'),
 
 	'logging.handler' => 'errorlog', //  write to stdout
 	'logging.level' => $loglevel,

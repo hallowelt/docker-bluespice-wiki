@@ -5,7 +5,9 @@ export PATH=$PATH:/app/bin
 init-datadirectory
 
 if [ -f /data/.wikienv ]; then
+  set -a
   source /data/.wikienv
+  set +a
 fi
 
 exec sh -c "$@"
