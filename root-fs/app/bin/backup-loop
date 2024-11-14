@@ -1,9 +1,5 @@
 #!/bin/bash
-set -o errexit
-set -o nounset
-set -o pipefail
 
-while true; do
+while sleep 60; do
     /app/bin/run-backup
-	sleep 2
 done
