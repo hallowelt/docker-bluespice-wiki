@@ -28,16 +28,18 @@ $GLOBALS['wgLogos'] = [
 ];
 $GLOBALS['wgEmergencyContact'] = getenv( 'WIKI_EMERGENCYCONTACT' ) ?? '';
 $GLOBALS['wgPasswordSender'] = getenv( 'WIKI_PASSWORDSENDER' ) ?? '';
-$GLOBALS['wgDBtype'] = "mysql";
+$GLOBALS['wgDBtype'] = getenv( 'DB_TYPE' ) ?? 'mysql';
 $GLOBALS['wgDBserver'] = getenv( 'DB_HOST' ) ?? "database";
-$GLOBALS['wgDBname'] = getenv( 'DB_NAME' );
-$GLOBALS['wgDBuser'] = getenv( 'DB_USER' );
+$GLOBALS['wgDBname'] = getenv( 'DB_NAME' ) ?? 'bluespice';
+$GLOBALS['wgDBuser'] = getenv( 'DB_USER' ) ?? 'bluespice';
 $GLOBALS['wgDBpassword'] = getenv( 'DB_PASS' );
 $GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?? '';
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgSharedTables'][] = "actor";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
-$GLOBALS['wgMemCachedServers'] = ["cache:11211"];
+$cacheHost = getenv( 'CACHE_HOST' ) ?? 'cache';
+$cachePort = getenv( 'CACHE_PORT' ) ?? '11211';
+$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 $GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
@@ -111,12 +113,18 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	}
 }
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
-$GLOBALS['bsgOverrideESBackendHost'] = 'search';
-$GLOBALS['bsgOverrideESBackendPort'] = '9200';
-$GLOBALS['bsgOverrideESBackendTransport'] = 'http';
+$GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?? 'search';
+$GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?? '9200';
+$GLOBALS['bsgOverrideESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?? 'http';
 
 wfLoadExtension( 'BlueSpiceUEModulePDF' );
-$GLOBALS['bsgOverrideUEModulePDFPdfServiceURL'] ='http://pdf:8080/BShtml2PDF';
+$pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?? 'http';
+$pdfHost = getenv( 'PDF_HOST' ) ?? 'pdf';
+$pdfPort = getenv( 'PDF_PORT' ) ?? '8080';
+$GLOBALS['bsgOverrideUEModulePDFPdfServiceURL'] = "$pdfProtocol://$pdfHost:$pdfPort/BShtml2PDF";
+unset( $pdfProtocol );
+unset( $pdfHost );
+unset( $pdfPort );
 
 wfLoadExtension( 'PdfHandler' );
 $GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
@@ -129,10 +137,16 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
 }
 
+$formulaProtocol = getenv( 'FORMULA_PROTOCOL' ) ?? 'http';
+$formulaHost = getenv( 'FORMULA_HOST' ) ?? 'formula';
+$formulaPort = getenv( 'FORMULA_PORT' ) ?? '10044';
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
-	'http://formula:10044'
+	"$formulaProtocol://$formulaHost:$formulaPort",
 ];
+unset( $formulaProtocol );
+unset( $formulaHost );
+unset( $formulaPort );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
