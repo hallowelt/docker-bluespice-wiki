@@ -77,7 +77,6 @@ RUN addgroup --gid $GID bluespice \
 	&& chown -R 1002:1002 /app/bin \
 	&& chown -R 1002:1002 /app/conf \
 	&& chown www-data: /app/simplesamlphp/public \
-	&& ln -s /app/simplesamlphp/public /app/bluespice/_sp \
 	&& chown -R www-data:www-data /app/bluespice \
 	&& chown bluespice:www-data /var/run/php \
 	&& chmod 755 /app/bin/* \
