@@ -4,8 +4,8 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 }
 
 ### Dynamic assembly of $GLOBALS['wgServer']
-$protocol = getenv( 'WIKI_PROTOCOL' ) ?? 'https';
-$host = getenv( 'WIKI_HOST' ) ?? 'localhost';
+$protocol = getenv( 'WIKI_PROTOCOL' ) ?: 'https';
+$host = getenv( 'WIKI_HOST' ) ?: 'localhost';
 $portSuffix = getenv( 'WIKI_PORT' ) ? ':' . getenv( 'WIKI_PORT' ) : '443';
 if ( $protocol === 'http' && $portSuffix === ':80' ) {
 	$portSuffix = '';
@@ -18,7 +18,7 @@ unset( $host );
 unset( $portSuffix );
 ### end
 
-$GLOBALS['wgSitename'] = getenv( 'WIKI_NAME' ) ?? 'BlueSpice';
+$GLOBALS['wgSitename'] = getenv( 'WIKI_NAME' ) ?: 'BlueSpice';
 $GLOBALS['wgScriptPath'] = "/w";
 
 $GLOBALS['wgResourceBasePath'] = $GLOBALS['wgScriptPath'];
@@ -26,19 +26,19 @@ $GLOBALS['wgLogos'] = [
 	'1x' => $GLOBALS['wgResourceBasePath'] . '/resources/assets/change-your-logo.svg',
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
-$GLOBALS['wgEmergencyContact'] = getenv( 'WIKI_EMERGENCYCONTACT' ) ?? '';
-$GLOBALS['wgPasswordSender'] = getenv( 'WIKI_PASSWORDSENDER' ) ?? '';
-$GLOBALS['wgDBtype'] = getenv( 'DB_TYPE' ) ?? 'mysql';
-$GLOBALS['wgDBserver'] = getenv( 'DB_HOST' ) ?? "database";
-$GLOBALS['wgDBname'] = getenv( 'DB_NAME' ) ?? 'bluespice';
-$GLOBALS['wgDBuser'] = getenv( 'DB_USER' ) ?? 'bluespice';
+$GLOBALS['wgEmergencyContact'] = getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '';
+$GLOBALS['wgPasswordSender'] = getenv( 'WIKI_PASSWORDSENDER' ) ?: '';
+$GLOBALS['wgDBtype'] = getenv( 'DB_TYPE' ) ?: 'mysql';
+$GLOBALS['wgDBserver'] = getenv( 'DB_HOST' ) ?: "database";
+$GLOBALS['wgDBname'] = getenv( 'DB_NAME' ) ?: 'bluespice';
+$GLOBALS['wgDBuser'] = getenv( 'DB_USER' ) ?: 'bluespice';
 $GLOBALS['wgDBpassword'] = getenv( 'DB_PASS' );
-$GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?? '';
+$GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?: '';
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgSharedTables'][] = "actor";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
-$cacheHost = getenv( 'CACHE_HOST' ) ?? 'cache';
-$cachePort = getenv( 'CACHE_PORT' ) ?? '11211';
+$cacheHost = getenv( 'CACHE_HOST' ) ?: 'cache';
+$cachePort = getenv( 'CACHE_PORT' ) ?: '11211';
 $GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 $GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
@@ -48,7 +48,7 @@ $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
 $GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/convert";
-$GLOBALS['wgLanguageCode'] = getenv( 'WIKI_LANG' ) ?? "en";
+$GLOBALS['wgLanguageCode'] = getenv( 'WIKI_LANG' ) ?: "en";
 $GLOBALS['wgLocaltimezone'] = "UTC";
 $GLOBALS['wgSecretKey'] = getenv( 'INTERNAL_WIKI_SECRETKEY' );
 $GLOBALS['wgAuthenticationTokenVersion'] = "1";
@@ -62,7 +62,7 @@ $GLOBALS['wgPhpCli'] = '/bin/php';
 $GLOBALS['wgSMTP'] = [
 	'host' => getenv( 'SMTP_HOST' ),
 	'IDHost' => getenv( 'SMTP_IDHOST' ),
-	'port' => getenv( 'SMTP_PORT' ) ?? 25,
+	'port' => getenv( 'SMTP_PORT' ) ?: 25,
 	'auth' => getenv( 'SMTP_USER' ) ? true : false,
 	'username' => getenv( 'SMTP_USER' ),
 	'password' => getenv( 'SMTP_PASS' ),
@@ -113,14 +113,14 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	}
 }
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
-$GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?? 'search';
-$GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?? '9200';
-$GLOBALS['bsgOverrideESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?? 'http';
+$GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
+$GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
+$GLOBALS['bsgOverrideESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
 
 wfLoadExtension( 'BlueSpiceUEModulePDF' );
-$pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?? 'http';
-$pdfHost = getenv( 'PDF_HOST' ) ?? 'pdf';
-$pdfPort = getenv( 'PDF_PORT' ) ?? '8080';
+$pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
+$pdfHost = getenv( 'PDF_HOST' ) ?: 'pdf';
+$pdfPort = getenv( 'PDF_PORT' ) ?: '8080';
 $GLOBALS['bsgOverrideUEModulePDFPdfServiceURL'] = "$pdfProtocol://$pdfHost:$pdfPort/BShtml2PDF";
 unset( $pdfProtocol );
 unset( $pdfHost );
@@ -137,9 +137,9 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
 }
 
-$formulaProtocol = getenv( 'FORMULA_PROTOCOL' ) ?? 'http';
-$formulaHost = getenv( 'FORMULA_HOST' ) ?? 'formula';
-$formulaPort = getenv( 'FORMULA_PORT' ) ?? '10044';
+$formulaProtocol = getenv( 'FORMULA_PROTOCOL' ) ?: 'http';
+$formulaHost = getenv( 'FORMULA_HOST' ) ?: 'formula';
+$formulaPort = getenv( 'FORMULA_PORT' ) ?: '10044';
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
 	"$formulaProtocol://$formulaHost:$formulaPort",
