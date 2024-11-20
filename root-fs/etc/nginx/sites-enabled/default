@@ -50,7 +50,6 @@ server {
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
 	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.+?)$ {
@@ -58,7 +57,6 @@ server {
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
 	location ~ /w/BUILDINFO {
@@ -77,7 +75,6 @@ server {
 			alias /app/simplesamlphp/public;
 				location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
 					include fastcgi_params;
-					fastcgi_pass unix:/var/run/php/php-fpm.sock;
 					fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
 					fastcgi_param SCRIPT_NAME /_sp/$phpfile;
 					fastcgi_param PATH_INFO $pathinfo if_not_empty;

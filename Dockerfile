@@ -4,6 +4,7 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 RUN apk add \
 	openssl \
+	openrc \
 	ca-certificates \
 	imagemagick \
 	texlive-dvi \
@@ -26,6 +27,9 @@ RUN apk add \
 	php-ctype \
 	php-iconv \
 	php-fileinfo \
+	php-xml \
+	php-xmlreader \
+	php-xmlwriter \
 	poppler-utils \
 	python3 \
 	vim \
