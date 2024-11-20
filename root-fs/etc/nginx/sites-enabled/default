@@ -45,11 +45,12 @@ server {
 		deny all;
 	}
 
-	location ~ ^/w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb)\.php$ {
+	location ~ ^/w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb|info)\.php$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_pass 127.0.0.1:9000;
 	}
 
 	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.+?)$ {
@@ -57,6 +58,7 @@ server {
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_pass 127.0.0.1:9000;
 	}
 
 	location ~ /w/BUILDINFO {
@@ -78,6 +80,7 @@ server {
 					fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
 					fastcgi_param SCRIPT_NAME /_sp/$phpfile;
 					fastcgi_param PATH_INFO $pathinfo if_not_empty;
+					fastcgi_pass 127.0.0.1:9000;
 				}
 			break;
 		}

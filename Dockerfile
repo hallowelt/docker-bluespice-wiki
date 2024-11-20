@@ -4,10 +4,8 @@ ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 RUN apk add \
 	openssl \
-	openrc \
 	ca-certificates \
 	imagemagick \
-	texlive-dvi \
 	nginx \
 	php \
 	php-fpm \
@@ -30,6 +28,8 @@ RUN apk add \
 	php-xml \
 	php-xmlreader \
 	php-xmlwriter \
+	php-simplexml \
+	php-session \
 	poppler-utils \
 	python3 \
 	vim \
@@ -51,7 +51,7 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& mkdir -p /app/bluespice \
 	&& cd /app/bluespice \
 	&& chmod -R 777 /var/log
-COPY --chown=$USER:$GROUPNAME ./_codebase/bluespice /app/bluespice/w
+COPY --chown=nginx:nginx ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
