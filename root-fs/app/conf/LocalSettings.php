@@ -43,7 +43,7 @@ $GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 $GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
-$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/";
+$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
@@ -103,6 +103,9 @@ $GLOBALS['bsgSimpleFarmer_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
 $GLOBALS['bsgSimpleFarmer_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
+	// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
+	// which otherwise causes the cache to be invalidated all the time.
+	$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
 	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
 }
 else {
