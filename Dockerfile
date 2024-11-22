@@ -16,7 +16,6 @@ RUN apt-get -y --no-install-recommends install \
 	openssl \
 	ca-certificates \
 	imagemagick \
-	dvipng \
 	nginx \
 	php \
 	php-fpm \
