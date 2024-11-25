@@ -34,7 +34,7 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	python3 \
 	librsvg2-bin \
- 	vim.tiny \
+	vim.tiny \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -52,18 +52,18 @@ RUN addgroup -gid $GID $GROUPNAME \
 	&& usermod -aG www-data $USER \
 	&& mkdir -p /app/bluespice \
 	&& cd /app/bluespice \
- 	&& chown -R $UID:www-data /var/run/php \
-  	&& mkdir -p /var/lib/nginx \
-  	&& chown -R $UID:www-data /var/lib/nginx \ 
-   	&& chmod -R 777 /var/lib/nginx
+	&& chown -R $UID:www-data /var/run/php \
+	&& mkdir -p /var/lib/nginx \
+	&& chown -R $UID:www-data /var/lib/nginx \
+	&& chmod -R 777 /var/lib/nginx
 COPY --chown=www-data:www-data ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
 COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp /app
-ADD https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
-ADD https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
-ADD https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
+ADD --chown=$USER:$GROUPNAME https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
+ADD --chown=$USER:$GROUPNAME https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
+ADD --chown=$USER:$GROUPNAME https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.2/fpm/conf.d
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.2/fpm/
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.2/fpm/pool.d/
