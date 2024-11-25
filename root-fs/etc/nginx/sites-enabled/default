@@ -19,7 +19,6 @@ server {
 	rewrite ^/([^/]*)/(.+)$ /w/$2 last;
 	rewrite ^/([^/]+)/?$ /w/index.php?sfr=$1 last;
 
-
 	if (-f /data/maintenance) {
 		return 503;
 	}
@@ -76,19 +75,15 @@ server {
 
 	location ^~ /_sp {
 			alias /app/simplesamlphp/public;
-        		location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
-            			include          fastcgi_params;
-				fastcgi_pass unix:/var/run/php/php-fpm.sock;
-            			fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
-
-            			# Must be prepended with the baseurlpath
-            			fastcgi_param SCRIPT_NAME /_sp/$phpfile;
-
-        	    		fastcgi_param PATH_INFO $pathinfo if_not_empty;
-        			}
+				location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
+					include fastcgi_params;
+					fastcgi_pass unix:/var/run/php/php-fpm.sock;
+					fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
+					fastcgi_param SCRIPT_NAME /_sp/$phpfile;
+					fastcgi_param PATH_INFO $pathinfo if_not_empty;
+				}
 			break;
 		}
-
 
 	location ~ ^/w/resources/(assets|lib|src) {
 		add_header Cache-Control "public";
