@@ -114,7 +114,8 @@ else {
 $GLOBALS['wgArticlePath'] = '/wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgArticlePath'] = "/" . FARMER_CALLED_INSTANCE . "/wiki/$1";
+		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
 	}
 }
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
