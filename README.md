@@ -5,5 +5,6 @@
 ## Build
 
 ```bash
+./prepareCodebase.sh
 docker build -t bluespice/wiki:latest .
 ```
