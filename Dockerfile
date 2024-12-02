@@ -12,11 +12,9 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 
 FROM base AS bluespice-main
 RUN apt-get -y --no-install-recommends install \
-	cron \
 	openssl \
 	ca-certificates \
 	imagemagick \
-	dvipng \
 	nginx \
 	php \
 	php-fpm \
@@ -34,29 +32,46 @@ RUN apt-get -y --no-install-recommends install \
 	php-gd \
 	php-gmp \
 	poppler-utils \
+	php-excimer \
 	python3 \
 	librsvg2-bin \
+	vim.tiny \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
 FROM bluespice-main AS bluespice-prepare
-RUN mkdir -p /app/bluespice \
-	&& cd /app/bluespice
-COPY ./_codebase/bluespice /app/bluespice/w
-COPY ./_codebase/simplesamlphp/ /app/simplesamlphp
-COPY ./root-fs/etc/nginx/sites-enabled/* /etc/nginx/sites-enabled
-COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./root-fs/app/bin /app/bin
-COPY ./root-fs/app/conf /app/conf
-COPY ./root-fs/app/simplesamlphp /app/
-ADD https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
-ADD https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
-ADD https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
+ARG UID
+ENV UID=1002
+ARG USER
+ENV USER=bluespice
+ARG GID
+ENV GID=$UID
+ARG GROUPNAME
+ENV GROUPNAME=$USER
+RUN addgroup -gid $GID $GROUPNAME \
+	&& adduser -uid $UID -gid $GID --disabled-password --gecos "" $USER \
+	&& usermod -aG www-data $USER \
+	&& mkdir -p /app/bluespice \
+	&& cd /app/bluespice \
+	&& chown -R $UID:www-data /var/run/php \
+	&& mkdir -p /var/lib/nginx \
+	&& chown -R $UID:www-data /var/lib/nginx \
+	&& chmod -R 777 /var/lib/nginx
+COPY --chown=www-data:www-data ./_codebase/bluespice /app/bluespice/w
+COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
+COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
+COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
+COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp /app
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.2/fpm/conf.d
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.2/fpm/
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.2/fpm/pool.d/
 COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.2/cli/conf.d/
 COPY ./root-fs/etc/php/8.x/mods-available /etc/php/8.2/mods-available
+COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
+COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
 FROM bluespice-prepare AS bluespice-final
 ENV PATH="/app/bin:${PATH}"
@@ -67,19 +82,6 @@ RUN apt-get -y auto-remove \
 	&& find /var/log -type f -delete \
 	&& rm -Rf /var/lib/apt/lists/* \
 	&& rm -fr /tmp/*
-ARG UID
-ARG GID
-ENV UID=1002
-ENV GID=1002
-RUN addgroup --gid $GID bluespice \
-	&& adduser --uid $UID --gid $GID --disabled-password --gecos "" bluespice \
-	&& usermod -aG www-data bluespice \
-	&& chown -R 1002:1002 /app/bin \
-	&& chown -R 1002:1002 /app/conf \
-	&& chown www-data: /app/simplesamlphp/public \
-	&& chown -R www-data:www-data /app/bluespice \
-	&& chown bluespice:www-data /var/run/php \
-	&& chmod 755 /app/bin/* \
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
