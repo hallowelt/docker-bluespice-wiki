@@ -36,7 +36,6 @@ $GLOBALS['wgDBpassword'] = getenv( 'DB_PASS' );
 $GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?: '';
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgSharedTables'][] = "actor";
-$GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
 $cacheHost = getenv( 'CACHE_HOST' ) ?: 'cache';
 $cachePort = getenv( 'CACHE_PORT' ) ?: '11211';
 $GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
