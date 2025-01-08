@@ -123,11 +123,11 @@ $GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
 $GLOBALS['bsgOverrideESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
 
-wfLoadExtension( 'BlueSpiceUEModulePDF' );
+wfLoadExtension( 'PDFCreator' );
 $pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
 $pdfHost = getenv( 'PDF_HOST' ) ?: 'pdf';
 $pdfPort = getenv( 'PDF_PORT' ) ?: '8080';
-$GLOBALS['bsgOverrideUEModulePDFPdfServiceURL'] = "$pdfProtocol://$pdfHost:$pdfPort/BShtml2PDF";
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = "$pdfProtocol://$pdfHost:$pdfPort/";
 unset( $pdfProtocol );
 unset( $pdfHost );
 unset( $pdfPort );
