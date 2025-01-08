@@ -6,7 +6,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 ### Dynamic assembly of $GLOBALS['wgServer']
 $protocol = getenv( 'WIKI_PROTOCOL' ) ?: 'https';
 $host = getenv( 'WIKI_HOST' ) ?: 'localhost';
-$portSuffix = getenv( 'WIKI_PORT' ) ? ':' . getenv( 'WIKI_PORT' ) : '443';
+$portSuffix = getenv( 'WIKI_PORT' ) ? ':' . getenv( 'WIKI_PORT' ) : ':443';
 if ( $protocol === 'http' && $portSuffix === ':80' ) {
 	$portSuffix = '';
 } elseif ( $protocol === 'https' && $portSuffix === ':443' ) {
@@ -79,7 +79,7 @@ if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
 	$logChannels = explode( ',', getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) );
 	$logChannels = array_map( 'trim', $logChannels );
 	foreach ( $logChannels as $channel ) {
-		$GLOBALS['bsgDebugLogGroups'][$channel] = '/dev/stdout';
+		$GLOBALS['bsgDebugLogGroups'][$channel] = true;
 	}
 	unset( $logChannels );
 }
@@ -114,7 +114,8 @@ else {
 $GLOBALS['wgArticlePath'] = '/wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgArticlePath'] = "/" . FARMER_CALLED_INSTANCE . "/wiki/$1";
+		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
 	}
 }
 wfLoadExtension( 'BlueSpiceExtendedSearch' );

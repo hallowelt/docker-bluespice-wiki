@@ -47,8 +47,8 @@ if [ ! -f /data/simplesamlphp/certs/saml.crt ] || [ ! -f /data/simplesamlphp/cer
 	echo "Creating simplesamlphp certificates"
 	openssl req -newkey rsa:3072 -new -x509 -days 3652 -nodes \
 		-out /data/simplesamlphp/certs/saml.crt \
-		-keyout /data/simplesamlphp/certs/saml.pem
-		-subj "/CN=$WIKI_HOST"}"
+		-keyout /data/simplesamlphp/certs/saml.pem \
+		-subj "/CN=$WIKI_HOST"
 fi
 
 run-updates
@@ -59,4 +59,4 @@ echo "#############################################"
 echo "Installation complete"
 echo "You can now access the wiki in your browser at $WIKI_PROTOCOL://$WIKI_HOST:$WIKI_PORT"
 echo "The password for user 'Admin' can be found in \$DATADIR/adminPassword"
-echo $adminPass > /data/adminPasssword
+echo $adminPass > /data/adminPassword

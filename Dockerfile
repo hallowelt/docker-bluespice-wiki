@@ -32,6 +32,7 @@ RUN apt-get -y --no-install-recommends install \
 	php-gd \
 	php-gmp \
 	poppler-utils \
+	php-excimer \
 	python3 \
 	librsvg2-bin \
 	vim.tiny \
@@ -60,10 +61,11 @@ COPY --chown=www-data:www-data ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
-COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp /app
+COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/config/* /app/simplesamlphp/config/
+COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/metadata/* /app/simplesamlphp/metadata/
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.2/fpm/conf.d
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.2/fpm/
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.2/fpm/pool.d/

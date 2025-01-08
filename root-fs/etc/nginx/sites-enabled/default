@@ -8,6 +8,8 @@ server {
 	server_tokens off;
 	
 	rewrite ^/_sp/(.*)$ /_sp/$1 last;
+	rewrite ^/webdav/(.*)$ /w/webdav.php/$1?$args last;
+	rewrite ^/([^/]*)/webdav/(.*)$ /w/webdav.php/$2?sfr=$1&$args last;
 	rewrite ^/wiki/(.*?).php/(.+)$ /w/$1.php?sfr=w&title=$2 last;
 	rewrite ^/wiki/(.+)$ /w/index.php?title=$1&sfr=w last;
 	rewrite ^/wiki/([^/]+)/?$ /w/index.php?title=$1&sfr=w last;
@@ -53,7 +55,7 @@ server {
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.+?)$ {
+	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
@@ -67,10 +69,6 @@ server {
 
 	location ~ ^/w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
 		allow all;
-	}
-
-	location ~ /webdav/(.*) {
-		rewrite /webdav/.* /w/webdav.php;
 	}
 
 	location ^~ /_sp {
