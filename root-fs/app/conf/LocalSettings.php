@@ -101,6 +101,7 @@ $GLOBALS['bsgSimpleFarmer_instanceDirectory'] = '/data/bluespice/_sf_instances/'
 $GLOBALS['bsgSimpleFarmer_archiveDirectory'] = '/data/bluespice/_sf_archives/';
 $GLOBALS['bsgSimpleFarmer_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
 $GLOBALS['bsgSimpleFarmer_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
+$GLOBALS['bsgSimpleFarmer_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
