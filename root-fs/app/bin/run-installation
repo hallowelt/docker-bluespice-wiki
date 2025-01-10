@@ -28,7 +28,7 @@ php $appDir/maintenance/install.php \
 	--dbuser=$DB_USER \
 	--dbpass=$DB_PASS \
 	--pass=$adminPass \
-	--lang=$WIKI_LANG \
+	--lang=${WIKI_LANG:-en} \
 	--scriptpath=/w \
 	$WIKI_NAME \
 	Admin \
