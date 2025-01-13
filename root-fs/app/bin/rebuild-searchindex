@@ -10,7 +10,7 @@ echo "Rebuilding search index"
 
 
 appDir=/app/bluespice/w
-runForAllScript=$appDir/extensions/BlueSpiceWikiFarm/SimpleFarmer/maintenance/RunForAll.php
+runForAllScript=$appDir/extensions/BlueSpiceWikiFarm/maintenance/RunForAll.php
 
 if [[ ( "$1" == "--help" ) || ( "$1" == "-h" ) ]]; then
     echo "use without Argument for rebuilding main BS"

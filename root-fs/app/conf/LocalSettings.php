@@ -86,7 +86,7 @@ if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
 	unset( $logChannels );
 }
 
-// Taken from `extensions/BlueSpiceWikiFarm/SimpleFarmer/src/Dispatcher.php`
+// Taken from `extensions/BlueSpiceWikiFarm/src/Dispatcher.php`
 // Not all of this may be required
 $GLOBALS['wgUploadDirectory'] = "/data/bluespice/images";
 $GLOBALS['wgReadOnlyFile'] = "{$GLOBALS['wgUploadDirectory']}/lock_yBgMBwiR";

@@ -21,7 +21,7 @@ echo "Running updates"
 echo "Version: $version"
 
 if [ "${EDITION}" == "farm" ]; then
-	runForAllScript=/app/bluespice/w/extensions/BlueSpiceWikiFarm/SimpleFarmer/maintenance/RunForAll.php
+	runForAllScript=/app/bluespice/w/extensions/BlueSpiceWikiFarm/maintenance/RunForAll.php
 	php $appDir/maintenance/update.php  --quick | tee -a /data/bluespice/logs/update-$timestamp.log
 	php $runForAllScript --script='maintenance/update.php'  --args='--quick' | tee -a /data/bluespice/logs/update-$timestamp.log
 fi
