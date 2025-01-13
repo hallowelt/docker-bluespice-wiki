@@ -114,6 +114,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 else {
 	require_once "$IP/LocalSettings.BlueSpice.php";
 }
+
 $GLOBALS['wgArticlePath'] = '/wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
@@ -121,6 +122,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
 	}
 }
+
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
 $GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';

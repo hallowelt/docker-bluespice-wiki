@@ -11,9 +11,6 @@ if [ $? -ne 0 ]; then
 	rm /data/maintenance
 fi
 
-
-
-
 ##add Variables to Scripts
 substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
 substitutePlaceholders /app/bin/config/runJobs_settings.php
