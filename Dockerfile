@@ -16,21 +16,20 @@ RUN apt-get -y --no-install-recommends install \
 	ca-certificates \
 	imagemagick \
 	nginx \
-	php \
-	php-fpm \
-	php-xml \
-	php-mbstring \
-	php-curl \
-	php-zip \
-	php-cli \
-	php-json \
-	php-mysql \
-	php-ldap \
-	php-opcache \
-	php-apcu \
-	php-intl \
-	php-gd \
-	php-gmp \
+	php8.4 \
+	php8.4-fpm \
+	php8.4-xml \
+	php8.4-mbstring \
+	php8.4-curl \
+	php8.4-zip \
+	php8.4-cli \
+	php8.4-mysql \
+	php8.4-ldap \
+	php8.4-opcache \
+	php8.4-apcu \
+	php8.4-intl \
+	php8.4-gd \
+	php8.4-gmp \
 	poppler-utils \
 	php-excimer \
 	python3 \
@@ -66,11 +65,11 @@ COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/metadata/* /app/simpl
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
-COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.2/fpm/conf.d
-COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.2/fpm/
-COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.2/fpm/pool.d/
-COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.2/cli/conf.d/
-COPY ./root-fs/etc/php/8.x/mods-available /etc/php/8.2/mods-available
+COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.4/fpm/conf.d
+COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.4/fpm/
+COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
+COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.4/cli/conf.d/
+COPY ./root-fs/etc/php/8.x/mods-available /etc/php/8.4/mods-available
 COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 

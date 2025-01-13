@@ -9,4 +9,4 @@ echo ""
 echo "#############################################"
 echo "Starting WebFrontend"
 
-php-fpm8.2 -D && nginx -g "daemon off;"
+php-fpm8.4 -D && nginx -g "daemon off;"
