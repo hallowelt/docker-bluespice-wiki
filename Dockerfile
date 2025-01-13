@@ -16,21 +16,20 @@ RUN apt-get -y --no-install-recommends install \
 	ca-certificates \
 	imagemagick \
 	nginx \
-	php \
-	php-fpm \
-	php-xml \
-	php-mbstring \
-	php-curl \
-	php-zip \
-	php-cli \
-	php-json \
-	php-mysql \
-	php-ldap \
-	php-opcache \
-	php-apcu \
-	php-intl \
-	php-gd \
-	php-gmp \
+	php8.2 \
+	php8.2-fpm \
+	php8.2-xml \
+	php8.2-mbstring \
+	php8.2-curl \
+	php8.2-zip \
+	php8.2-cli \
+	php8.2-mysql \
+	php8.2-ldap \
+	php8.2-opcache \
+	php8.2-apcu \
+	php8.2-intl \
+	php8.2-gd \
+	php8.2-gmp \
 	poppler-utils \
 	php-excimer \
 	python3 \
