@@ -1,6 +1,6 @@
 #!/bin/bash 
 
-# Call me like ./runBackup /data/bluespice /data/backup/ /data/bluespice/_sf_instances
+# Call me like ./runBackup /data/bluespice /data/backup/ /data/bluespice/farm-instances
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -8,7 +8,7 @@ set -o pipefail
 
 mediaWikiRoot=/data/bluespice
 backupDest=/data/backup
-instancesRoot=/data/bluespice/_sf_instances
+instancesRoot=/data/bluespice/farm-instances
 hour=$(date +"%H")
 minute=$(date +"%M")
 
@@ -30,7 +30,7 @@ if [ $minute == 01 ]; then
 			wiki-backup \
 			--mediawiki-root $mediaWikiRoot \
 			--dest $backupDest \
-	        --profile /app/bin/config/mediawiki_adm_backup_conf.json
+			--profile /app/bin/config/mediawiki_adm_backup_conf.json
 
 	if [ ! -d "$instancesRoot" ]; then
 		exit 1

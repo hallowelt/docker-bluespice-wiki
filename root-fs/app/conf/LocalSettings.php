@@ -99,11 +99,11 @@ define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
 define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
 define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
 
-$GLOBALS['bsgSimpleFarmer_instanceDirectory'] = '/data/bluespice/_sf_instances/';
-$GLOBALS['bsgSimpleFarmer_archiveDirectory'] = '/data/bluespice/_sf_archives/';
-$GLOBALS['bsgSimpleFarmer_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
-$GLOBALS['bsgSimpleFarmer_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
-$GLOBALS['bsgSimpleFarmer_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
+$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
+$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
+$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
+$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
+$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,

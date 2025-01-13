@@ -22,8 +22,8 @@ if [ "${EDITION}" == "farm" ]; then
 	directories=(
   /data/bluespice/extensions/BlueSpiceFoundation/data
   /data/bluespice/images
-  /data/bluespice/_sf_instances
-  /data/bluespice/_sf_archive
+  /data/bluespice/farm-instances
+  /data/bluespice/farm-archive
   /data/bluespice/logs/postupdate
   /data/bluespice/logs
   /data/simplesamlphp/cache
