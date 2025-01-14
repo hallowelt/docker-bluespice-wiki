@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo "
+cat <<EOF
   ____  _            ____        _
  | __ )| |_   _  ___/ ___| _ __ (_) ___ ___
- |  _ \| | | | |/ _ \___ \| '_ \| |/ __/ _ \
+ |  _ \| | | | |/ _ \___ \| '_ \| |/ __/ _ \\
  | |_) | | |_| |  __/___) | |_) | | (_|  __/
  |____/|_|\__,_|\___|____/| .__/|_|\___\___|
                           |_|
-"
+EOF
 blueSpiceVersion=$(cat /app/bluespice/w/BLUESPICE-VERSION)
 blueSpiceEdition=$(cat /app/bluespice/w/BLUESPICE-EDITION)
 blueSpiceBuildInfo=$(cat /app/bluespice/w/BUILDINFO)
