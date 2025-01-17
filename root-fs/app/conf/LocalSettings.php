@@ -43,6 +43,7 @@ $GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 unset( $cacheHost );
 unset( $cachePort );
 $GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
+$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
 $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
