@@ -133,7 +133,7 @@ wfLoadExtension( 'PDFCreator' );
 $pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
 $pdfHost = getenv( 'PDF_HOST' ) ?: 'pdf';
 $pdfPort = getenv( 'PDF_PORT' ) ?: '8080';
-$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = "$pdfProtocol://$pdfHost:$pdfPort/";
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = "$pdfProtocol://$pdfHost:$pdfPort/Html2PDF/v1";
 unset( $pdfProtocol );
 unset( $pdfHost );
 unset( $pdfPort );
