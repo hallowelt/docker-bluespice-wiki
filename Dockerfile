@@ -3,9 +3,12 @@ ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 RUN apk add \
+	bash \
 	openssl \
 	ca-certificates \
 	imagemagick \
+	ghostscript \
+	xpdf \
 	nginx \
 	php \
 	php-fpm \
