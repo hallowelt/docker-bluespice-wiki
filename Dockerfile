@@ -8,13 +8,18 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 	&& apt-get -y install --no-install-recommends gnupg2 curl  \
 	&& touch /etc/apt/sources.list.d/trixie.list && printf "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list \
 	&& apt-get update \
-	&& apt-get --only-upgrade install zlib1g
-
+	&& apt-get --only-upgrade install zlib1g \
+ 	&& apt-mark hold zlib1g \
+	&& rm -fr /etc/apt/sources.list.d/trixie.list \
+ 	&& apt-get update
+  
 FROM base AS bluespice-main
 RUN apt-get -y --no-install-recommends install \
 	openssl \
 	ca-certificates \
 	imagemagick \
+ 	ghostscript \
+  	xpdf-utils \
 	nginx \
 	php \
 	php-fpm \
