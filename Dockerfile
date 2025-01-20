@@ -33,6 +33,7 @@ RUN apk add \
 	php-xmlwriter \
 	php-simplexml \
 	php-session \
+	php-phar \
 	poppler-utils \
 	python3 \
 	vim \
@@ -52,16 +53,17 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& adduser -u $UID -G $GROUPNAME --disabled-password --gecos "" $USER \
 	&& addgroup $USER nginx \
 	&& mkdir -p /app/bluespice \
-	&& cd /app/bluespice \
+	&& chown $USER:$GROUPNAME /app/bluespice/ \
 	&& chmod -R 777 /var/log
-COPY --chown=nginx:nginx ./_codebase/bluespice /app/bluespice/w
+COPY --chown=$USER:$GROUPNAME ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
+COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
-COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp /app/
-ADD https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
-ADD https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
-ADD https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
+COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php83
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php83/php-fpm.d/
 COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php83/conf.d/
