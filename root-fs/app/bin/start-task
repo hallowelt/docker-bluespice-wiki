@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 check-database
 if [ $? -ne 0 ]; then
@@ -15,9 +15,9 @@ fi
 
 
 ##add Variables to Scripts
-php substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
-php substitutePlaceholders /app/bin/config/runJobs_settings.php
-php substitutePlaceholders /app/bin/config/runJobs_conf.yaml
+/bin/php /app/bin/substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
+/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_settings.php
+/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_conf.yaml
 
 echo ""
 echo "#############################################"
@@ -41,11 +41,6 @@ fi
 if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting ProcessRunner"
 	sg www-data -c '/bin/bash /app/bin/parallel-processRunner'  > /dev/stdout 2>&1 &
-fi
-if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]]; then
-	echo "Starting Backup-Agent"
-	echo "Backup daily at" $BACKUP_HOUR
-	/app/bin/backup-loop   > /dev/stdout 2>&1  &
 fi
 sleep inf
 

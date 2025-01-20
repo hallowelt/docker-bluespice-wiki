@@ -1,9 +1,6 @@
-#!/bin/bash
-set -o errexit
-set -o nounset
-set -o pipefail
+#!/bin/sh
 
-php /app/bin/substitutePlaceholders /etc/nginx/sites-enabled/default
+/bin/php /app/bin/substitutePlaceholders /etc/nginx/sites-enabled/default
 
 echo ""
 echo "#############################################"
