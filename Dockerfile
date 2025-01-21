@@ -34,6 +34,8 @@ RUN apk add \
 	php-simplexml \
 	php-session \
 	php-phar \
+	php-pdo \
+	php-pdo_mysql \
 	poppler-utils \
 	python3 \
 	vim \
