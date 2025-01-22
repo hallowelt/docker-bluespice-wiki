@@ -4,47 +4,17 @@ echo ""
 echo "#############################################"
 echo "Init data directory"
 
-directories=(
-  /data/bluespice/extensions/BlueSpiceFoundation/data
-  /data/bluespice/images
-  /data/bluespice/logs/postupdate
-  /data/bluespice/logs
-  /data/simplesamlphp/cache
-  /data/simplesamlphp/certs
-  /data/simplesamlphp/data
-  /data/simplesamlphp/logs
-)
+mkdir -p /data/bluespice/{images,logs/pustupdate,extensions/BlueSpiceFoundation/data,_sf_instances,_sf_archive}
+mkdir -p /data/simplesamlphp/{cache,certs,data,logs}
 
-if [ "${EDITION}" == "farm" ]; then
-	directories=(
-  /data/bluespice/extensions/BlueSpiceFoundation/data
-  /data/bluespice/images
-  /data/bluespice/_sf_instances
-  /data/bluespice/_sf_archive
-  /data/bluespice/logs/postupdate
-  /data/bluespice/logs
-  /data/simplesamlphp/cache
-  /data/simplesamlphp/certs
-  /data/simplesamlphp/data
-  /data/simplesamlphp/logs
-  )
+path=/data/bluespice
+if test -ne $path/pre-init-settings.php ;then
+	echo "<?php" > $path/pre-init-settings.php
+fi
+if test -ne $path/post-init-settings.php ;then
+	echo "<?php" > $path/pre-init-settings.php
+fi
+if test -ne $path/logs/postupdate/README.md ;then
+	echo "Do not delete files from this directory!" > $pathh/logs/postupdate/README.md 
 fi
 
-for directory in "${directories[@]}"; do
-  if [ ! -d "$directory" ]; then
-    mkdir -p "$directory"
-  fi
-done
-
-declare -A files
-files[/data/bluespice/pre-init-settings.php]="<?php"
-files[/data/bluespice/post-init-settings.php]="<?php"
-files[/data/bluespice/logs/postupdate/README.md]="Do not delete files from this directory!"
-
-for file in "${!files[@]}"; do
-  if [ ! -f "$file" ]; then
-    echo -e "${files[$file]}" > "$file"
-  fi
-done
-echo "Done"
-chown -R bluespice:bluespice /data
