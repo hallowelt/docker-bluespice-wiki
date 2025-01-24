@@ -109,7 +109,9 @@ require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 	// which otherwise causes the cache to be invalidated all the time.
-	$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
+	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
+		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
+	}
 	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
 }
 else {
