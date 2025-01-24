@@ -123,6 +123,9 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
 		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
 	}
+	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
+	wfLoadExtension( 'BlueSpiceInterwikiSearch' );
+	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\SimpleFarmer\\Setup::setupSearchInOtherWikisConfig';
 }
 
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
