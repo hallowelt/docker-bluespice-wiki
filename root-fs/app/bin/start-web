@@ -1,6 +1,6 @@
 #!/bin/sh
 
-/bin/php /app/bin/substitutePlaceholders /etc/nginx/sites-enabled/default
+/usr/bin/php /app/bin/substitutePlaceholders /etc/nginx/sites-enabled/default
 
 echo ""
 echo "#############################################"
