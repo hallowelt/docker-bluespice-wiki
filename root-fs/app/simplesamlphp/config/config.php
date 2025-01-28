@@ -27,7 +27,12 @@ $customConfig = [
 		'saml' => true
 	],
 
-	'auth.adminpassword' => getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS'),
+	'auth.adminpassword' => ( new Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher(
+		4, // time cost
+		65536, // memory cost
+		null, // cost
+		PASSWORD_ARGON2ID,
+	) )->hash( getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS') ),
 	'admin.protectindexpage' => true,
 	'admin.protectmetadata' => false,
 	'admin.checkforupdates' => false,
@@ -38,16 +43,16 @@ $customConfig = [
 	'logging.handler' => 'errorlog', //  write to stdout
 	'logging.level' => $loglevel,
 	'debug' => array(
-		'saml' => false,
-		'backtraces' => false,
-		'validatexml' => false,
+		'saml' => getenv( 'DEBUG_MODE' ) ?? false,
+		'backtraces' => getenv( 'DEBUG_MODE' ) ?? false,
+		'validatexml' => getenv( 'DEBUG_MODE' ) ?? false,
 	),
 
 	'cachedir' => '/data/simplesamlphp/cache/',
 	'loggingdir' => '/data/simplesamlphp/logs/',
 	'datadir' => '/data/simplesamlphp/data/',
 
-	'showerrors' => false,
+	'showerrors' => getenv( 'DEBUG_MODE' ) ?? false,
 	'errorreporting' => true,
 
 	'technicalcontact_name' => getenv('WIKI_NAME') ?? 'BlueSpice',
