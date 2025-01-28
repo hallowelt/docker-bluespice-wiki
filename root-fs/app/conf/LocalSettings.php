@@ -106,11 +106,6 @@ $GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOB
 $GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
-	// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
-	// which otherwise causes the cache to be invalidated all the time.
-	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
-	}
 	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
 }
 else {
@@ -122,10 +117,16 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
 		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
+		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
+		// which otherwise causes the cache to be invalidated all the time.
+		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
 	}
+	wfLoadExtension( 'ContentTransfer' );
+	wfLoadExtension( 'MergeArticles' );
+	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
 	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
 	wfLoadExtension( 'BlueSpiceInterwikiSearch' );
-	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\SimpleFarmer\\Setup::setupSearchInOtherWikisConfig';
+	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\WikiFarm\\Setup::setupSearchInOtherWikisConfig';
 }
 
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
