@@ -15,8 +15,8 @@ RUN apt-get -y --no-install-recommends install \
 	openssl \
 	ca-certificates \
 	imagemagick \
-  	ghostscript \
-  	xpdf-utils \
+	ghostscript \
+	xpdf-utils \
 	nginx \
 	php8.4 \
 	php8.4-fpm \
