@@ -15,9 +15,9 @@ fi
 
 
 ##add Variables to Scripts
-/bin/php /app/bin/substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
-/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_settings.php
-/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_conf.yaml
+/usr/bin/php /app/bin/substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
+/usr/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_settings.php
+/usr/bin/php /app/bin/substitutePlaceholders /app/bin/config/runJobs_conf.yaml
 
 echo ""
 echo "#############################################"

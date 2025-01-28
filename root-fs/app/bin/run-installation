@@ -48,7 +48,7 @@ if [ ! -f /data/simplesamlphp/certs/saml.crt ] || [ ! -f /data/simplesamlphp/cer
 	openssl req -newkey rsa:3072 -new -x509 -days 3652 -nodes \
 		-out /data/simplesamlphp/certs/saml.crt \
 		-keyout /data/simplesamlphp/certs/saml.pem
-		-subj "/CN=$WIKI_HOST"}"
+		-subj "/CN=$WIKI_HOST"
 fi
 
 run-updates
