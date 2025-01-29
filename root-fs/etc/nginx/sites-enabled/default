@@ -3,8 +3,8 @@ server {
 	listen 9090 default_server;
 	root /app/bluespice;
 	client_max_body_size 1024m;
-	access_log /dev/stdout;
-	error_log /dev/stderr warn;
+	access_log /proc/1/fd/1;
+	error_log /proc/1/fd/2 warn;
 	server_tokens off;
 	
 	rewrite ^/_sp/(.*)$ /_sp/$1 last;
