@@ -124,7 +124,9 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	wfLoadExtension( 'ContentTransfer' );
 	wfLoadExtension( 'MergeArticles' );
 	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
-	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
+	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
+	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
+	$GLOBALS['wgSharedTables'][] = "bs_translationtransfer_translations";
 	wfLoadExtension( 'BlueSpiceInterwikiSearch' );
 	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\WikiFarm\\Setup::setupSearchInOtherWikisConfig';
 }
