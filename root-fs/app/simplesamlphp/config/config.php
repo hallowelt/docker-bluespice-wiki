@@ -2,8 +2,8 @@
 
 include (__DIR__ . '/config.php.dist');
 
-$protocol = getenv('WIKI_PROTOCOL') ?? 'http';
-$host = getenv('WIKI_HOST') ?? 'localhost';
+$protocol = getenv('WIKI_PROTOCOL') ?: 'http';
+$host = getenv('WIKI_HOST') ?: 'localhost';
 $portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '';
 if ($protocol === 'http' && $portSuffix === ':80') {
 	$portSuffix = '';
@@ -55,18 +55,18 @@ $customConfig = [
 	'mail.transport.method' => 'smtp',
 	'mail.transport.options' => [
 		'host' => getenv( 'SMTP_HOST' ),
-		'port' => getenv( 'SMTP_PORT' ) ?? 25,
+		'port' => getenv( 'SMTP_PORT' ) ?: 25,
 		'username' => getenv( 'SMTP_USER' ),
 		'password' => getenv( 'SMTP_PASS' ),
 		'security' => 'tls'
 	],
-	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT') ?? '',
+	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT') ?: '',
 
 	'store.type' => 'sql',
 	'store.sql.dsn' => 'mysql:dbname=' . (getenv('DB_NAME') ?? 'database') . ';host=' . getenv('DB_HOST'),
 	'store.sql.username' => getenv('DB_USER'),
 	'store.sql.password' => getenv('DB_PASS'),
-	'store.sql.prefix' => 'SimpleSAMLphp_' . (getenv('DB_PREFIX') ?? ''),
+	'store.sql.prefix' => 'SimpleSAMLphp_' . (getenv('DB_PREFIX') ?: ''),
 ];
 
 $config = $customConfig + $config;
