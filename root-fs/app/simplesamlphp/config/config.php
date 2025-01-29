@@ -2,9 +2,9 @@
 
 include (__DIR__ . '/config.php.dist');
 
-$protocol = getenv('WIKI_PROTOCOL') ?? 'http';
-$host = getenv('WIKI_HOST') ?? 'localhost';
-$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '';
+$protocol = getenv('WIKI_PROTOCOL') ?: 'https';
+$host = getenv('WIKI_HOST') ?: 'localhost';
+$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '443';
 if ($protocol === 'http' && $portSuffix === ':80') {
 	$portSuffix = '';
 } elseif ($protocol === 'https' && $portSuffix === ':443') {
@@ -43,16 +43,16 @@ $customConfig = [
 	'logging.handler' => 'errorlog', //  write to stdout
 	'logging.level' => $loglevel,
 	'debug' => array(
-		'saml' => getenv( 'DEBUG_MODE' ) ?? false,
-		'backtraces' => getenv( 'DEBUG_MODE' ) ?? false,
-		'validatexml' => getenv( 'DEBUG_MODE' ) ?? false,
+		'saml' => getenv( 'DEBUG_MODE' ) ?: false,
+		'backtraces' => getenv( 'DEBUG_MODE' ) ?: false,
+		'validatexml' => getenv( 'DEBUG_MODE' ) ?: false,
 	),
 
 	'cachedir' => '/data/simplesamlphp/cache/',
 	'loggingdir' => '/data/simplesamlphp/logs/',
 	'datadir' => '/data/simplesamlphp/data/',
 
-	'showerrors' => getenv( 'DEBUG_MODE' ) ?? false,
+	'showerrors' => getenv( 'DEBUG_MODE' ) ?: false,
 	'errorreporting' => true,
 
 	'technicalcontact_name' => getenv('WIKI_NAME') ?? 'BlueSpice',
@@ -60,12 +60,12 @@ $customConfig = [
 	'mail.transport.method' => 'smtp',
 	'mail.transport.options' => [
 		'host' => getenv( 'SMTP_HOST' ),
-		'port' => getenv( 'SMTP_PORT' ) ?? 25,
+		'port' => getenv( 'SMTP_PORT' ) ?: 25,
 		'username' => getenv( 'SMTP_USER' ),
 		'password' => getenv( 'SMTP_PASS' ),
 		'security' => 'tls'
 	],
-	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT') ?? '',
+	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT') ?: '',
 
 	'store.type' => 'sql',
 	'store.sql.dsn' => 'mysql:dbname=' . (getenv('DB_NAME') ?? 'database') . ';host=' . getenv('DB_HOST'),
