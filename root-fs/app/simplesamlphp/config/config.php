@@ -4,7 +4,7 @@ include (__DIR__ . '/config.php.dist');
 
 $protocol = getenv('WIKI_PROTOCOL') ?: 'https';
 $host = getenv('WIKI_HOST') ?: 'localhost';
-$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '443';
+$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : ':443';
 if ($protocol === 'http' && $portSuffix === ':80') {
 	$portSuffix = '';
 } elseif ($protocol === 'https' && $portSuffix === ':443') {
