@@ -134,9 +134,9 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 }
 
 wfLoadExtension( 'BlueSpiceExtendedSearch' );
-$GLOBALS['bsgOverrideESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
-$GLOBALS['bsgOverrideESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
-$GLOBALS['bsgOverrideESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
+$GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
+$GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
+$GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
 
 wfLoadExtension( 'PDFCreator' );
 $pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
