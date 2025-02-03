@@ -35,7 +35,6 @@ $GLOBALS['wgDBuser'] = getenv( 'DB_USER' ) ?: 'bluespice';
 $GLOBALS['wgDBpassword'] = getenv( 'DB_PASS' );
 $GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?: '';
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-$GLOBALS['wgSharedTables'][] = "actor";
 $cacheHost = getenv( 'CACHE_HOST' ) ?: 'cache';
 $cachePort = getenv( 'CACHE_PORT' ) ?: '11211';
 $GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
@@ -99,11 +98,17 @@ define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
 define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
 define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
 
-$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
-$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
-$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
-$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
-$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
+if ( getenv( 'EDITION' ) === 'farm' ) {
+	$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
+	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
+	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
+	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
+	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
+	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
+	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
+	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
+}
+
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
@@ -124,9 +129,6 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	wfLoadExtension( 'ContentTransfer' );
 	wfLoadExtension( 'MergeArticles' );
 	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
-	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
-	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
-	$GLOBALS['wgSharedTables'][] = "bs_translationtransfer_translations";
 	wfLoadExtension( 'BlueSpiceInterwikiSearch' );
 	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\WikiFarm\\Setup::setupSearchInOtherWikisConfig';
 }
