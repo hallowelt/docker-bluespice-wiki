@@ -42,17 +42,17 @@ $customConfig = [
 
 	'logging.handler' => 'errorlog', //  write to stdout
 	'logging.level' => $loglevel,
-	'debug' => array(
-		'saml' => getenv( 'DEBUG_MODE' ) ?: false,
-		'backtraces' => getenv( 'DEBUG_MODE' ) ?: false,
-		'validatexml' => getenv( 'DEBUG_MODE' ) ?: false,
-	),
+	'debug' => [
+		'saml' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+		'backtraces' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+		'validatexml' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+	],
 
 	'cachedir' => '/data/simplesamlphp/cache/',
 	'loggingdir' => '/data/simplesamlphp/logs/',
 	'datadir' => '/data/simplesamlphp/data/',
 
-	'showerrors' => getenv( 'DEBUG_MODE' ) ?: false,
+	'showerrors' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
 	'errorreporting' => true,
 
 	'technicalcontact_name' => getenv('WIKI_NAME') ?? 'BlueSpice',
