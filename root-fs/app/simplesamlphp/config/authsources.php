@@ -4,7 +4,7 @@ $idpRemoteMetaData = require( __DIR__ . '/_bluespice-saml20-idp-remote-meta.php'
 
 $protocol = getenv('WIKI_PROTOCOL') ?: 'http';
 $host = getenv('WIKI_HOST') ?: 'localhost';
-$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '443';
+$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : ':443';
 if ($protocol === 'http' && $portSuffix === ':80') {
 	$portSuffix = '';
 } elseif ($protocol === 'https' && $portSuffix === ':443') {
