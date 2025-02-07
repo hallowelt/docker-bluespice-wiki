@@ -126,19 +126,12 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
 	}
-	wfLoadExtension( 'ContentTransfer' );
-	wfLoadExtension( 'MergeArticles' );
-	wfLoadExtension( 'BlueSpiceTranslationTransfer' );
-	wfLoadExtension( 'BlueSpiceInterwikiSearch' );
-	$GLOBALS['wgExtensionFunctions'][] = 'BlueSpice\\WikiFarm\\Setup::setupSearchInOtherWikisConfig';
 }
 
-wfLoadExtension( 'BlueSpiceExtendedSearch' );
 $GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
 $GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
 
-wfLoadExtension( 'PDFCreator' );
 $pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
 $pdfHost = getenv( 'PDF_HOST' ) ?: 'pdf';
 $pdfPort = getenv( 'PDF_PORT' ) ?: '8080';
@@ -147,7 +140,6 @@ unset( $pdfProtocol );
 unset( $pdfHost );
 unset( $pdfPort );
 
-wfLoadExtension( 'PdfHandler' );
 $GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
 $GLOBALS['wgPdfPostProcessor'] = $GLOBALS['wgImageMagickConvertCommand'];
 $GLOBALS['wgPdfInfo'] = '/usr/bin/pdfinfo';
