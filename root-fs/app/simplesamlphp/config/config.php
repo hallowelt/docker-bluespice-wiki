@@ -2,15 +2,11 @@
 
 include (__DIR__ . '/config.php.dist');
 
-$protocol = getenv('WIKI_PROTOCOL') ?: 'https';
-$host = getenv('WIKI_HOST') ?: 'localhost';
-$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : ':443';
-if ($protocol === 'http' && $portSuffix === ':80') {
-	$portSuffix = '';
-} elseif ($protocol === 'https' && $portSuffix === ':443') {
-	$portSuffix = '';
-}
-$baseUrl = "$protocol://$host{$portSuffix}";
+$baseUrl = $GLOBALS['wgServer'] = bsAssembleURL(
+	[ 'WIKI_PROTOCOL', 'https' ],
+	[ 'WIKI_HOST', 'localhost' ],
+	[ 'WIKI_PORT', '443' ]
+);
 
 // TODO calculate from environment variable
 $loglevel = SimpleSAML\Logger::WARNING;
@@ -77,7 +73,4 @@ $customConfig = [
 $config = $customConfig + $config;
 
 unset($customConfig);
-unset($protocol);
-unset($host);
-unset($portSuffix);
 unset($baseUrl);

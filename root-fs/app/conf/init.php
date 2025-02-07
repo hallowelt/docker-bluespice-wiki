@@ -1,15 +1,5 @@
 <?php
 
-// We must not set MW_CONFIG_FILE if we are running the CLI installer
-// in `run-installation`, because otherwise it will not allow us to install
-if (
-		PHP_SAPI === 'cli'
-		&& isset( $_SERVER['SCRIPT_NAME'] )
-		&& basename( $_SERVER['SCRIPT_NAME'] ) === 'install.php'
-	) {
-	return;
-}
-
 if ( isset( $_REQUEST['_profiler'] ) ) {
 	$excimer = new ExcimerProfiler();
 	$excimer->setPeriod( 0.001 ); // 1ms
@@ -31,6 +21,32 @@ if ( isset( $_REQUEST['_profiler'] ) ) {
 		}
 		file_put_contents( $filename, $fileContent );
 	} );
+}
+
+function bsAssembleURL( $proto, $hostname, $port ) {
+	$protocol = getenv( $proto[0] ) ?: $proto[1];
+	$host = getenv( $hostname[0] ) ?: $hostname[1];
+	$portSuffix = getenv( $port[0] )
+					? ':' . getenv( $port[0] )
+					: ':' . $port[1];
+
+	if ( $protocol === 'http' && $portSuffix === ':80' ) {
+		$portSuffix = '';
+	} elseif ( $protocol === 'https' && $portSuffix === ':443' ) {
+		$portSuffix = '';
+	}
+
+	return "$protocol://$host{$portSuffix}";
+}
+
+// We must not set MW_CONFIG_FILE if we are running the CLI installer
+// in `run-installation`, because otherwise it will not allow us to install
+if (
+	PHP_SAPI === 'cli'
+	&& isset( $_SERVER['SCRIPT_NAME'] )
+	&& basename( $_SERVER['SCRIPT_NAME'] ) === 'install.php'
+) {
+return;
 }
 
 define( 'MW_CONFIG_FILE', '/app/conf/LocalSettings.php' );

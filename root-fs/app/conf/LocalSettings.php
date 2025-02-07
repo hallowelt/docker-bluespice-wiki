@@ -3,20 +3,11 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-### Dynamic assembly of $GLOBALS['wgServer']
-$protocol = getenv( 'WIKI_PROTOCOL' ) ?: 'https';
-$host = getenv( 'WIKI_HOST' ) ?: 'localhost';
-$portSuffix = getenv( 'WIKI_PORT' ) ? ':' . getenv( 'WIKI_PORT' ) : ':443';
-if ( $protocol === 'http' && $portSuffix === ':80' ) {
-	$portSuffix = '';
-} elseif ( $protocol === 'https' && $portSuffix === ':443' ) {
-	$portSuffix = '';
-}
-$GLOBALS['wgServer'] = "$protocol://$host{$portSuffix}";
-unset( $protocol );
-unset( $host );
-unset( $portSuffix );
-### end
+$GLOBALS['wgServer'] = bsAssembleURL(
+	[ 'WIKI_PROTOCOL', 'https' ],
+	[ 'WIKI_HOST', 'localhost' ],
+	[ 'WIKI_PORT', '443' ]
+);
 
 $GLOBALS['wgSitename'] = getenv( 'WIKI_NAME' ) ?: 'BlueSpice';
 $GLOBALS['wgScriptPath'] = "/w";
@@ -132,13 +123,12 @@ $GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
 $GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
 
-$pdfProtocol = getenv( 'PDF_PROTOCOL' ) ?: 'http';
-$pdfHost = getenv( 'PDF_HOST' ) ?: 'pdf';
-$pdfPort = getenv( 'PDF_PORT' ) ?: '8080';
-$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = "$pdfProtocol://$pdfHost:$pdfPort/Html2PDF/v1";
-unset( $pdfProtocol );
-unset( $pdfHost );
-unset( $pdfPort );
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
+	[ 'PDF_PROTOCOL', 'http' ],
+	[ 'PDF_HOST', 'pdf' ],
+	[ 'PDF_PORT', '8080' ]
+);
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
 
 $GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
 $GLOBALS['wgPdfPostProcessor'] = $GLOBALS['wgImageMagickConvertCommand'];
@@ -150,16 +140,14 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
 }
 
-$formulaProtocol = getenv( 'FORMULA_PROTOCOL' ) ?: 'http';
-$formulaHost = getenv( 'FORMULA_HOST' ) ?: 'formula';
-$formulaPort = getenv( 'FORMULA_PORT' ) ?: '10044';
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
-	"$formulaProtocol://$formulaHost:$formulaPort",
+	bsAssembleURL(
+		[ 'FORMULA_PROTOCOL', 'http' ],
+		[ 'FORMULA_HOST', 'formula' ],
+		[ 'FORMULA_PORT', '10044' ]
+	),
 ];
-unset( $formulaProtocol );
-unset( $formulaHost );
-unset( $formulaPort );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
