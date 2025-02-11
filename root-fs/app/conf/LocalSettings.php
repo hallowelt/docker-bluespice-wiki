@@ -102,7 +102,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
-	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
+	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
 }
 else {
 	require_once "$IP/LocalSettings.BlueSpice.php";
