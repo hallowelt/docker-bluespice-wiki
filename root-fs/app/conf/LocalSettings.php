@@ -59,6 +59,8 @@ $GLOBALS['wgSMTP'] = [
 	'username' => getenv( 'SMTP_USER' ),
 	'password' => getenv( 'SMTP_PASS' ),
 ];
+$GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
+$GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
 
 if ( getenv( 'DEV_WIKI_DEBUG' ) ) {
 	#$GLOBALS['wgDebugToolbar'] = true;

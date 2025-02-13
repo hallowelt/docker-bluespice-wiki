@@ -2,7 +2,7 @@
 
 echo ""
 echo "#############################################"
-echo "Running installation"
+echo "🧰 Running installation"
 
 timestamp=$(date +%Y%m%d%H%M%S)
 appDir=/app/bluespice/w
@@ -38,17 +38,24 @@ php $appDir/maintenance/install.php \
 rm $appDir/LocalSettings.php
 
 
-
 echo "Database installed"
 
-# Create the simplesamlphp certificates
+# Create the SimpleSAMLphp certificates
 if [ ! -f /data/simplesamlphp/certs/saml.crt ] || [ ! -f /data/simplesamlphp/certs/saml.pem ]; then
 	echo "#############################################"
-	echo "Creating simplesamlphp certificates"
+	echo "📜 Creating SimpleSAMLphp certificates"
 	openssl req -newkey rsa:3072 -new -x509 -days 3652 -nodes \
 		-out /data/simplesamlphp/certs/saml.crt \
 		-keyout /data/simplesamlphp/certs/saml.pem \
 		-subj "/CN=$WIKI_HOST"
+fi
+
+# Create public and private keys for OAuth2
+if [ ! -f /data/bluespice/oauth_public.key ] || [ ! -f /data/bluespice/oauth_private.key ]; then
+	echo "#############################################"
+	echo "🔑 Creating OAuth2 keys"
+	openssl genrsa -out /data/bluespice/oauth_private.key 2048
+	openssl rsa -in /data/bluespice/oauth_private.key -pubout -out /data/bluespice/oauth_public.key
 fi
 
 run-updates
@@ -56,7 +63,8 @@ rebuild-searchindex --all
 
 echo ""
 echo "#############################################"
-echo "Installation complete"
+echo ""
+echo "🏁 Installation complete"
 echo "You can now access the wiki in your browser at $WIKI_PROTOCOL://$WIKI_HOST:$WIKI_PORT"
 echo "The password for user 'Admin' can be found in \$DATADIR/adminPassword"
 echo $adminPass > /data/adminPassword

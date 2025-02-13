@@ -20,7 +20,7 @@ echo ""
 echo "#############################################"
 
 if [[ ($1 == "--runAll") ]]; then
-echo "Starting TaskRunner"
+echo "🏇 Starting TaskRunner"
 fi
 
 if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then

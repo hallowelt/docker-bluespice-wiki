@@ -7,6 +7,6 @@ substitutePlaceholders /etc/nginx/sites-enabled/default
 
 echo ""
 echo "#############################################"
-echo "Starting WebFrontend"
+echo "🌐 Starting WebFrontend"
 
 php-fpm8.4 -D && nginx -g "daemon off;"
