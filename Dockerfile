@@ -74,7 +74,7 @@ COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
 COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.4/cli/conf.d/
 COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-COPY ./root-fs/etc/clamav/clamd.conf /etc/clamav/clamd.conf
+RUN ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf
 
 FROM bluespice-prepare AS bluespice-final
 ENV PATH="/app/bin:${PATH}"

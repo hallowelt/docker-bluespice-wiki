@@ -3,8 +3,6 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-substitutePlaceholders /etc/nginx/sites-enabled/default
-
 echo ""
 echo "#############################################"
 echo "🌐 Starting WebFrontend"
