@@ -12,12 +12,13 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 
 FROM base AS bluespice-main
 RUN apt-get -y --no-install-recommends install \
-	openssl \
 	ca-certificates \
-	imagemagick \
+	clamdscan \
 	ghostscript \
-	xpdf-utils \
+	imagemagick \
+	librsvg2-bin \
 	nginx \
+	openssl \
 	php8.4 \
 	php8.4-fpm \
 	php8.4-xml \
@@ -35,8 +36,8 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	php-excimer \
 	python3 \
-	librsvg2-bin \
 	vim.tiny \
+	xpdf-utils \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
 
@@ -73,6 +74,7 @@ COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
 COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.4/cli/conf.d/
 COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./root-fs/etc/clamav/clamd.conf /etc/clamav/clamd.conf
 
 FROM bluespice-prepare AS bluespice-final
 ENV PATH="/app/bin:${PATH}"

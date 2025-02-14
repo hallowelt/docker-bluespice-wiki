@@ -59,6 +59,23 @@ $GLOBALS['wgSMTP'] = [
 	'username' => getenv( 'SMTP_USER' ),
 	'password' => getenv( 'SMTP_PASS' ),
 ];
+if ( getenv( 'AV_HOST' ) ) {
+	$GLOBALS['wgAntivirusSetup'] = [
+		'clamav' => [
+			'command' => 'clamdscan --no-summary',
+			'codemap' => [
+				"0" => AV_NO_VIRUS,
+				"1" => AV_VIRUS_FOUND,
+				"52" => AV_SCAN_ABORTED,
+				"*" => AV_SCAN_FAILED,
+			],
+			'messagepattern' => '/.*?:(.*)/sim',
+		],
+	];
+	$GLOBALS['wgAntivirus'] = 'clamav';
+	$GLOBALS['wgAntivirusRequired'] = true;
+}
+
 $GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
 $GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
 

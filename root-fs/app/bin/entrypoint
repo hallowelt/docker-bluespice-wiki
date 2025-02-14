@@ -16,6 +16,7 @@ echo "---------------------------------------------"
 echo ""
 
 export PATH=$PATH:/app/bin
+substitutePlaceholders /etc/clamav/clamd.conf
 
 init-datadirectory
 

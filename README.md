@@ -12,6 +12,8 @@ docker build -t bluespice/wiki:latest .
 
 | Variable                     | Default Value  | Description                                          | Optional |
 |------------------------------|----------------|------------------------------------------------------|----------|
+| `AV_HOST`                 | `antivitus`        | Hostname of a `clamav` compatible service   | Yes      |
+| `AV_PORT`                 | `3310`        | Port of a `clamav` compatible service       | Yes      |
 | `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service   | Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |

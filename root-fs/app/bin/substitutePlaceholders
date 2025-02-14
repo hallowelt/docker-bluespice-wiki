@@ -15,13 +15,16 @@ if (!file_exists($file)) {
 
 $contents = file_get_contents( $file );
 $modifiedContents = preg_replace_callback(
-	'/###([A-Z_]+)###/',
+	'/###([A-Z_|]+)###/',
 	function( $matches ) {
-		$envVarName = $matches[1];
+		$placeholder = $matches[1];
+		$placeholderParts = explode( '|', $placeholder, 2 );
+		$envVarName = $placeholderParts[0];
+		$defaultValue = $placeholderParts[1] ?? '';
 		$envVarValue = getenv( $envVarName );
-		;
+
 		if ( $envVarValue === false ) {
-			$envVarValue = '';
+			$envVarValue = $defaultValue;
 		}
 
 		$outputValue = $envVarValue;
