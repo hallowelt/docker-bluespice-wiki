@@ -94,19 +94,7 @@ if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
 	}
 	unset( $logChannels );
 }
-
-// Taken from `extensions/BlueSpiceWikiFarm/src/Dispatcher.php`
-// Not all of this may be required
-$GLOBALS['wgUploadDirectory'] = "/data/bluespice/images";
-$GLOBALS['wgReadOnlyFile'] = "{$GLOBALS['wgUploadDirectory']}/lock_yBgMBwiR";
-$GLOBALS['wgFileCacheDirectory'] = "{$GLOBALS['wgUploadDirectory']}/cache";
-$GLOBALS['wgDeletedDirectory'] = "{$GLOBALS['wgUploadDirectory']}/deleted";
-$GLOBALS['wgCacheDirectory'] = "/data/bluespice/cache";
-
-define( 'BSDATADIR', "/data/bluespice/extensions/BlueSpiceFoundation/data" ); //Present
-define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
-define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
-define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
+define( 'BSROOTDIR', '/data/bluespice/extensions/BlueSpiceFoundation' );
 
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
@@ -124,6 +112,18 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
 }
 else {
+	// Taken from `extensions/BlueSpiceWikiFarm/src/Dispatcher.php`
+	// Not all of this may be required
+	$GLOBALS['wgUploadDirectory'] = "/data/bluespice/images";
+	$GLOBALS['wgReadOnlyFile'] = "{$GLOBALS['wgUploadDirectory']}/lock_yBgMBwiR";
+	$GLOBALS['wgFileCacheDirectory'] = "{$GLOBALS['wgUploadDirectory']}/cache";
+	$GLOBALS['wgDeletedDirectory'] = "{$GLOBALS['wgUploadDirectory']}/deleted";
+	$GLOBALS['wgCacheDirectory'] = "/data/bluespice/cache";
+
+	define( 'BSDATADIR', "/data/bluespice/extensions/BlueSpiceFoundation/data" ); //Present
+	define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
+	define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
+	define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
 	require_once "$IP/LocalSettings.BlueSpice.php";
 }
 
