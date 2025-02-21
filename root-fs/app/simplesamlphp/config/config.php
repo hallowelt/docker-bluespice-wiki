@@ -33,6 +33,10 @@ $customConfig = [
 	'admin.protectmetadata' => false,
 	'admin.checkforupdates' => false,
 	'session.cookie.secure' => true,
+	'session.cookie.name' =>
+		getenv('DB_NAME') .
+		( getenv('DB_PREFIX') ?? '' ) .
+		'SAMLSessionID',
 	'enable.http_post' => true,
 	'secretsalt' => getenv('INTERNAL_SIMPLESAMLPHP_SECRET_SALT'),
 
@@ -67,7 +71,7 @@ $customConfig = [
 	'store.sql.dsn' => 'mysql:dbname=' . (getenv('DB_NAME') ?? 'database') . ';host=' . getenv('DB_HOST'),
 	'store.sql.username' => getenv('DB_USER'),
 	'store.sql.password' => getenv('DB_PASS'),
-	'store.sql.prefix' => 'SimpleSAMLphp_' . (getenv('DB_PREFIX') ?? ''),
+	'store.sql.prefix' => (getenv('DB_PREFIX') ?? '') . 'SimpleSAMLphp_',
 ];
 
 $config = $customConfig + $config;
