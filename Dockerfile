@@ -40,7 +40,9 @@ RUN apk add \
 	poppler-utils \
 	python3 \
 	vim \
-	rsvg-convert
+	rsvg-convert \
+	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+	&& apk add php83-pecl-excimer@testing
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
