@@ -5,6 +5,7 @@ ENV LC_ALL=C.UTF-8
 RUN apk add \
 	bash \
 	openssl \
+	clamav-clamdscan \
 	ca-certificates \
 	imagemagick \
 	ghostscript \
