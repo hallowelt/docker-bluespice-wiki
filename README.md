@@ -12,15 +12,16 @@ docker build -t bluespice/wiki:latest .
 
 | Variable                     | Default Value  | Description                                          | Optional |
 |------------------------------|----------------|------------------------------------------------------|----------|
-| `AV_HOST`                 | `antivitus`        | Hostname of a `clamav` compatible service   | Yes      |
-| `AV_PORT`                 | `3310`        | Port of a `clamav` compatible service       | Yes      |
+| `AV_HOST`                    | `antivitus`    | Hostname of a `clamav` compatible service            | Yes      |
+| `AV_PORT`                    | `3310`         | Port of a `clamav` compatible service                | Yes      |
 | `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service   | Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
+| `DB_NAME_PREFIX`             | `wiki_`        | Database name prefix for wiki farm instances         | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix                                      | Yes      |
-| `DB_ROOT_PASS`               | `null`         | Database root password                               | Yes      |
+| `DB_ROOT_PASS`               | `null`         | Database root password *)                            | No       |
 | `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
@@ -43,6 +44,7 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
+| `WIKI_ADMIN_USER`            | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
@@ -50,6 +52,8 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
+
+*) Required for the initial installation of the database.
 
 ## Profiling
 
