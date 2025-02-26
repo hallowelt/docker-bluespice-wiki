@@ -16,8 +16,8 @@ echo "Initializing database '$dbName' on $dbHost ... \n";
 try {
 	$pdo = new PDO(
 		"mysql:host=$dbHost;dbname=$dbName",
-		$dbUser,
-		$dbPass
+		$dbRootUser,
+		$dbRootPass
 	);
 	$pdo->setAttribute(
 		PDO::ATTR_ERRMODE,
