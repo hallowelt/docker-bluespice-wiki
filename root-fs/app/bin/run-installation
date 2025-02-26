@@ -6,6 +6,7 @@ echo "🧰 Running installation"
 
 timestamp=$(date +%Y%m%d%H%M%S)
 appDir=/app/bluespice/w
+adminUserName=${WIKI_ADMIN_USER:-Admin}
 adminPass=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 20; echo)
 upgradeKey=$(tr -dc a-z0-9 </dev/urandom | head -c 16; echo)
 secretKey=$(tr -dc a-z0-9 </dev/urandom | head -c 64; echo)
@@ -19,24 +20,24 @@ set -a
 source /data/.wikienv
 set +a
 
-# TODO: make admin name configurable
+init-database
+
 php $appDir/maintenance/install.php \
 	--dbserver=$DB_HOST \
 	--dbname=$DB_NAME \
-	--installdbuser=$DB_USER \
-	--installdbpass=$DB_PASS \
+	--installdbuser=$DB_ROOT_USER \
+	--installdbpass=$DB_ROOT_PASS \
 	--dbuser=$DB_USER \
 	--dbpass=$DB_PASS \
 	--pass=$adminPass \
 	--lang=${WIKI_LANG:-en} \
 	--scriptpath=/w \
 	$WIKI_NAME \
-	Admin \
+	$adminUserName \
 	| tee -a /data/bluespice/logs/install-$timestamp.log
 
 # Remove the LocalSettings.php file created by the install script
 rm $appDir/LocalSettings.php
-
 
 echo "Database installed"
 
@@ -66,5 +67,5 @@ echo "#############################################"
 echo ""
 echo "🏁 Installation complete"
 echo "You can now access the wiki in your browser at $WIKI_PROTOCOL://$WIKI_HOST:$WIKI_PORT"
-echo "The password for user 'Admin' can be found in \$DATADIR/adminPassword"
+echo "The password for user '$adminUserName' can be found in \$DATADIR/adminPassword"
 echo $adminPass > /data/adminPassword
