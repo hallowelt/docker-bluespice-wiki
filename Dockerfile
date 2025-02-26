@@ -14,6 +14,7 @@ FROM base AS bluespice-main
 RUN apt-get -y --no-install-recommends install \
 	ca-certificates \
 	clamdscan \
+	cron \
 	ghostscript \
 	imagemagick \
 	librsvg2-bin \
@@ -63,6 +64,7 @@ COPY --chown=www-data:www-data ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
+COPY --chown=$USER:$GROUPNAME ./root-fs/app/cron /app/cron
 COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/config/* /app/simplesamlphp/config/
 COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/metadata/* /app/simplesamlphp/metadata/
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
