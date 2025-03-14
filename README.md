@@ -53,6 +53,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
+| `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 
 *) Required for the initial installation of the database.
 

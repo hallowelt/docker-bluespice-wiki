@@ -75,6 +75,9 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
+if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
+	$GLOBALS['bsgOverrideLicenseKey'] = getenv( 'WIKI_SUBSCRIPTION_KEY' );
+}
 
 $GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
 $GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
