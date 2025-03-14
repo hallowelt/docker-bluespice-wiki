@@ -14,8 +14,8 @@ timestamp=$(date +%Y%m%d%H%M%S)
 appDir=/app/bluespice/w
 adminUserName=${WIKI_ADMIN_USER:-Admin}
 adminPass=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 20; echo)
-if [ -n "$INITIAL_ADMIN_PASS" ]; then
-	adminPass=$INITIAL_ADMIN_PASS
+if [ -n "$WIKI_INITIAL_ADMIN_PASS" ]; then
+	adminPass=$WIKI_INITIAL_ADMIN_PASS
 fi
 upgradeKey=$(tr -dc a-z0-9 </dev/urandom | head -c 16; echo)
 secretKey=$(tr -dc a-z0-9 </dev/urandom | head -c 64; echo)

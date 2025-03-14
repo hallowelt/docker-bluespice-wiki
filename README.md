@@ -47,6 +47,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_ADMIN_USER`            | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
+| `WIKI_INITIAL_ADMIN_PASS`	| `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                     | Yes      |
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
