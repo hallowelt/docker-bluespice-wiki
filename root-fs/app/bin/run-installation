@@ -70,8 +70,7 @@ rebuild-searchindex --all
 
 echo ""
 echo "#############################################"
-echo ""
 echo "🏁 Installation complete"
 echo "You can now access the wiki in your browser at $WIKI_PROTOCOL://$WIKI_HOST:$WIKI_PORT"
-echo "The password for user '$adminUserName' can be found in \$DATADIR/adminPassword"
-echo $adminPass > /data/adminPassword
+echo "The password for user '$adminUserName' can be found in \$DATADIR/initialAdminPassword"
+echo $adminPass > /data/initialAdminPassword
