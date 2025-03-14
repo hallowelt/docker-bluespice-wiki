@@ -1,5 +1,11 @@
 #!/bin/bash
 
+if [ -n "$SKIP_INSTALL" ]; then
+	echo "#############################################"
+	echo "🚫 Skipping installation"
+	exit 0
+fi
+
 echo ""
 echo "#############################################"
 echo "🧰 Running installation"
