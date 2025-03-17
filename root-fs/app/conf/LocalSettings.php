@@ -75,6 +75,9 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
+if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
+	$GLOBALS['bsgOverrideLicenseKey'] = getenv( 'WIKI_SUBSCRIPTION_KEY' );
+}
 
 $GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
 $GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
@@ -109,6 +112,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
 	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
 	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
+	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = getenv( 'DB_NAME_PREFIX' ) ?: 'wiki_';
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
