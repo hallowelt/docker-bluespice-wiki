@@ -20,12 +20,17 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
+php $appDir/maintenance/update.php \
+	--quick \
+	--doshared \
+	| tee -a /data/bluespice/logs/update-$timestamp.log
+
 if [ "${EDITION}" == "farm" ]; then
 	runForAllScript=/app/bluespice/w/extensions/BlueSpiceWikiFarm/maintenance/RunForAll.php
-	php $appDir/maintenance/update.php  --quick | tee -a /data/bluespice/logs/update-$timestamp.log
-	php $runForAllScript --script='maintenance/update.php'  --args='--quick --doshared' | tee -a /data/bluespice/logs/update-$timestamp.log
+	php $runForAllScript \
+		--script='maintenance/update.php' \
+		--args='--quick --doshared' \
+		| tee -a /data/bluespice/logs/update-$timestamp.log
 fi
-
-php $appDir/maintenance/update.php  --quick --doshared | tee -a /data/bluespice/logs/update-$timestamp.log
 
 echo $version > /data/bluespice/logs/baseversion
