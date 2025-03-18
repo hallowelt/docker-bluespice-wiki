@@ -28,7 +28,9 @@ try {
 
 	# Grant all privileges all databases with given prefix
 	$pdo->exec( "GRANT ALL PRIVILEGES ON $dbName.* TO '$dbUser'@'%'" );
-	$pdo->exec( "GRANT ALL PRIVILEGES ON $dbNamePrefix%.* TO '$dbUser'@'%'" );
+	if ( $dbNamePrefix ) {
+		$pdo->exec( "GRANT ALL PRIVILEGES ON $dbNamePrefix%.* TO '$dbUser'@'%'" );
+	}
 	$pdo->exec( "FLUSH PRIVILEGES" );
 
 	echo "OK\n";
