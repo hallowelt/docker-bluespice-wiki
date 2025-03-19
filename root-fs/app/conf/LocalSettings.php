@@ -145,6 +145,8 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 $GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
 $GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
+$GLOBALS['bsgESBackendUsername'] = getenv( 'SEARCH_USER' ) ?: '';
+$GLOBALS['bsgESBackendPassword'] = getenv( 'SEARCH_PASS' ) ?: '';
 
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
 	[ 'PDF_PROTOCOL', 'http' ],
@@ -160,7 +162,13 @@ $GLOBALS['wgPdftoText'] = '/usr/bin/pdftotext';
 
 if ( getenv( 'EDITION' ) !== 'free' ) {
 	// FREE edition uses public diagrams.net service
-	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
+	// HINT: Keep in sync with assembly of $GLOBALS['wgServer']
+	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL(
+		[ 'DIAGRAM_PROTOCOL', getenv( 'WIKI_PROTOCOL' ) ?: 'https' ],
+		[ 'DIAGRAM_HOST', getenv( 'WIKI_HOST' ) ?: 'localhost' ],
+		[ 'DIAGRAM_PORT', getenv( 'WIKI_PORT' ) ?: '443' ],
+		[ 'DIAGRAM_PATH', '/_diagram/' ]
+	);
 }
 
 $GLOBALS['wgMathoidCli'] = [
