@@ -145,6 +145,8 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 $GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
 $GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
 $GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
+$GLOBALS['bsgESBackendUsername'] = getenv( 'SEARCH_USER' ) ?: '';
+$GLOBALS['bsgESBackendPassword'] = getenv( 'SEARCH_PASS' ) ?: '';
 
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
 	[ 'PDF_PROTOCOL', 'http' ],

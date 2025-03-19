@@ -37,8 +37,10 @@ docker build -t bluespice/wiki:latest .
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
 | `PDF_PROTOCOL`               | `http`         | Protocol of a `bluespice/pdf` compatible service     | Yes      |
 | `SEARCH_HOST`                | `search`       | Hostname of a `bluespice/search` compatible service  | Yes      |
+| `SEARCH_PASS`                | ``             | Password of a `bluespice/search` compatible service  | Yes      |
 | `SEARCH_PORT`                | `9200`         | Port of a `bluespice/search` compatible service      | Yes      |
 | `SEARCH_PROTOCOL`            | `http`         | Protocol of a `bluespice/search` compatible service  | Yes      |
+| `SEARCH_USER`                | ``             | User of a `bluespice/search` compatible service      | Yes      |
 | `SMTP_HOST`                  | `null`         | SMTP host                                            | Yes      |
 | `SMTP_IDHOST`                | `null`         | SMTP ID host                                         | Yes      |
 | `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
@@ -47,7 +49,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_ADMIN_USER`            | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
-| `WIKI_INITIAL_ADMIN_PASS`	| `null`         | Initial admin password. Uses random, if not set      | Yes      |
+| `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                     | Yes      |
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
