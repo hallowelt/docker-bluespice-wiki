@@ -8,6 +8,10 @@ $dbNamePrefix = getenv('DB_NAME_PREFIX');
 $dbRootUser = getenv('DB_ROOT_USER');
 $dbRootPass = getenv('DB_ROOT_PASS');
 
+if ( !$dbRootUser || !$dbRootPass ) {
+	// If no root user is set, we can't create a database or set permissions
+	exit( 0 );
+}
 
 echo "\n";
 echo "#############################################\n";

@@ -34,8 +34,8 @@ init-database
 php $appDir/maintenance/install.php \
 	--dbserver=$DB_HOST \
 	--dbname=$DB_NAME \
-	--installdbuser=$DB_ROOT_USER \
-	--installdbpass=$DB_ROOT_PASS \
+	--installdbuser=${DB_ROOT_USER:-$DB_USER} \
+	--installdbpass=${DB_ROOT_PASS:-$DB_PASS} \
 	--dbuser=$DB_USER \
 	--dbpass=$DB_PASS \
 	--pass=$adminPass \

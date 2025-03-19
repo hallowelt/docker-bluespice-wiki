@@ -21,8 +21,8 @@ docker build -t bluespice/wiki:latest .
 | `DB_NAME_PREFIX`             | `wiki_`        | Database name prefix for wiki farm instances         | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix                                      | Yes      |
-| `DB_ROOT_PASS`               | `null`         | Database root password *)                            | No       |
-| `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
+| `DB_ROOT_PASS`               | `$DB_PASS`     | Database root password *)                            | No       |
+| `DB_ROOT_USER`               | `$DB_USER`     | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -61,7 +61,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 
-*) Required for the initial installation of the database.
+*) See section "Database requirements for FARM edition"
 
 ## Profiling
 
@@ -73,3 +73,7 @@ The image contains the Excimer profiler, which can be used in production scenari
 Results will be stored in `/data/bluespice/logs`. JSON files can be viewed with the [Speedscope](https://www.speedscope.app/) viewer. LOG files can be processed with https://github.com/brendangregg/FlameGraph
 
 See https://www.mediawiki.org/wiki/Excimer and https://techblog.wikimedia.org/2021/03/03/profiling-php-in-production-at-scale for details.
+
+## Database requirements for FARM edition
+
+If `DB_USER` is not allowed to create databases and the database with `DB_NAME` does not exist yet, you need to provide a `DB_ROOT_USER` and `DB_ROOT_PASS` during installation. In addition, the `FARM` edition will need to have a user that is allowed to create databases with the `DB_NAME_PREFIX` as prefix. This user can be the same as `DB_USER` or a different one. If you want to use a different user, you need to provide the `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
