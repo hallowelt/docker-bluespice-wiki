@@ -19,7 +19,7 @@ echo ""
 echo "#############################################"
 
 if [[ ($1 == "--runAll") ]]; then
-echo "🏇 Starting TaskRunner"
+	echo "🏇 Starting TaskRunner"
 fi
 
 if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
@@ -45,7 +45,7 @@ fi
 if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting SnapshotStatistics cronjobs"
 	crontab /app/cron/snapshot-statistics
-	cron -f &
+	cron -f -l 8 > /proc/1/fd/1 2>&1 &
 fi
 
 sleep inf

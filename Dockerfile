@@ -86,7 +86,9 @@ RUN apt-get -y auto-remove \
 	&& rm -Rf /usr/share/doc \
 	&& find /var/log -type f -delete \
 	&& rm -Rf /var/lib/apt/lists/* \
-	&& rm -fr /tmp/*
+	&& rm -fr /tmp/* \
+	&& chmod gu+rw /var/run \
+	&& chmod gu+s /usr/sbin/cron
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
