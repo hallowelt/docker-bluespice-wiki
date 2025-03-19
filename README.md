@@ -27,6 +27,10 @@ docker build -t bluespice/wiki:latest .
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
 | `DEV_WIKI_DEBUG_LOGCHANNELS` | `null`         | Debug log channels, comma separated                  | Yes      |
+| `DIAGRAM_HOST`               | `$WIKI_HOST`   | Hostname of a `bluespice/diagram` compatible service | Yes      |
+| `DIAGRAM_PATH`               | `/_diagram/`   | Path of a `bluespice/diagram` compatible service     | Yes      |
+| `DIAGRAM_PORT`               | `$WIKI_PORT`   | Port of a `bluespice/diagram` compatible service     | Yes      |
+| `DIAGRAM_PROTOCOL`           | `$WIKI_PROTOCOL`| Protocol of a `bluespice/diagram` compatible service| Yes      |
 | `EDITION`                    | `null`         | Edition of the wiki                                  | Yes      |
 | `FORMULA_HOST`               | `formula`      | Hostname of a `bluespice/formula` compatible service | Yes      |
 | `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |

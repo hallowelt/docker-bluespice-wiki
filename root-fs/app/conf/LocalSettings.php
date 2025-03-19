@@ -162,7 +162,13 @@ $GLOBALS['wgPdftoText'] = '/usr/bin/pdftotext';
 
 if ( getenv( 'EDITION' ) !== 'free' ) {
 	// FREE edition uses public diagrams.net service
-	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
+	// HINT: Keep in sync with assembly of $GLOBALS['wgServer']
+	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL(
+		[ 'DIAGRAM_PROTOCOL', getenv( 'WIKI_PROTOCOL' ) ?: 'https' ],
+		[ 'DIAGRAM_HOST', getenv( 'WIKI_HOST' ) ?: 'localhost' ],
+		[ 'DIAGRAM_PORT', getenv( 'WIKI_PORT' ) ?: '443' ],
+		[ 'DIAGRAM_PATH', '/_diagram/' ]
+	);
 }
 
 $GLOBALS['wgMathoidCli'] = [
