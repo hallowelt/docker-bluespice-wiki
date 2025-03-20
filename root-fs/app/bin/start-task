@@ -44,8 +44,7 @@ if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]]; then
 fi
 if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting SnapshotStatistics cronjobs"
-	crontab /app/cron/snapshot-statistics
-	sudo /usr/sbin/service cron start
+	/app/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
 fi
 
 sleep inf

@@ -37,7 +37,6 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	php-excimer \
 	python3 \
-	sudo \
 	vim.tiny \
 	xpdf-utils \
 	&& apt-get clean \
@@ -54,7 +53,6 @@ ARG GROUPNAME
 ENV GROUPNAME=$USER
 RUN addgroup -gid $GID $GROUPNAME \
 	&& adduser -uid $UID -gid $GID --disabled-password --gecos "" $USER \
-	&& echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/service cron start" >> /etc/sudoers \
 	&& usermod -aG www-data $USER \
 	&& mkdir -p /app/bluespice \
 	&& cd /app/bluespice \
@@ -72,6 +70,7 @@ COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/metadata/* /app/simpl
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 /app/bin/supercronic
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.4/fpm/conf.d
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.4/fpm/
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
