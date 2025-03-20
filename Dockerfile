@@ -14,7 +14,6 @@ FROM base AS bluespice-main
 RUN apt-get -y --no-install-recommends install \
 	ca-certificates \
 	clamdscan \
-	cron \
 	ghostscript \
 	imagemagick \
 	librsvg2-bin \
