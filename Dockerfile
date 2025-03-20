@@ -37,6 +37,7 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	php-excimer \
 	python3 \
+	sudo \
 	vim.tiny \
 	xpdf-utils \
 	&& apt-get clean \
@@ -53,6 +54,7 @@ ARG GROUPNAME
 ENV GROUPNAME=$USER
 RUN addgroup -gid $GID $GROUPNAME \
 	&& adduser -uid $UID -gid $GID --disabled-password --gecos "" $USER \
+	&& echo "$USER ALL=(ALL) NOPASSWD: /usr/sbin/service cron start" >> /etc/sudoers \
 	&& usermod -aG www-data $USER \
 	&& mkdir -p /app/bluespice \
 	&& cd /app/bluespice \
@@ -86,9 +88,7 @@ RUN apt-get -y auto-remove \
 	&& rm -Rf /usr/share/doc \
 	&& find /var/log -type f -delete \
 	&& rm -Rf /var/lib/apt/lists/* \
-	&& rm -fr /tmp/* \
-	&& chmod gu+rw /var/run \
-	&& chmod gu+s /usr/sbin/cron
+	&& rm -fr /tmp/*
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
