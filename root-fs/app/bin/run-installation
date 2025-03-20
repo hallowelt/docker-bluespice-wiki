@@ -1,8 +1,9 @@
 #!/bin/bash
 
-if [ ! -w /data ]; then
-	echo "ERROR: /data is not writable"
-	exit 1
+if [ -n "$SKIP_INSTALL" ]; then
+	echo "#############################################"
+	echo "🚫 Skipping installation"
+	exit 0
 fi
 
 echo ""
