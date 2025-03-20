@@ -19,11 +19,10 @@ echo ""
 echo "#############################################"
 
 if [[ ($1 == "--runAll") ]]; then
-echo "🏇 Starting TaskRunner"
+	echo "🏇 Starting TaskRunner"
 fi
 
 if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
-	
 	echo "Starting update"
 	date > /data/maintenance
 	run-updates
@@ -43,5 +42,10 @@ if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Backup daily at" $BACKUP_HOUR
 	/app/bin/backup-loop   > /proc/1/fd/1 2>&1  &
 fi
+if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
+	echo "Starting SnapshotStatistics cronjobs"
+	/app/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
+fi
+
 sleep inf
 

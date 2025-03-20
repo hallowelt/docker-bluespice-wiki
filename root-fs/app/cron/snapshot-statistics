@@ -1,0 +1,5 @@
+ 9 0 * * * sleep $(( RANDOM \% 600 )); /usr/bin/php /app/bluespice/w/extensions/BlueSpiceExtendedStatistics/maintenance/generateSnapshot.php --interval=day
+19 0 * * 0 sleep $(( RANDOM \% 600 )); /usr/bin/php /app/bluespice/w/extensions/BlueSpiceExtendedStatistics/maintenance/generateSnapshot.php --interval=week
+29 0 1 * * sleep $(( RANDOM \% 600 )); /usr/bin/php /app/bluespice/w/extensions/BlueSpiceExtendedStatistics/maintenance/generateSnapshot.php --interval=month
+39 0 1 1 * sleep $(( RANDOM \% 600 )); /usr/bin/php /app/bluespice/w/extensions/BlueSpiceExtendedStatistics/maintenance/generateSnapshot.php --interval=year
+#ATTENTION: There must be an empty line at the end of this file.
