@@ -50,10 +50,10 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
-| `WIKI_ADMIN_USER`            | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
+| `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                     | Yes      |
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |

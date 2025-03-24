@@ -1,0 +1,9 @@
+#!/bin/bash
+
+appDir=/app/bluespice/w
+timestamp=$(date +%Y%m%d%H%M%S)
+
+php $appDir/maintenance/update.php \
+	--quick \
+	--doshared \
+	| tee -a /data/bluespice/logs/update-$timestamp.log
