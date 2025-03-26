@@ -1,5 +1,5 @@
- 9 0 * * * create-statistic-snapshot --interval=day --randomize
-19 0 * * 0 create-statistic-snapshot --interval=week --randomize
-29 0 1 * * create-statistic-snapshot --interval=month --randomize
-39 0 1 1 * create-statistic-snapshot --interval=year --randomize
+ 9 0 * * * create-statistic-snapshot --randomize --interval=day --skip-timecheck
+19 0 * * 0 create-statistic-snapshot --randomize --interval=week --skip-timecheck
+29 0 1 * * create-statistic-snapshot --randomize --interval=month --skip-timecheck
+39 0 1 1 * create-statistic-snapshot --randomize --interval=year --skip-timecheck
 #ATTENTION: There must be an empty line at the end of this file.
