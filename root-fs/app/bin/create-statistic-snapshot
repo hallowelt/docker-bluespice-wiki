@@ -1,0 +1,9 @@
+#!/bin/bash
+
+$interval=$1
+
+if [ "$2" == "--randomize" ]; then
+	sleep $((RANDOM % 600))
+fi
+
+run-maintenance BlueSpiceExtendedStatistics:generateSnapshot --interval=$interval
