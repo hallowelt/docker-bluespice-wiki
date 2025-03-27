@@ -5,8 +5,8 @@ $dbHost = getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
 $dbName = getenv('DB_NAME');
 $dbNamePrefix = getenv('DB_NAME_PREFIX');
-$dbRootUser = getenv('DB_ROOT_USER');
-$dbRootPass = getenv('DB_ROOT_PASS');
+$dbRootUser = getenv('DB_ROOT_USER') ?: $dbUser;
+$dbRootPass = getenv('DB_ROOT_PASS') ?: getenv('DB_PASS');
 
 
 echo "\n";
