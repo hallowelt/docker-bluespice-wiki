@@ -17,6 +17,7 @@ RUN apt-get -y --no-install-recommends install \
 	ghostscript \
 	imagemagick \
 	librsvg2-bin \
+	nano \
 	nginx \
 	openssl \
 	php8.4 \
@@ -36,7 +37,6 @@ RUN apt-get -y --no-install-recommends install \
 	poppler-utils \
 	php-excimer \
 	python3 \
-	vim.tiny \
 	xpdf-utils \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/*
