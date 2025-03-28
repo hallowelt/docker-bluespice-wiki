@@ -1,0 +1,20 @@
+#!/bin/bash
+
+php $appDir/maintenance/install.php \
+	--dbserver=$DB_HOST \
+	--dbname=$DB_NAME \
+	--installdbuser=${DB_ROOT_USER:-$DB_USER} \
+	--installdbpass=${DB_ROOT_PASS:-$DB_PASS} \
+	--dbuser=$DB_USER \
+	--dbpass=$DB_PASS \
+	--pass=$adminPass \
+	--lang=${WIKI_LANG:-en} \
+	--scriptpath=/w \
+	$WIKI_NAME \
+	$adminUserName \
+	| tee -a /data/bluespice/logs/install-$timestamp.log
+
+# Remove the LocalSettings.php file created by the install script
+rm $appDir/LocalSettings.php
+
+echo "Database installed"

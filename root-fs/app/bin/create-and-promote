@@ -4,4 +4,4 @@ echo ""
 echo "#############################################"
 echo "Creating and promoting user"
 
-php /app/bluespice/w/maintenance/createAndPromote.php "$@"
+run-maintenance createAndPromote "$@"

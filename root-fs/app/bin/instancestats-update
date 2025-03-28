@@ -1,11 +1,8 @@
 #!/bin/bash
 
-appDir=/app/bluespice/w
-runForAllScript=$appDir/extensions/BlueSpiceWikiFarm/SimpleFarmer/maintenance/RunForAll.php
-
-php $appDir/extensions/BlueSpiceUsageTracker/maintenance/usageTrackerUpdate.php
+run-maintenance BlueSpiceUsageTracker:usageTrackerUpdate
 # Conditionally run for farm setups
 if [ "${EDITION}" == "farm" ]; then
-	php $runForAllScript \
+	run-maintenance BlueSpiceWikiFarm:RunForAll \
 		--script='extensions/BlueSpiceUsageTracker/maintenance/usageTrackerUpdate.php'
 fi
