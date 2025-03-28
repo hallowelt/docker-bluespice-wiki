@@ -10,6 +10,8 @@ database:
     dbuser: "###DB_USER###"
     dbpassword: "###DB_PASS###"
     dbprefix: "###DB_PREFIX###"
+runjobs:
+    cooldown: 5
 farm:
     include-instances: []
     exclude-instances: []
