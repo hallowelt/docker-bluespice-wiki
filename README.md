@@ -72,30 +72,30 @@ The main directory for application data is `/data/`. The setup routine will crea
 ├── bluespice
 │   ├── extensions
 │   │   └── BlueSpiceFoundation
-│   ├── farm-archive
-│   ├── farm-instances
+│   ├── farm-archive             -> Contains data of "deleted" FARM instances
+│   ├── farm-instances           -> Contains data of FARM instances
 │   ├── images
 │   ├── logs
 │   │   ├── postupdate
-│   │   └── baseversion
+│   │   └── baseversion          -> Stores the application version at the last container start. Used to determine if update scripts need to run.
 │   │
-│   ├── oauth_private.key
-│   ├── oauth_public.key
+│   ├── oauth_private.key        -> Automatically created during installation. Used by Extension:OAuth
+│   ├── oauth_public.key         -> Automatically created during installation. Used by Extension:OAuth
 │   │
-│   ├── post-init-settings.php
-│   └── pre-init-settings.php
+│   ├── post-init-settings.php   -> Automatically created during installation. May contain additional settings.
+│   └── pre-init-settings.php    -> Automatically created during installation. May contain additional settings.
 │
 ├── simplesamlphp
 │   ├── cache
-│   ├── certs
+│   ├── certs                    -> Automatically created during installation. Used by SimpleSAMLphp
 │   │   ├── saml.crt
 │   │   └── saml.pem
 │   ├── data
 │   ├── logs
-│   └── saml_idp_metadata.xml
+│   └── saml_idp_metadata.xml    -> Needs to be created manually, in case SAML authentication is used.
 |
-├── adminPassword
-└── .wikienv
+├── initialAdminPassword         -> Automatically created during installation.
+└── .wikienv                     -> Automatically created during installation. Contains various keys.
 ```
 
 If the application needs to connect to external services that use self-signed certificates, you need to add the certificate to the trusted certificates.
