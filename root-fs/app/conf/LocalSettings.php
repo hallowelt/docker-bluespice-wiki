@@ -111,6 +111,10 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	);
 }
 
+$GLOBALS['wgMathValidModes'] = [ 'mathml' ];
+$GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
+$GLOBALS['wgMaxShellMemory'] = 1228800;
+$GLOBALS['wgHiddenPrefs'][] = 'math';
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
 	bsAssembleURL(
