@@ -63,6 +63,44 @@ docker build -t bluespice/wiki:latest .
 
 *) See section "Database requirements for FARM edition"
 
+## Directories and Volumes
+
+The main directory for application data is `/data/`. The setup routine will create the following directories:
+
+```
+.
+├── bluespice
+│   ├── extensions
+│   │   └── BlueSpiceFoundation
+│   ├── farm-archive
+│   ├── farm-instances
+│   ├── images
+│   ├── logs
+│   │   ├── postupdate
+│   │   └── baseversion
+│   │
+│   ├── oauth_private.key
+│   ├── oauth_public.key
+│   │
+│   ├── post-init-settings.php
+│   └── pre-init-settings.php
+│
+├── simplesamlphp
+│   ├── cache
+│   ├── certs
+│   │   ├── saml.crt
+│   │   └── saml.pem
+│   ├── data
+│   ├── logs
+│   └── saml_idp_metadata.xml
+|
+├── adminPassword
+└── .wikienv
+```
+
+If the application needs to connect to external services that use self-signed certificates, you need to add the certificate to the trusted certificates.
+For this purpose, you can mount a volume to `/usr/local/share/ca-certificates/ca.crt`
+
 ## Profiling
 
 The image contains the Excimer profiler, which can be used in production scenarios. To enable it, set `_profiler=trace` or `_profiler=speedscope` in
