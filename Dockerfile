@@ -70,6 +70,7 @@ ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallo
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 /app/bin/supercronic
+ADD https://curl.se/ca/cacert.pem /usr/local/share/ca-certificates/ca.crt
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.4/fpm/conf.d
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.4/fpm/
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
