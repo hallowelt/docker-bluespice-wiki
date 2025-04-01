@@ -98,8 +98,14 @@ The main directory for application data is `/data/`. The setup routine will crea
 └── .wikienv                     -> Automatically created during installation. Contains various keys.
 ```
 
-If the application needs to connect to external services that use self-signed certificates, you need to add the certificate to the trusted certificates.
-For this purpose, you can mount a volume to `/usr/local/share/ca-certificates/ca.crt`
+## Custom SSL certificates
+
+If the application needs to connect to external services that use self-signed certificates, make sure to add those to the `/etc/ssl/certs/ca-certificates.crt` of the **hostmachine** and then mount it into the container like this:
+
+```yaml
+volumes:
+  - /etc/ssl/certs/ca-certificates.crt:/etc/ssl/certs/ca-certificates.crt:ro
+```
 
 ## Profiling
 
