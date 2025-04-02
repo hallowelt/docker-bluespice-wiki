@@ -50,4 +50,3 @@ for file in "${!files[@]}"; do
   fi
 done
 echo "Done"
-chown -R bluespice:bluespice /data
