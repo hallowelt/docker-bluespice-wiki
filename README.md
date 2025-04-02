@@ -18,7 +18,6 @@ docker build -t bluespice/wiki:latest .
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
-| `DB_NAME_PREFIX`             | `wiki_`        | Database name prefix for wiki farm instances         | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix                                      | Yes      |
 | `DB_ROOT_PASS`               | `$DB_PASS`     | Database root password *)                            | No       |
@@ -51,6 +50,8 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
+| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances *)      | Yes      |
+| `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` *)            | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
@@ -114,4 +115,11 @@ See https://www.mediawiki.org/wiki/Excimer and https://techblog.wikimedia.org/20
 
 ## Database requirements for FARM edition
 
-If `DB_USER` is not allowed to create databases and the database with `DB_NAME` does not exist yet, you need to provide a `DB_ROOT_USER` and `DB_ROOT_PASS` during installation. In addition, the `FARM` edition will need to have a user that is allowed to create databases with the `DB_NAME_PREFIX` as prefix. This user can be the same as `DB_USER` or a different one. If you want to use a different user, you need to provide the `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
+If `DB_USER` is not allowed to create databases and the database with `DB_NAME` does not exist yet, you need to provide a `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
+
+In addition, the `FARM` edition will need to have a user that is allowed to create databases with the `WIKI_FARM_DB_PREFIX` as prefix.
+This user can be the same as `DB_USER` or a different one.
+
+If you want to use a different user, you need to provide the `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
+
+If `WIKI_FARM_USE_SHARED_DB` is set to `1`, the `FARM` edition will store the wiki instance dbs in `DB_NAME` itself and `DB_USER` does not need permissions to create further databases with the `WIKI_FARM_DB_PREFIX` prefix.

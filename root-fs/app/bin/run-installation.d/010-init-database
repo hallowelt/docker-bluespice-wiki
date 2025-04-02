@@ -4,7 +4,7 @@
 $dbHost = getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
 $dbName = getenv('DB_NAME');
-$dbNamePrefix = getenv('DB_NAME_PREFIX');
+$dbNamePrefix = getenv('WIKI_FARM_DB_PREFIX') ?: 'wiki_';
 $dbRootUser = getenv('DB_ROOT_USER') ?: $dbUser;
 $dbRootPass = getenv('DB_ROOT_PASS') ?: getenv('DB_PASS');
 
@@ -13,7 +13,6 @@ if ( !$dbRootUser || !$dbRootPass ) {
 	exit( 0 );
 }
 
-echo "\n";
 echo "#############################################\n";
 echo "Initializing database '$dbName' on $dbHost ... \n";
 
@@ -32,7 +31,7 @@ try {
 
 	# Grant all privileges all databases with given prefix
 	$pdo->exec( "GRANT ALL PRIVILEGES ON $dbName.* TO '$dbUser'@'%'" );
-	if ( $dbNamePrefix ) {
+	if ( !getenv( 'WIKI_FARM_USE_SHARED_DB' ) ) {
 		$pdo->exec( "GRANT ALL PRIVILEGES ON $dbNamePrefix%.* TO '$dbUser'@'%'" );
 	}
 	$pdo->exec( "FLUSH PRIVILEGES" );
