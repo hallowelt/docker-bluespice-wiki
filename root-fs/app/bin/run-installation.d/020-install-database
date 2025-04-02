@@ -1,5 +1,16 @@
 #!/bin/bash
 
+echo "Installing database with values:"
+echo "dbserver: $DB_HOST"
+echo "dbname: $DB_NAME"
+echo "installdbuser: ${DB_ROOT_USER:-$DB_USER}"
+echo "installdbpass: ${DB_ROOT_PASS:-$DB_PASS:0:1}********${DB_ROOT_PASS:-$DB_PASS: -1}"
+echo "lang: ${WIKI_LANG:-en}"
+echo "admin user: $adminUserName"
+echo "pass: ${adminPass:0:1}********${adminPass: -1}"
+echo "wiki name: $WIKI_NAME"
+echo ""
+
 php $appDir/maintenance/install.php \
 	--dbserver=$DB_HOST \
 	--dbname=$DB_NAME \
