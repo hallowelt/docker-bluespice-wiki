@@ -14,6 +14,7 @@ docker build -t bluespice/wiki:latest .
 |------------------------------|----------------|------------------------------------------------------|----------|
 | `AV_HOST`                    | `antivirus`    | Hostname of a `clamav` compatible service            | Yes      |
 | `AV_PORT`                    | `3310`         | Port of a `clamav` compatible service                | Yes      |
+| `BACKUP_HOUR`                | `1    `        | Hour for daily backup. Set to `-1` to disable        | Yes      |
 | `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service *)| Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
