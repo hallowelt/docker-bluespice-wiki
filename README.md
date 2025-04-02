@@ -14,7 +14,7 @@ docker build -t bluespice/wiki:latest .
 |------------------------------|----------------|------------------------------------------------------|----------|
 | `AV_HOST`                    | `antivirus`    | Hostname of a `clamav` compatible service            | Yes      |
 | `AV_PORT`                    | `3310`         | Port of a `clamav` compatible service                | Yes      |
-| `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service   | Yes      |
+| `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service *)| Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
@@ -50,8 +50,8 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
-| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances *)      | Yes      |
-| `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` *)            | Yes      |
+| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances **)     | Yes      |
+| `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
@@ -62,7 +62,8 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 
-*) See section "Database requirements for FARM edition"
+*) External cache can be disabled by setting `-` as `CACHE_HOST`.
+**) See section "Database requirements for FARM edition"
 
 ## Directories and Volumes
 
