@@ -35,7 +35,7 @@ if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
 fi
 if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting ProcessRunner"
-	sg www-data -c '/bin/bash /app/bin/parallel-processRunner'  > /proc/1/fd/1 2>&1 &
+	/app/bin/parallel-processRunner  > /proc/1/fd/1 2>&1 &
 fi
 
 if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]] && [[ ( ${BACKUP_HOUR:-1} != -1 ) ]]; then
