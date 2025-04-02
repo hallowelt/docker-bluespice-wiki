@@ -14,7 +14,4 @@ php $appDir/maintenance/install.php \
 	$adminUserName \
 	| tee -a /data/bluespice/logs/install-$timestamp.log
 
-# Remove the LocalSettings.php file created by the install script
-rm $appDir/LocalSettings.php
-
 echo "Database installed"
