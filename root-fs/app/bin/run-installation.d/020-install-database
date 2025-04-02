@@ -21,8 +21,8 @@ php $appDir/maintenance/install.php \
 	--pass=$adminPass \
 	--lang=${WIKI_LANG:-en} \
 	--scriptpath=/w \
-	$WIKI_NAME \
-	$adminUserName \
+	"$WIKI_NAME" \
+	"$adminUserName" \
 	| tee -a /data/bluespice/logs/install-$timestamp.log
 
 echo "Database installed"
