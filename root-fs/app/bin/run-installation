@@ -35,6 +35,7 @@ export adminPass
 
 for f in /app/bin/run-installation.d/*; do
 	if [ -f "$f" ]; then
+		echo ""
 		echo "🔧 Running $f"
 		$f
 	fi
