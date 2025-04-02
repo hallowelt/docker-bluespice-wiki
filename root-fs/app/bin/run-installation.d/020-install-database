@@ -1,21 +1,26 @@
 #!/bin/bash
 
+installdbuser=${DB_ROOT_USER:-$DB_USER}
+installdbpass=${DB_ROOT_PASS:-$DB_PASS}
+
 echo "Installing database with values:"
 echo "dbserver: $DB_HOST"
 echo "dbname: $DB_NAME"
+echo "dbuser: $DB_USER"
+echo "dbpass: ${DB_PASS:0:1}********${DB_PASS: -1}"
 echo "installdbuser: ${DB_ROOT_USER:-$DB_USER}"
-echo "installdbpass: ${DB_ROOT_PASS:-$DB_PASS:0:1}********${DB_ROOT_PASS:-$DB_PASS: -1}"
+echo "installdbpass: ${installdbpass:0:1}********${installdbpass: -1}"
 echo "lang: ${WIKI_LANG:-en}"
-echo "admin user: $adminUserName"
+echo "'admin user': $adminUserName"
 echo "pass: ${adminPass:0:1}********${adminPass: -1}"
-echo "wiki name: $WIKI_NAME"
+echo "'wiki name': $WIKI_NAME"
 echo ""
 
 php $appDir/maintenance/install.php \
 	--dbserver=$DB_HOST \
 	--dbname=$DB_NAME \
-	--installdbuser=${DB_ROOT_USER:-$DB_USER} \
-	--installdbpass=${DB_ROOT_PASS:-$DB_PASS} \
+	--installdbuser=$installdbuser \
+	--installdbpass=$installdbuser \
 	--dbuser=$DB_USER \
 	--dbpass=$DB_PASS \
 	--pass=$adminPass \
@@ -24,5 +29,3 @@ php $appDir/maintenance/install.php \
 	"$WIKI_NAME" \
 	"$adminUserName" \
 	| tee -a /data/bluespice/logs/install-$timestamp.log
-
-echo "Database installed"
