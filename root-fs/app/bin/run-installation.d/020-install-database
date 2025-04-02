@@ -2,15 +2,16 @@
 
 installdbuser=${DB_ROOT_USER:-$DB_USER}
 installdbpass=${DB_ROOT_PASS:-$DB_PASS}
+lang=${WIKI_LANG:-en}
 
 echo "Installing database with values:"
 echo "dbserver: $DB_HOST"
 echo "dbname: $DB_NAME"
 echo "dbuser: $DB_USER"
 echo "dbpass: ${DB_PASS:0:1}********${DB_PASS: -1}"
-echo "installdbuser: ${DB_ROOT_USER:-$DB_USER}"
+echo "installdbuser: $installdbuser"
 echo "installdbpass: ${installdbpass:0:1}********${installdbpass: -1}"
-echo "lang: ${WIKI_LANG:-en}"
+echo "lang: $lang"
 echo "'admin user': $adminUserName"
 echo "pass: ${adminPass:0:1}********${adminPass: -1}"
 echo "'wiki name': $WIKI_NAME"
@@ -20,11 +21,11 @@ php $appDir/maintenance/install.php \
 	--dbserver=$DB_HOST \
 	--dbname=$DB_NAME \
 	--installdbuser=$installdbuser \
-	--installdbpass=$installdbuser \
+	--installdbpass=$installdbpass \
 	--dbuser=$DB_USER \
 	--dbpass=$DB_PASS \
 	--pass=$adminPass \
-	--lang=${WIKI_LANG:-en} \
+	--lang=$lang \
 	--scriptpath=/w \
 	"$WIKI_NAME" \
 	"$adminUserName" \
