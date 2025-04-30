@@ -30,7 +30,7 @@ if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
 	rm /data/maintenance
 
 	echo "Starting runJobs"
-	echo "parallel-runjobs-service" >> /tmp/healthcheck
+	echo "parallel-runJobsService" >> /tmp/healthcheck
 	/app/bin/parallel-runJobsService > /proc/1/fd/1 2>&1 &
 fi
 if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
