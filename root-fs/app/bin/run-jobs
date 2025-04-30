@@ -28,7 +28,7 @@ if [[ $1 == "--sfr" ]];	then
 	j=$#;
 	while [ $i -le $j ]
 	do
-		run-maintenance runJobs --memory-limit=max --memory-limit=max --sfr=$1
+		run-maintenance runJobs --memory-limit=max --sfr=$1
 		i=$((i + 1));
 		shift 1;
 	done

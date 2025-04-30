@@ -1,10 +1,8 @@
+#!/bin/bash
+
 set -o errexit
 set -o nounset
 set -o pipefail
-
-echo ""
-echo "#############################################"
-echo "Starting TaskRunner"
 
 appDir=/app/bluespice/w
 processRunnerScript=$appDir/vendor/mwstake/mediawiki-component-processmanager/maintenance/processRunner.php
