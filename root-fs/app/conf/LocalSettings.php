@@ -25,10 +25,10 @@ $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
 $GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) ?: 'bluespice' );
 $GLOBALS['wgDBpassword'] = trim(  getenv( 'DB_PASS' ) );
 $GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) ?: '' );
+$GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgSessionCacheType'] = CACHE_DB;
 if ( getenv( 'CACHE_HOST' ) !== '-' ) {
-	$GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 	$cacheHost = trim( getenv( 'CACHE_HOST' ) ?: 'cache' );
 	$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '11211' );
 	$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
