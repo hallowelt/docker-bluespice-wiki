@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -o errexit
+#We can not use `set -o errexit` here, as we need to check for a potentially failing command
 set -o nounset
 set -o pipefail
 
