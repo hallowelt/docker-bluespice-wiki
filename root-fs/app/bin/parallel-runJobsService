@@ -7,7 +7,8 @@ set -o pipefail
 parallel_runjobs_pid=0
 while true; do
 	# Check if the process is not running
-	if ! ps -p $parallel_runjobs_pid > /dev/null; then
+	ps -p $parallel_runjobs_pid > /dev/null 2>&1
+	if [[ $? -ne 0 ]]; then
 		/app/bin/parallel-runjobs-service \
 		--config /app/bin/config/runJobs_conf.yaml \
 		&
