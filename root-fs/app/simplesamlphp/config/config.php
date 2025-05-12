@@ -23,7 +23,12 @@ $customConfig = [
 		'saml' => true
 	],
 
-	'auth.adminpassword' => getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS'),
+	'auth.adminpassword' => ( new Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher(
+		4, // time cost
+		65536, // memory cost
+		null, // cost
+		PASSWORD_ARGON2ID,
+	) )->hash( getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS') ),
 	'admin.protectindexpage' => true,
 	'admin.protectmetadata' => false,
 	'admin.checkforupdates' => false,
