@@ -7,6 +7,7 @@ server {
 	error_log /proc/1/fd/2 warn;
 	server_tokens off;
 	
+	rewrite ^/###WIKI_BASE_PATH|###sys/monitoring.json$ /w/monitoring.php last;
 	rewrite ^/###WIKI_BASE_PATH|###_sp/(.*)$ /_sp/$1 last;
 	rewrite ^/###WIKI_BASE_PATH|###webdav/(.*)$ /w/webdav.php/$1?$args last;
 	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/webdav/(.*)$ /w/webdav.php/$2?sfr=$1&$args last;
