@@ -2,15 +2,11 @@
 
 include (__DIR__ . '/config.php.dist');
 
-$protocol = getenv('WIKI_PROTOCOL') ?: 'http';
-$host = getenv('WIKI_HOST') ?: 'localhost';
-$portSuffix = getenv('WIKI_PORT') ? ':' . getenv('WIKI_PORT') : '';
-if ($protocol === 'http' && $portSuffix === ':80') {
-	$portSuffix = '';
-} elseif ($protocol === 'https' && $portSuffix === ':443') {
-	$portSuffix = '';
-}
-$baseUrl = "$protocol://$host{$portSuffix}";
+$baseUrl = $GLOBALS['wgServer'] = bsAssembleURL(
+	[ 'WIKI_PROTOCOL', 'https' ],
+	[ 'WIKI_HOST', 'localhost' ],
+	[ 'WIKI_PORT', '443' ]
+);
 
 // TODO calculate from environment variable
 $loglevel = SimpleSAML\Logger::WARNING;
@@ -27,27 +23,36 @@ $customConfig = [
 		'saml' => true
 	],
 
-	'auth.adminpassword' => getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS'),
+	'auth.adminpassword' => ( new Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher(
+		4, // time cost
+		65536, // memory cost
+		null, // cost
+		PASSWORD_ARGON2ID,
+	) )->hash( getenv('INTERNAL_SIMPLESAMLPHP_ADMIN_PASS') ),
 	'admin.protectindexpage' => true,
 	'admin.protectmetadata' => false,
 	'admin.checkforupdates' => false,
 	'session.cookie.secure' => true,
+	'session.cookie.name' =>
+		getenv('DB_NAME') .
+		( getenv('DB_PREFIX') ?? '' ) .
+		'SAMLSessionID',
 	'enable.http_post' => true,
 	'secretsalt' => getenv('INTERNAL_SIMPLESAMLPHP_SECRET_SALT'),
 
 	'logging.handler' => 'errorlog', //  write to stdout
 	'logging.level' => $loglevel,
-	'debug' => array(
-		'saml' => false,
-		'backtraces' => false,
-		'validatexml' => false,
-	),
+	'debug' => [
+		'saml' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+		'backtraces' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+		'validatexml' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
+	],
 
 	'cachedir' => '/data/simplesamlphp/cache/',
 	'loggingdir' => '/data/simplesamlphp/logs/',
 	'datadir' => '/data/simplesamlphp/data/',
 
-	'showerrors' => false,
+	'showerrors' => getenv( 'DEV_WIKI_DEBUG' ) ?: false,
 	'errorreporting' => true,
 
 	'technicalcontact_name' => getenv('WIKI_NAME') ?? 'BlueSpice',
@@ -66,13 +71,10 @@ $customConfig = [
 	'store.sql.dsn' => 'mysql:dbname=' . (getenv('DB_NAME') ?? 'database') . ';host=' . getenv('DB_HOST'),
 	'store.sql.username' => getenv('DB_USER'),
 	'store.sql.password' => getenv('DB_PASS'),
-	'store.sql.prefix' => 'SimpleSAMLphp_' . (getenv('DB_PREFIX') ?: ''),
+	'store.sql.prefix' => (getenv('DB_PREFIX') ?? '') . 'SimpleSAMLphp_',
 ];
 
 $config = $customConfig + $config;
 
 unset($customConfig);
-unset($protocol);
-unset($host);
-unset($portSuffix);
 unset($baseUrl);
