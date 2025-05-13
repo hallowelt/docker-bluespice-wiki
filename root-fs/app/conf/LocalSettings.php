@@ -99,8 +99,8 @@ define( 'BSROOTDIR', '/data/bluespice/extensions/BlueSpiceFoundation' );
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['bsgSimpleFarmer_instanceDirectory'] = '/data/bluespice/_sf_instances/';
 	$GLOBALS['bsgSimpleFarmer_archiveDirectory'] = '/data/bluespice/_sf_archives/';
-	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
-	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = trim( getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'] );
+	$GLOBALS['bsgSimpleFarmer_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
+	$GLOBALS['bsgSimpleFarmer_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
 }
 
 require_once '/data/bluespice/pre-init-settings.php';
