@@ -87,7 +87,7 @@ if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
 	unset( $logChannels );
 }
 
-// Taken from `extensions/BlueSpiceWikiFarm/src/Dispatcher.php`
+// Taken from `extensions/BlueSpiceWikiFarm/SimpleFarmer/src/Dispatcher.php`
 // Not all of this may be required
 $GLOBALS['wgUploadDirectory'] = "/data/bluespice/images";
 $GLOBALS['wgReadOnlyFile'] = "{$GLOBALS['wgUploadDirectory']}/lock_yBgMBwiR";
@@ -111,7 +111,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
-	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
+	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
 }
 else {
 	define( 'BSDATADIR', BSROOTDIR . "/data" ); //Present
