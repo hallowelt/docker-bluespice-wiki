@@ -101,12 +101,6 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
 	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
 	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = trim( getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'] );
-	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'wiki_' );
-	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
-	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
-	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
-	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
-	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
 }
 
 require_once '/data/bluespice/pre-init-settings.php';
