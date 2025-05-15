@@ -119,14 +119,21 @@ $GLOBALS['wgMathValidModes'] = [ 'mathml' ];
 $GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
 $GLOBALS['wgMaxShellMemory'] = 1228800;
 $GLOBALS['wgHiddenPrefs'][] = 'math';
+// We don't use the `MathMathML` renderer, but `MathMathMLCli`,
+// but `Extension:BlueSpiceInstanceStatus` needs this variable
+$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL(
+	[ 'FORMULA_PROTOCOL', 'http' ],
+	[ 'FORMULA_HOST', 'formula' ],
+	[ 'FORMULA_PORT', '10044' ]
+);
+// By setting `$wgMathoidCli`, `MathMathMLCli` renderer is used
+// instead of `MathMathML`.
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
-	bsAssembleURL(
-		[ 'FORMULA_PROTOCOL', 'http' ],
-		[ 'FORMULA_HOST', 'formula' ],
-		[ 'FORMULA_PORT', '10044' ]
-	),
+	$GLOBALS['wgMathMathMLUrl']
 ];
+
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
