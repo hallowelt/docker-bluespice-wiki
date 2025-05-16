@@ -10,7 +10,7 @@ $GLOBALS['wgServer'] = bsAssembleURL(
 );
 
 $GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) ?: 'BlueSpice' );
-$GLOBALS['wgScriptPath'] = "/w";
+$GLOBALS['wgScriptPath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) .'w';
 
 $GLOBALS['wgResourceBasePath'] = $GLOBALS['wgScriptPath'];
 $GLOBALS['wgLogos'] = [
@@ -179,7 +179,7 @@ else {
 	require_once "$IP/LocalSettings.BlueSpice.php";
 }
 
-$GLOBALS['wgArticlePath'] = '/wiki/$1';
+$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';

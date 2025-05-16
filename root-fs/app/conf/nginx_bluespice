@@ -49,25 +49,27 @@ server {
 
 	location ~ ^###WIKI_BASE_PATH|/###w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb)\.php$ {
 		include fastcgi.conf;
-		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
+		fastcgi_split_path_info ^###WIKI_BASE_PATH|/###(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
-		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_param SCRIPT_FILENAME $document_root/w/$1.php;
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
 	location ~ ^###WIKI_BASE_PATH|/###(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
 		include fastcgi.conf;
-		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
+		fastcgi_split_path_info ^###WIKI_BASE_PATH|/###(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
-		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_param SCRIPT_FILENAME $document_root/w/$1.php;
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
 	location ~ ###WIKI_BASE_PATH|/###w/BUILDINFO {
+		alias /app/bluespice/w/BUILDINFO;
 		allow all;
 	}
 
 	location ~ ^###WIKI_BASE_PATH|/###w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
+		alias /app/bluespice/w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico;
 		allow all;
 	}
 
@@ -84,11 +86,13 @@ server {
 		}
 
 	location ~ ^###WIKI_BASE_PATH|/###w/resources/(assets|lib|src) {
+		alias /app/bluespice/w/resources/$1;
 		add_header Cache-Control "public";
 		expires 7d;
 	}
 
 	location ~ ^###WIKI_BASE_PATH|/###w/(skins|extensions)/.+\.(css|js|gif|jpg|jpeg|png|svg|woff|woff2|ttf)$ {
+		alias /app/bluespice/w/$1/$2;
 		add_header Cache-Control "public";
 		expires 7d;
 	}
