@@ -132,3 +132,8 @@ This user can be the same as `DB_USER` or a different one.
 If you want to use a different user, you need to provide the `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
 
 If `WIKI_FARM_USE_SHARED_DB` is set to `1`, the `FARM` edition will store the wiki instance dbs in `DB_NAME` itself and `DB_USER` does not need permissions to create further databases with the `WIKI_FARM_DB_PREFIX` prefix.
+
+# Liveness and readiness probes
+The container exposes the following commands for liveness and readiness probes:
+- `probe-liveness` - Exists with 0 if the application is healthy
+- `probe-readiness <type>` - Value of `<type>` can be `web` or `task`. Exists with 0 if the application is ready
