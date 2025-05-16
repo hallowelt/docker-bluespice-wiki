@@ -76,8 +76,8 @@ COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
 COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.4/cli/conf.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 RUN ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
-    rm -fr /etc/nginx/sites-enabled-default \
-    ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
+	&& rm -fr /etc/nginx/sites-enabled-default \
+	&& ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
 FROM bluespice-prepare AS bluespice-final
 ENV PATH="/app/bin:${PATH}"
 RUN apt-get -y auto-remove \
