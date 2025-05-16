@@ -7,19 +7,19 @@ server {
 	error_log /proc/1/fd/2 warn;
 	server_tokens off;
 	
-	rewrite ^/###WIKI_BASE_PATH|###_sp/(.*)$ /_sp/$1 last;
-	rewrite ^/###WIKI_BASE_PATH|###webdav/(.*)$ /w/webdav.php/$1?$args last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/webdav/(.*)$ /w/webdav.php/$2?sfr=$1&$args last;
-	rewrite ^/###WIKI_BASE_PATH|###wiki/(.*?).php/(.+)$ /w/$1.php?sfr=w&title=$2 last;
-	rewrite ^/###WIKI_BASE_PATH|###wiki/(.+)$ /w/index.php?title=$1&sfr=w last;
-	rewrite ^/###WIKI_BASE_PATH|###wiki/([^/]+)/?$ /w/index.php?title=$1&sfr=w last;
-	rewrite ^/###WIKI_BASE_PATH|###w/(.*?)$ /w/$1?sfr=w last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/index.php/(.+)$ /w/$2.php?sfr=$1&title=$3 last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/(.*?).php/(.+)$ /w/$2.php/$3?sfr=$1 last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/(.*?).php /w/$2.php?sfr=$1 last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/wiki/(.+)$ /w/index.php?title=$2&sfr=$1 last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]*)/(.+)$ /w/$2 last;
-	rewrite ^/###WIKI_BASE_PATH|###([^/]+)/?$ /w/index.php?sfr=$1 last;
+	rewrite ^###WIKI_BASE_PATH|/###_sp/(.*)$ /_sp/$1 last;
+	rewrite ^###WIKI_BASE_PATH|/###webdav/(.*)$ /w/webdav.php/$1?$args last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/webdav/(.*)$ /w/webdav.php/$2?sfr=$1&$args last;
+	rewrite ^###WIKI_BASE_PATH|/###wiki/(.*?).php/(.+)$ /w/$1.php?sfr=w&title=$2 last;
+	rewrite ^###WIKI_BASE_PATH|/###wiki/(.+)$ /w/index.php?title=$1&sfr=w last;
+	rewrite ^###WIKI_BASE_PATH|/###wiki/([^/]+)/?$ /w/index.php?title=$1&sfr=w last;
+	rewrite ^###WIKI_BASE_PATH|/###w/(.*?)$ /w/$1?sfr=w last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/index.php/(.+)$ /w/$2.php?sfr=$1&title=$3 last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/(.*?).php/(.+)$ /w/$2.php/$3?sfr=$1 last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/(.*?).php /w/$2.php?sfr=$1 last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/wiki/(.+)$ /w/index.php?title=$2&sfr=$1 last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/(.+)$ /w/$2 last;
+	rewrite ^###WIKI_BASE_PATH|/###([^/]+)/?$ /w/index.php?sfr=$1 last;
 
 	if (-f /data/maintenance) {
 		return 503;
@@ -47,7 +47,7 @@ server {
 		deny all;
 	}
 
-	location ~ ^/###WIKI_BASE_PATH|###w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb)\.php$ {
+	location ~ ^###WIKI_BASE_PATH|/###w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb)\.php$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
@@ -55,7 +55,7 @@ server {
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	location ~ ^/###WIKI_BASE_PATH|###(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
+	location ~ ^###WIKI_BASE_PATH|/###(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
@@ -63,15 +63,15 @@ server {
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	location ~ /###WIKI_BASE_PATH|###w/BUILDINFO {
+	location ~ ###WIKI_BASE_PATH|/###w/BUILDINFO {
 		allow all;
 	}
 
-	location ~ ^/###WIKI_BASE_PATH|###w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
+	location ~ ^###WIKI_BASE_PATH|/###w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
 		allow all;
 	}
 
-	location ^~ /###WIKI_BASE_PATH|###_sp {
+	location ^~ ###WIKI_BASE_PATH|/###_sp {
 			alias /app/simplesamlphp/public;
 				location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
 					include fastcgi_params;
@@ -83,17 +83,17 @@ server {
 			break;
 		}
 
-	location ~ ^/###WIKI_BASE_PATH|###w/resources/(assets|lib|src) {
+	location ~ ^###WIKI_BASE_PATH|/###w/resources/(assets|lib|src) {
 		add_header Cache-Control "public";
 		expires 7d;
 	}
 
-	location ~ ^/###WIKI_BASE_PATH|###w/(skins|extensions)/.+\.(css|js|gif|jpg|jpeg|png|svg|woff|woff2|ttf)$ {
+	location ~ ^###WIKI_BASE_PATH|/###w/(skins|extensions)/.+\.(css|js|gif|jpg|jpeg|png|svg|woff|woff2|ttf)$ {
 		add_header Cache-Control "public";
 		expires 7d;
 	}
 
 	location = / {
-		return 301 /###WIKI_BASE_PATH|###wiki/;
+		return 301 ###WIKI_BASE_PATH|/###wiki/;
 	}
 }
