@@ -2,7 +2,6 @@
 set -o errexit
 set -o nounset
 set -o pipefail
-export WIKI_BASE_PATH=${WIKI_BASE_PATH:-wiki/}
 substitutePlaceholders /app/conf/nginx_bluespice
 
 echo ""
