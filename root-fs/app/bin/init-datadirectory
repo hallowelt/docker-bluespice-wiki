@@ -8,6 +8,7 @@ echo "#############################################"
 echo "Init data directory"
 
 directories=(
+  /data/bluespice/cache
   /data/bluespice/extensions/BlueSpiceFoundation/data
   /data/bluespice/images
   /data/bluespice/logs/postupdate
@@ -20,6 +21,7 @@ directories=(
 
 if [ "${EDITION}" == "farm" ]; then
 	directories=(
+  /data/bluespice/cache
   /data/bluespice/extensions/BlueSpiceFoundation/data
   /data/bluespice/images
   /data/bluespice/farm-instances
@@ -50,4 +52,3 @@ for file in "${!files[@]}"; do
   fi
 done
 echo "Done"
-chown -R bluespice:bluespice /data
