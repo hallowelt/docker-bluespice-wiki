@@ -18,7 +18,7 @@ git clone --branch $(git ls-remote --tags https://github.com/simplesamlphp/simpl
 cd simplesamlphp && cp config/config.php.dist config/config.php
 composer clear-cache && composer install
 ```
-The `bluespice-dev` part of the Dockerfile are development specific. You can also visit `root-fs/etc/php/8.x/cli/conf.d/99-dev.ini` and `root-fs/etc/php/8.x/fpm/conf.d/99-dev.ini` to modify `php.ini` settings, for example those xdebug related things.
+The `bluespice-dev` section of the Dockerfile is development-specific. You can also visit `root-fs/etc/php/8.x/cli/conf.d/99-dev.ini` and `root-fs/etc/php/8.x/fpm/conf.d/99-dev.ini` to modify `php.ini` settings, for example, those related to xdebug.
 
 ## ENV vars
 
