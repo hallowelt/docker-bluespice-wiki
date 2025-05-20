@@ -12,7 +12,7 @@ instancesRoot=/data/bluespice/farm-instances
 hour=$(date +"%H")
 minute=$(date +"%M")
 
-if [ $hour != $BACKUP_HOUR ]; then
+if [ $hour != ${BACKUP_HOUR:-1} ]; then
 	exit 1
 fi
 backupDest=/data/backup

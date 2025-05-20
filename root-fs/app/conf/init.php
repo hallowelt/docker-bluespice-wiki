@@ -23,11 +23,16 @@ if ( isset( $_REQUEST['_profiler'] ) ) {
 	} );
 }
 
-function bsAssembleURL( $proto, $hostname, $port ) {
-	$protocol = getenv( $proto[0] ) ?: $proto[1];
-	$host = getenv( $hostname[0] ) ?: $hostname[1];
+function bsAssembleURL( $proto, $hostname, $port, $path = [] ) {
+	$protocol = trim( getenv( $proto[0] ) ?: $proto[1] );
+	$host = trim( getenv( $hostname[0] ) ?: $hostname[1] );
+	if ( !empty( $path ) ) {
+		$path = trim( getenv( $path[0] ) ?: $path[1] );
+	} else {
+		$path = '';
+	}
 	$portSuffix = getenv( $port[0] )
-					? ':' . getenv( $port[0] )
+					? ':' . trim( getenv( $port[0] ) )
 					: ':' . $port[1];
 
 	if ( $protocol === 'http' && $portSuffix === ':80' ) {
@@ -36,7 +41,7 @@ function bsAssembleURL( $proto, $hostname, $port ) {
 		$portSuffix = '';
 	}
 
-	return "$protocol://$host{$portSuffix}";
+	return "$protocol://$host{$portSuffix}$path";
 }
 
 // We must not set MW_CONFIG_FILE if we are running the CLI installer

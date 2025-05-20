@@ -9,7 +9,7 @@ $GLOBALS['wgServer'] = bsAssembleURL(
 	[ 'WIKI_PORT', '443' ]
 );
 
-$GLOBALS['wgSitename'] = getenv( 'WIKI_NAME' ) ?: 'BlueSpice';
+$GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) ?: 'BlueSpice' );
 $GLOBALS['wgScriptPath'] = "/w";
 
 $GLOBALS['wgResourceBasePath'] = $GLOBALS['wgScriptPath'];
@@ -17,22 +17,26 @@ $GLOBALS['wgLogos'] = [
 	'1x' => $GLOBALS['wgResourceBasePath'] . '/resources/assets/change-your-logo.svg',
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
-$GLOBALS['wgEmergencyContact'] = getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '';
-$GLOBALS['wgPasswordSender'] = getenv( 'WIKI_PASSWORDSENDER' ) ?: '';
-$GLOBALS['wgDBtype'] = getenv( 'DB_TYPE' ) ?: 'mysql';
-$GLOBALS['wgDBserver'] = getenv( 'DB_HOST' ) ?: "database";
-$GLOBALS['wgDBname'] = getenv( 'DB_NAME' ) ?: 'bluespice';
-$GLOBALS['wgDBuser'] = getenv( 'DB_USER' ) ?: 'bluespice';
-$GLOBALS['wgDBpassword'] = getenv( 'DB_PASS' );
-$GLOBALS['wgDBprefix'] = getenv( 'DB_PREFIX' ) ?: '';
+$GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '' );
+$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) ?: '' );
+$GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) ?: 'mysql' );
+$GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) ?: 'database' );
+$GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
+$GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) ?: 'bluespice' );
+$GLOBALS['wgDBpassword'] = trim(  getenv( 'DB_PASS' ) );
+$GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) ?: '' );
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
-$cacheHost = getenv( 'CACHE_HOST' ) ?: 'cache';
-$cachePort = getenv( 'CACHE_PORT' ) ?: '11211';
-$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
-unset( $cacheHost );
-unset( $cachePort );
-$GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
-$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
+$GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
+$GLOBALS['wgSessionCacheType'] = CACHE_DB;
+if ( getenv( 'CACHE_HOST' ) !== '-' ) {
+	$cacheHost = trim( getenv( 'CACHE_HOST' ) ?: 'cache' );
+	$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '11211' );
+	$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
+	unset( $cacheHost );
+	unset( $cachePort );
+	$GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
+	$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
+}
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
 $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
@@ -40,11 +44,11 @@ $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
 $GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/convert";
-$GLOBALS['wgLanguageCode'] = getenv( 'WIKI_LANG' ) ?: "en";
+$GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) ?: 'en' );
 $GLOBALS['wgLocaltimezone'] = "UTC";
-$GLOBALS['wgSecretKey'] = getenv( 'INTERNAL_WIKI_SECRETKEY' );
+$GLOBALS['wgSecretKey'] = trim( getenv( 'INTERNAL_WIKI_SECRETKEY' ) );
 $GLOBALS['wgAuthenticationTokenVersion'] = "1";
-$GLOBALS['wgUpgradeKey'] = getenv( 'INTERNAL_WIKI_UPGRADEKEY' );
+$GLOBALS['wgUpgradeKey'] = trim( getenv( 'INTERNAL_WIKI_UPGRADEKEY' ) );
 $GLOBALS['wgRightsPage'] = "";
 $GLOBALS['wgRightsUrl'] = "";
 $GLOBALS['wgRightsText'] = "";
@@ -52,12 +56,12 @@ $GLOBALS['wgRightsIcon'] = "";
 $GLOBALS['wgMetaNamespace'] = "Site";
 $GLOBALS['wgPhpCli'] = '/bin/php';
 $GLOBALS['wgSMTP'] = [
-	'host' => getenv( 'SMTP_HOST' ),
-	'IDHost' => getenv( 'SMTP_IDHOST' ),
-	'port' => getenv( 'SMTP_PORT' ) ?: 25,
+	'host' => trim( getenv( 'SMTP_HOST' ) ),
+	'IDHost' => trim( getenv( 'SMTP_IDHOST' ) ),
+	'port' => trim( getenv( 'SMTP_PORT' ) ?: 25 ),
 	'auth' => getenv( 'SMTP_USER' ) ? true : false,
-	'username' => getenv( 'SMTP_USER' ),
-	'password' => getenv( 'SMTP_PASS' ),
+	'username' => trim( getenv( 'SMTP_USER' ) ),
+	'password' => trim( getenv( 'SMTP_PASS' ) ),
 ];
 if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirusSetup'] = [
@@ -76,21 +80,71 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
 if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
-	$GLOBALS['bsgOverrideLicenseKey'] = getenv( 'WIKI_SUBSCRIPTION_KEY' );
+	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
 $GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
 $GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
 
+$GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) ?: 'search' );
+$GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) ?: '9200' );
+$GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) ?: 'http' );
+$GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) ?: '' );
+$GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) ?: '' );
+
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
+	[ 'PDF_PROTOCOL', 'http' ],
+	[ 'PDF_HOST', 'pdf' ],
+	[ 'PDF_PORT', '8080' ]
+);
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
+
+$GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
+$GLOBALS['wgPdfPostProcessor'] = $GLOBALS['wgImageMagickConvertCommand'];
+$GLOBALS['wgPdfInfo'] = '/usr/bin/pdfinfo';
+$GLOBALS['wgPdftoText'] = '/usr/bin/pdftotext';
+
+if ( getenv( 'EDITION' ) !== 'free' ) {
+	// FREE edition uses public diagrams.net service
+	// HINT: Keep in sync with assembly of $GLOBALS['wgServer']
+	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL(
+		[ 'DIAGRAM_PROTOCOL', trim( getenv( 'WIKI_PROTOCOL' ) ?: 'https' ) ],
+		[ 'DIAGRAM_HOST', trim( getenv( 'WIKI_HOST' ) ?: 'localhost' ) ],
+		[ 'DIAGRAM_PORT', trim( getenv( 'WIKI_PORT' ) ?: '443' ) ],
+		[ 'DIAGRAM_PATH', '/_diagram/' ]
+	);
+}
+
+$GLOBALS['wgMathValidModes'] = [ 'mathml' ];
+$GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
+$GLOBALS['wgMaxShellMemory'] = 1228800;
+$GLOBALS['wgHiddenPrefs'][] = 'math';
+// We don't use the `MathMathML` renderer, but `MathMathMLCli`,
+// but `Extension:BlueSpiceInstanceStatus` needs this variable
+$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL(
+	[ 'FORMULA_PROTOCOL', 'http' ],
+	[ 'FORMULA_HOST', 'formula' ],
+	[ 'FORMULA_PORT', '10044' ]
+);
+// By setting `$wgMathoidCli`, `MathMathMLCli` renderer is used
+// instead of `MathMathML`.
+$GLOBALS['wgMathoidCli'] = [
+	'/app/bin/mathoid-remote',
+	$GLOBALS['wgMathMathMLUrl']
+];
+
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
+
+$GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
+
 if ( getenv( 'DEV_WIKI_DEBUG' ) ) {
-	#$GLOBALS['wgDebugToolbar'] = true;
 	$GLOBALS['wgShowExceptionDetails'] = true;
 	$GLOBALS['wgDevelopmentWarnings'] = true;
 	$GLOBALS['wgDebugDumpSql'] = true;
 }
 
 if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
-	$logChannels = explode( ',', getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) );
+	$logChannels = explode( ',', trim( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) );
 	$logChannels = array_map( 'trim', $logChannels );
 	foreach ( $logChannels as $channel ) {
 		$GLOBALS['bsgDebugLogGroups'][$channel] = true;
@@ -110,10 +164,11 @@ define( 'BSROOTDIR', '/data/bluespice/extensions/BlueSpiceFoundation' );
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
-	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = getenv( 'DB_ROOT_USER' ) ?: 'root';
-	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'];
-	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = getenv( 'DB_NAME_PREFIX' ) ?: 'wiki_';
+	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
+	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = trim( getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'] );
+	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'wiki_' );
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
+	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
@@ -141,37 +196,5 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
 	}
 }
-
-$GLOBALS['bsgESBackendHost'] = getenv( 'SEARCH_HOST' ) ?: 'search';
-$GLOBALS['bsgESBackendPort'] = getenv( 'SEARCH_PORT' ) ?: '9200';
-$GLOBALS['bsgESBackendTransport'] = getenv( 'SEARCH_PROTOCOL' ) ?: 'http';
-
-$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
-	[ 'PDF_PROTOCOL', 'http' ],
-	[ 'PDF_HOST', 'pdf' ],
-	[ 'PDF_PORT', '8080' ]
-);
-$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
-
-$GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
-$GLOBALS['wgPdfPostProcessor'] = $GLOBALS['wgImageMagickConvertCommand'];
-$GLOBALS['wgPdfInfo'] = '/usr/bin/pdfinfo';
-$GLOBALS['wgPdftoText'] = '/usr/bin/pdftotext';
-
-if ( getenv( 'EDITION' ) !== 'free' ) {
-	// FREE edition uses public diagrams.net service
-	$GLOBALS['wgDrawioEditorBackendUrl'] = $GLOBALS['wgServer'] . '/_diagram/';
-}
-
-$GLOBALS['wgMathoidCli'] = [
-	'/app/bin/mathoid-remote',
-	bsAssembleURL(
-		[ 'FORMULA_PROTOCOL', 'http' ],
-		[ 'FORMULA_HOST', 'formula' ],
-		[ 'FORMULA_PORT', '10044' ]
-	),
-];
-
-$GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
 require_once '/data/bluespice/post-init-settings.php';

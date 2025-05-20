@@ -19,29 +19,39 @@ echo ""
 echo "#############################################"
 
 if [[ ($1 == "--runAll") ]]; then
-echo "🏇 Starting TaskRunner"
+	echo "🏇 Starting TaskRunner"
 fi
 
+echo "" > /tmp/healthcheck
 if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
-	
 	echo "Starting update"
 	date > /data/maintenance
 	run-updates
 	rm /data/maintenance
 
 	echo "Starting runJobs"
-	/app/bin/parallel-runjobs-service \
-	--config /app/bin/config/runJobs_conf.yaml \
-	 > /proc/1/fd/1 2>&1 &
+	echo "parallel-runJobsService" >> /tmp/healthcheck
+	/app/bin/parallel-runJobsService > /proc/1/fd/1 2>&1 &
 fi
 if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting ProcessRunner"
-	sg www-data -c '/bin/bash /app/bin/parallel-processRunner'  > /proc/1/fd/1 2>&1 &
+	echo "parallel-processRunner" >> /tmp/healthcheck
+	/app/bin/parallel-processRunner > /proc/1/fd/1 2>&1 &
 fi
-if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]]; then
+
+if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]] && [[ ( ${BACKUP_HOUR:-1} != -1 ) ]]; then
 	echo "Starting Backup-Agent"
-	echo "Backup daily at" $BACKUP_HOUR
-	/app/bin/backup-loop   > /proc/1/fd/1 2>&1  &
+	echo "Backup daily at" ${BACKUP_HOUR:-1}
+	echo "backup-loop" >> /tmp/healthcheck
+	/app/bin/backup-loop > /proc/1/fd/1 2>&1  &
 fi
+if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
+	echo "Starting SnapshotStatistics cronjobs"
+	echo "supercronic" >> /tmp/healthcheck
+	/app/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
+fi
+
+echo "ready" > /tmp/state
+
 sleep inf
 
