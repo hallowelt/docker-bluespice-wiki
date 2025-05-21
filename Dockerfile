@@ -1,4 +1,4 @@
-FROM alpine:3.20 AS base
+FROM alpine:3 AS base
 ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -49,6 +49,7 @@ ARG UID
 ENV UID=1002
 ARG USER
 ENV USER=bluespice
+ENV PATH="/app/bin:${PATH}"
 ARG GID
 ENV GID=$UID
 ARG GROUPNAME
@@ -66,7 +67,6 @@ COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
-COPY  --chmod=755 /root-fs/etc/clamav/clamd.conf /etc/clamav/clamd.conf
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
