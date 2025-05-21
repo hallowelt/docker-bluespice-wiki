@@ -1,12 +1,21 @@
-#!/bin/sh
+#!/bin/bash
+
+if [ ! -w /data ]; then
+	echo "ERROR: /data is not writable"
+	exit 1
+fi
 
 echo ""
 echo "#############################################"
-echo "Running installation"
+echo "🧰 Running installation"
 
-timestamp=$(date +%Y%m%d%H%M%S)
 appDir=/app/bluespice/w
+timestamp=$(date +%Y%m%d%H%M%S)
+adminUserName=${WIKI_INITIAL_ADMIN_USER:-Admin}
 adminPass=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 20; echo)
+if [ -n "$WIKI_INITIAL_ADMIN_PASS" ]; then
+	adminPass=$WIKI_INITIAL_ADMIN_PASS
+fi
 upgradeKey=$(tr -dc a-z0-9 </dev/urandom | head -c 16; echo)
 secretKey=$(tr -dc a-z0-9 </dev/urandom | head -c 64; echo)
 samlSecretSalt=$(tr -dc a-z0-9 </dev/urandom | head -c 64; echo)
@@ -19,44 +28,27 @@ set -a
 source /data/.wikienv
 set +a
 
-# TODO: make admin name configurable
-php $appDir/maintenance/install.php \
-	--dbserver=$DB_HOST \
-	--dbname=$DB_NAME \
-	--installdbuser=$DB_USER \
-	--installdbpass=$DB_PASS \
-	--dbuser=$DB_USER \
-	--dbpass=$DB_PASS \
-	--pass=$adminPass \
-	--lang=$WIKI_LANG \
-	--scriptpath=/w \
-	$WIKI_NAME \
-	Admin \
-	| tee -a /data/bluespice/logs/install-$timestamp.log
+export appDir
+export timestamp
+export adminUserName
+export adminPass
 
-# Remove the LocalSettings.php file created by the install script
-rm $appDir/LocalSettings.php
-
-
-
-echo "Database installed"
-
-# Create the simplesamlphp certificates
-if [ ! -f /data/simplesamlphp/certs/saml.crt ] || [ ! -f /data/simplesamlphp/certs/saml.pem ]; then
-	echo "#############################################"
-	echo "Creating simplesamlphp certificates"
-	openssl req -newkey rsa:3072 -new -x509 -days 3652 -nodes \
-		-out /data/simplesamlphp/certs/saml.crt \
-		-keyout /data/simplesamlphp/certs/saml.pem
-		-subj "/CN=$WIKI_HOST"
-fi
-
-run-updates
-rebuild-searchindex --all
+for f in /app/bin/run-installation.d/*; do
+	if [ -f "$f" ]; then
+		echo ""
+		echo "🔧 Running $f"
+		$f
+	fi
+done
 
 echo ""
 echo "#############################################"
-echo "Installation complete"
+echo "🏁 Installation complete"
 echo "You can now access the wiki in your browser at $WIKI_PROTOCOL://$WIKI_HOST:$WIKI_PORT"
-echo "The password for user 'Admin' can be found in \$DATADIR/adminPassword"
-echo $adminPass > /data/adminPasssword
+echo "The password for user '$adminUserName' can be found in \$DATADIR/initialAdminPassword"
+echo $adminPass > /data/initialAdminPassword
+
+unset appDir
+unset timestamp
+unset adminUserName
+unset adminPass

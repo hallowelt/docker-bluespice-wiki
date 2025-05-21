@@ -3,11 +3,13 @@ server {
 	listen 9090 default_server;
 	root /app/bluespice;
 	client_max_body_size 1024m;
-	access_log /dev/stdout;
-	error_log /dev/stderr warn;
+	access_log /proc/1/fd/1;
+	error_log /proc/1/fd/2 warn;
 	server_tokens off;
 	
 	rewrite ^/_sp/(.*)$ /_sp/$1 last;
+	rewrite ^/webdav/(.*)$ /w/webdav.php/$1?$args last;
+	rewrite ^/([^/]*)/webdav/(.*)$ /w/webdav.php/$2?sfr=$1&$args last;
 	rewrite ^/wiki/(.*?).php/(.+)$ /w/$1.php?sfr=w&title=$2 last;
 	rewrite ^/wiki/(.+)$ /w/index.php?title=$1&sfr=w last;
 	rewrite ^/wiki/([^/]+)/?$ /w/index.php?title=$1&sfr=w last;
@@ -45,20 +47,20 @@ server {
 		deny all;
 	}
 
-	location ~ ^/w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb|info)\.php$ {
+	location ~ ^/w/(api|dynamic_file|index|load|opensearch_desc|thumb_handler|thumb)\.php$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.+?)$ {
+	location ~ ^/(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
 		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
-		fastcgi_pass 127.0.0.1:9000;
+		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
 	location ~ /w/BUILDINFO {
@@ -69,18 +71,14 @@ server {
 		allow all;
 	}
 
-	location ~ /webdav/(.*) {
-		rewrite /webdav/.* /w/webdav.php;
-	}
-
 	location ^~ /_sp {
 			alias /app/simplesamlphp/public;
 				location ~^(?<prefix>/_sp)(?<phpfile>.+?\.php)(?<pathinfo>/.*)?$ {
 					include fastcgi_params;
+					fastcgi_pass unix:/var/run/php/php-fpm.sock;
 					fastcgi_param SCRIPT_FILENAME $document_root$phpfile;
 					fastcgi_param SCRIPT_NAME /_sp/$phpfile;
 					fastcgi_param PATH_INFO $pathinfo if_not_empty;
-					fastcgi_pass 127.0.0.1:9000;
 				}
 			break;
 		}

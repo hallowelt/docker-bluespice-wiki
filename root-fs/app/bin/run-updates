@@ -1,10 +1,13 @@
-#!/bin/sh
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
 
 timestamp=$(date +%Y%m%d%H%M%S)
 appDir=/app/bluespice/w
 
 baseVersion=""
-if [ -f /data//bluespice/logs/baseversion ]; then
+if [ -f /data/bluespice/logs/baseversion ]; then
 	baseVersion=$(cat /data/bluespice/logs/baseversion)
 fi
 version=$(cat $appDir/BLUESPICE-VERSION)
@@ -17,12 +20,18 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
-if [ "${EDITION}" == "farm" ]; then
-	runForAllScript=/app/bluespice/w/extensions/BlueSpiceWikiFarm/SimpleFarmer/maintenance/RunforAll.php
-	php $appDir/maintenance/update.php  --quick | tee -a /data/bluespice/logs/update-$timestamp.log
-	php $runForAllScript --script='maintenance/update.php'  --args='--quick' | tee -a /data/bluespice/logs/update-$timestamp.log
-fi
+ /app/bin/run-installation.d/040-create-oauth-keypair
 
-php $appDir/maintenance/update.php  --quick | tee -a /data/bluespice/logs/update-$timestamp.log
+ run-maintenance update \
+	--quick \
+	--doshared \
+	| tee -a /data/bluespice/logs/update-$timestamp.log
 
 echo $version > /data/bluespice/logs/baseversion
+
+if [ "${EDITION}" == "farm" ]; then
+	run-maintenance BlueSpiceWikiFarm:RunForAll \
+		--script='maintenance/update.php' \
+		--args='--quick --doshared' \
+		| tee -a /data/bluespice/logs/update-$timestamp.log
+fi

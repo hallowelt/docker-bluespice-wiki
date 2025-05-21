@@ -6,7 +6,7 @@ $file = $argv[1];
 
 echo "\n";
 echo "#############################################\n";
-echo "Substitute placeholders in a $file\n";
+echo "Substitute placeholders in '$file'\n";
 
 if (!file_exists($file)) {
 	echo "File $file does not exist\n";
@@ -14,14 +14,17 @@ if (!file_exists($file)) {
 }
 
 $contents = file_get_contents( $file );
+$pattern = '/###([A-Z_]+)(\|[^#]+)?###/';
 $modifiedContents = preg_replace_callback(
-	'/###([A-Z_]+)###/',
+	$pattern,
 	function( $matches ) {
 		$envVarName = $matches[1];
+		$defaultValue = $matches[2] ?? '';
+		$defaultValue = substr( $defaultValue, 1 );
 		$envVarValue = getenv( $envVarName );
-		;
+
 		if ( $envVarValue === false ) {
-			$envVarValue = '';
+			$envVarValue = $defaultValue;
 		}
 
 		$outputValue = $envVarValue;

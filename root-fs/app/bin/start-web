@@ -1,9 +1,14 @@
-#!/bin/sh
-
-/usr/bin/php /app/bin/substitutePlaceholders /etc/nginx/sites-enabled/default
+#!/bin/bash
+set -o errexit
+set -o nounset
+set -o pipefail
 
 echo ""
 echo "#############################################"
-echo "Starting WebFrontend"
+echo "🌐 Starting WebFrontend"
 
-php-fpm83 -D && nginx -g "daemon off;"
+echo "" > /tmp/healthcheck
+echo "php-fpm" >> /tmp/healthcheck # Process name is `php-fpm`, not `php-fpm8.4`
+echo "nginx" >> /tmp/healthcheck
+
+php-fpm8.4 -D && nginx -g "daemon off;"
