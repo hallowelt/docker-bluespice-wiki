@@ -21,6 +21,7 @@ echo "Running updates"
 echo "Version: $version"
 
  /app/bin/run-installation.d/040-create-oauth-keypair
+ /app/bin/run-installation.d/010-init-database
 
  run-maintenance update \
 	--quick \
