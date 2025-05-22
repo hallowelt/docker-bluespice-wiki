@@ -51,7 +51,7 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
-| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances **)     | Yes      |
+| `WIKI_FARM_DB_PREFIX`        | `sfr_`        | Database name prefix for wiki farm instances **)     | Yes      |
 | `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
