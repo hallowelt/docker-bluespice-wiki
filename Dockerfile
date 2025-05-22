@@ -37,6 +37,7 @@ RUN apk add \
 	php-phar \
 	php-pdo \
 	php-pdo_mysql \
+	php-posix \
 	poppler-utils \
 	python3 \
 	vim \
@@ -56,7 +57,7 @@ ARG GROUPNAME
 ENV GROUPNAME=$USER
 
 RUN addgroup -g $GID $GROUPNAME \
-	&& adduser -u $UID -G $GROUPNAME --disabled-password --gecos "" $USER \
+	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
 	&& addgroup $USER nginx \
 	&& mkdir -p /app/bluespice \
 	&& chown $USER:$GROUPNAME /app/bluespice/ \
@@ -72,14 +73,19 @@ ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-media
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php83
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php83/php-fpm.d/
-COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php83/conf.d/
+COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php83/conf.d/
 COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+RUN ln -sf /usr/sbin/php-fpm83 /usr/bin/php-fpm \
+	&& mkdir /var/run/php \
+	&& ln -sf /usr/bin/php /bin/php \
+	&& chown -R $USER:$GROUPNAME /var/run/php
 
 
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
-#ENTRYPOINT ["sleep infinity"]
-CMD ["sleep", "infinity"]
+HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness
+ENTRYPOINT ["/app/bin/entrypoint"]
+#ENTRYPOINT ["sleep", "infinity"]
