@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # In BlueSpice 5, the two FARM directories
-#`/data/bluespice/_sf_instances` and `/data/bluespice/_sf_archive`
+# `/data/bluespice/_sf_instances` and `/data/bluespice/_sf_archive`
 # have been moved to
 # `/data/bluespice/farm-instances` and `/data/bluespice/farm-archive`
 

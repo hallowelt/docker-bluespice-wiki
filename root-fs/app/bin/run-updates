@@ -20,7 +20,7 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
-run-one-shot-update-scripts preupdate
+run-logged-update-scripts preupdate
 
 run-maintenance update \
 	--quick \
@@ -36,4 +36,4 @@ if [ "${EDITION}" == "farm" ]; then
 		| tee -a /data/bluespice/logs/update-$timestamp.log
 fi
 
-run-one-shot-update-scripts postupdate
+run-logged-update-scripts postupdate
