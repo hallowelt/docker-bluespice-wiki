@@ -1,7 +1,8 @@
-FROM alpine:3 AS base
+FROM alpine:3.21 AS base
 ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
+ENV VERSION=84
 RUN apk add \
 	bash \
 	openssl \
@@ -12,38 +13,39 @@ RUN apk add \
 	xpdf \
 	nginx \
 	php \
-	php-fpm \
-	php-xml \
-	php-mbstring \
-	php-curl \
-	php-zip \
-	php-cli \
-	php-json \
-	php-mysqli \
-	php-ldap \
-	php-opcache \
-	php-apcu \
-	php-intl \
-	php-gd \
-	php-gmp \
-	php-ctype \
-	php-iconv \
-	php-fileinfo \
-	php-xml \
-	php-xmlreader \
-	php-xmlwriter \
-	php-simplexml \
-	php-session \
-	php-phar \
-	php-pdo \
-	php-pdo_mysql \
-	php-posix \
+	php$VERSION-fpm \
+	php$VERSION-xml \
+	php$VERSION-mbstring \
+	php$VERSION-curl \
+	php$VERSION-zip \
+	php$VERSION-cli \
+	php$VERSION-json \
+	php$VERSION-mysqli \
+	php$VERSION-ldap \
+	php$VERSION-opcache \
+	php$VERSION-apcu \
+	php$VERSION-intl \
+	php$VERSION-gd \
+	php$VERSION-gmp \
+	php$VERSION-ctype \
+	php$VERSION-iconv \
+	php$VERSION-fileinfo \
+	php$VERSION-xml \
+	php$VERSION-xmlreader \
+	php$VERSION-xmlwriter \
+	php$VERSION-simplexml \
+	php$VERSION-session \
+	php$VERSION-phar \
+	php$VERSION-pdo \
+	php$VERSION-pdo_mysql \
+	php$VERSION-posix \
 	poppler-utils \
 	python3 \
-	vim \
 	rsvg-convert \
+	supercronic \
+	vim \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-	&& apk add php83-pecl-excimer@testing
+	&& apk add php84-pecl-excimer@testing
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
@@ -71,12 +73,12 @@ COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.0/parallel-runjobs-service /app/bin
-COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php83
-COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php83/php-fpm.d/
-COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php83/conf.d/
+COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
+COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
+COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php$VERSION/conf.d/
 COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-RUN ln -sf /usr/sbin/php-fpm83 /usr/bin/php-fpm \
+RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
 	&& ln -sf /usr/bin/php /bin/php \
 	&& chown -R $USER:$GROUPNAME /var/run/php
