@@ -20,9 +20,7 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
- /app/bin/run-installation.d/040-create-oauth-keypair
-
- run-maintenance update \
+run-maintenance update \
 	--quick \
 	--doshared \
 	| tee -a /data/bluespice/logs/update-$timestamp.log
@@ -35,3 +33,24 @@ if [ "${EDITION}" == "farm" ]; then
 		--args='--quick --doshared' \
 		| tee -a /data/bluespice/logs/update-$timestamp.log
 fi
+
+for f in /app/bin/postupdate.d/*; do
+	logFile=/data/bluespice/logs/postupdate/$(basename $f).log
+	errorLogFile=/data/bluespice/logs/postupdate/$(basename $f).$timestamp.error.log
+	if [ -f "$logFile" ]; then
+		echo "Log file $logFile already exists, skipping $f"
+		continue
+	fi
+
+	if [ -f "$f" ]; then
+		echo ""
+		echo "🔧 Running $f"
+		$f \
+			| tee -a $logFile
+		if [ $? -ne 0 ]; then
+			echo "Error running $f"
+			mv $logFile $errorLogFile
+			exit 1
+		fi
+	fi
+done
