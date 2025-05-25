@@ -93,4 +93,3 @@ USER bluespice
 EXPOSE 9090
 HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness
 ENTRYPOINT ["/app/bin/entrypoint"]
-#ENTRYPOINT ["sleep", "infinity"]
