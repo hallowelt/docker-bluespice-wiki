@@ -20,6 +20,8 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
+# TODO: Fix me - Those scripts should be renamed/generalized
+/app/bin/run-installation.d/010-init-database
 /app/bin/run-installation.d/040-create-oauth-keypair
 
 run-maintenance update \
