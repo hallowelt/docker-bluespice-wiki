@@ -27,7 +27,9 @@ try {
 		PDO::ERRMODE_EXCEPTION
 	);
 
+	$dbUser = $pdo->quote( $dbUser );
 	$dbName = $pdo->quote( $dbName );
+	$dbNamePrefix = $pdo->quote( $dbNamePrefix );
 
 	# Create the database
 	$pdo->exec( "CREATE DATABASE IF NOT EXISTS $dbName" );
