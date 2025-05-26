@@ -18,7 +18,7 @@ echo "Initializing database '$dbName' on $dbHost ... \n";
 
 try {
 	$pdo = new PDO(
-		"mysql:host=$dbHost;dbname=$dbName",
+		"mysql:host=$dbHost",
 		$dbRootUser,
 		$dbRootPass
 	);
