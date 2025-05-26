@@ -20,9 +20,9 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
- /app/bin/run-installation.d/040-create-oauth-keypair
+/app/bin/run-installation.d/040-create-oauth-keypair
 
- run-maintenance update \
+run-maintenance update \
 	--quick \
 	--doshared \
 	| tee -a /data/bluespice/logs/update-$timestamp.log
