@@ -28,7 +28,7 @@ for f in /app/bin/run-updates.d/*; do
 	fi
 done
 
- run-maintenance update \
+run-maintenance update \
 	--quick \
 	--doshared \
 	| tee -a /data/bluespice/logs/update-$timestamp.log
