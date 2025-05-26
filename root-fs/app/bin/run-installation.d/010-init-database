@@ -27,17 +27,13 @@ try {
 		PDO::ERRMODE_EXCEPTION
 	);
 
-	$dbUser = $pdo->quote( $dbUser );
-	$dbName = $pdo->quote( $dbName );
-	$dbNamePrefix = $pdo->quote( $dbNamePrefix );
-
 	# Create the database
-	$pdo->exec( "CREATE DATABASE IF NOT EXISTS $dbName" );
+	$pdo->exec( "CREATE DATABASE IF NOT EXISTS `$dbName`" );
 
 	# Grant all privileges all databases with given prefix
-	$pdo->exec( "GRANT ALL PRIVILEGES ON $dbName.* TO '$dbUser'@'%'" );
+	$pdo->exec( "GRANT ALL PRIVILEGES ON `$dbName`.* TO '$dbUser'@'%'" );
 	if ( !getenv( 'WIKI_FARM_USE_SHARED_DB' ) ) {
-		$pdo->exec( "GRANT ALL PRIVILEGES ON $dbNamePrefix%.* TO '$dbUser'@'%'" );
+		$pdo->exec( "GRANT ALL PRIVILEGES ON `$dbNamePrefix%`.* TO '$dbUser'@'%'" );
 	}
 	$pdo->exec( "FLUSH PRIVILEGES" );
 
