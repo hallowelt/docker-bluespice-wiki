@@ -5,8 +5,10 @@ $dbHost = getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
 $dbName = getenv('DB_NAME');
 $dbNamePrefix = getenv('WIKI_FARM_DB_PREFIX') ?: 'sfr_';
-$dbRootUser = getenv('DB_ROOT_USER') ?: $dbUser;
-$dbRootPass = getenv('DB_ROOT_PASS') ?: getenv('DB_PASS');
+// Attention: In contrast to the `install-database` script, we must not fall
+// back to `DB_USER`/`DB_PASS` here, as these operations require real root privileges.
+$dbRootUser = getenv('DB_ROOT_USER');
+$dbRootPass = getenv('DB_ROOT_PASS');
 
 if ( !$dbRootUser || !$dbRootPass ) {
 	// If no root user is set, we can't create a database or set permissions

@@ -12,9 +12,9 @@ echo "dbpass: ${DB_PASS:0:1}********${DB_PASS: -1}"
 echo "installdbuser: $installdbuser"
 echo "installdbpass: ${installdbpass:0:1}********${installdbpass: -1}"
 echo "lang: $lang"
-echo "'admin user': $adminUserName"
+echo "admin user: $adminUserName"
 echo "pass: ${adminPass:0:1}********${adminPass: -1}"
-echo "'wiki name': $WIKI_NAME"
+echo "wiki name: $WIKI_NAME"
 echo ""
 
 # If there is for whatever reason a LocalSettings.php file in the appDir, we need to remove it
