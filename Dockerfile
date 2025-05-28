@@ -39,6 +39,7 @@ RUN apk add \
 	php$VERSION-pdo \
 	php$VERSION-pdo_mysql \
 	php$VERSION-posix \
+ 	php$VERSION-tokenizer \
 	poppler-utils \
 	procps \
 	python3 \
