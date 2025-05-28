@@ -20,9 +20,9 @@ docker build -t bluespice/wiki:latest .
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
-| `DB_PREFIX`                  | `''`           | Database prefix                                      | Yes      |
-| `DB_ROOT_PASS`               | `$DB_PASS`     | Database root password *)                            | No       |
-| `DB_ROOT_USER`               | `$DB_USER`     | Database root user                                   | Yes      |
+| `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
+| `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
+| `DB_ROOT_USER`               | ``             | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -51,7 +51,7 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
-| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances **)     | Yes      |
+| `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances **)     | Yes      |
 | `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
