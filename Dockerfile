@@ -1,93 +1,98 @@
-FROM debian:bookworm-slim AS base
+FROM alpine:3.21 AS base
 ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-	&& apt-get update  \
-	&& apt-get -y install --no-install-recommends gnupg2 curl  \
-	&& touch /etc/apt/sources.list.d/trixie.list && printf "deb http://deb.debian.org/debian trixie main" > /etc/apt/sources.list.d/trixie.list \
-	&& apt-get update \
-	&& apt-get --only-upgrade install zlib1g
-
-FROM base AS bluespice-main
-RUN apt-get -y --no-install-recommends install \
-	ca-certificates \
-	clamdscan \
-	ghostscript \
-	imagemagick \
-	librsvg2-bin \
-	nano \
-	nginx \
+ENV VERSION=84
+RUN apk add \
+	bash \
 	openssl \
-	php8.4 \
-	php8.4-fpm \
-	php8.4-xml \
-	php8.4-mbstring \
-	php8.4-curl \
-	php8.4-zip \
-	php8.4-cli \
-	php8.4-mysql \
-	php8.4-ldap \
-	php8.4-opcache \
-	php8.4-apcu \
-	php8.4-intl \
-	php8.4-gd \
-	php8.4-gmp \
+	clamav-clamdscan \
+	ca-certificates \
+	imagemagick \
+	ghostscript \
+	xpdf \
+	nginx \
+	php \
+	php$VERSION-fpm \
+	php$VERSION-xml \
+	php$VERSION-mbstring \
+	php$VERSION-curl \
+	php$VERSION-zip \
+	php$VERSION-cli \
+	php$VERSION-json \
+	php$VERSION-mysqli \
+	php$VERSION-ldap \
+	php$VERSION-opcache \
+	php$VERSION-apcu \
+	php$VERSION-intl \
+	php$VERSION-gd \
+	php$VERSION-gmp \
+	php$VERSION-ctype \
+	php$VERSION-iconv \
+	php$VERSION-fileinfo \
+	php$VERSION-xml \
+	php$VERSION-xmlreader \
+	php$VERSION-xmlwriter \
+	php$VERSION-simplexml \
+	php$VERSION-session \
+	php$VERSION-phar \
+	php$VERSION-pdo \
+	php$VERSION-pdo_mysql \
+	php$VERSION-posix \
+ 	php$VERSION-tokenizer \
 	poppler-utils \
-	php-excimer \
+	procps \
 	python3 \
-	xpdf-utils \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
-
-FROM bluespice-main AS bluespice-prepare
+	rsvg-convert \
+	supercronic \
+	vim \
+	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
+	&& apk add php84-pecl-excimer@testing
+FROM base AS bluespice-prepare
+ENV PATH="/app/bin:${PATH}"
 ARG UID
 ENV UID=1002
 ARG USER
 ENV USER=bluespice
+ENV PATH="/app/bin:${PATH}"
 ARG GID
 ENV GID=$UID
 ARG GROUPNAME
 ENV GROUPNAME=$USER
-RUN addgroup -gid $GID $GROUPNAME \
-	&& adduser -uid $UID -gid $GID --disabled-password --gecos "" $USER \
-	&& usermod -aG www-data $USER \
+
+RUN addgroup -g $GID $GROUPNAME \
+	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
+	&& addgroup $USER nginx \
 	&& mkdir -p /app/bluespice \
-	&& cd /app/bluespice \
-	&& chown -R $UID:www-data /var/run/php \
-	&& mkdir -p /var/lib/nginx \
-	&& chown -R $UID:www-data /var/lib/nginx \
-	&& chmod -R 777 /var/lib/nginx
-COPY --chown=www-data:www-data ./_codebase/bluespice /app/bluespice/w
+	&& chown $USER:$GROUPNAME /app/bluespice/ \
+	&& chmod -R 777 /var/log
+COPY --chown=$USER:$GROUPNAME ./_codebase/bluespice /app/bluespice/w
 COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
+COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
+COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/cron /app/cron
-COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/config/* /app/simplesamlphp/config/
-COPY --chown=www-data:www-data ./root-fs/app/simplesamlphp/metadata/* /app/simplesamlphp/metadata/
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/aptible/supercronic/releases/download/v0.2.33/supercronic-linux-amd64 /app/bin/supercronic
-COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php/8.4/fpm/conf.d
-COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php/8.4/fpm/
-COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php/8.4/fpm/pool.d/
-COPY ./root-fs/etc/php/8.x/cli/conf.d/* /etc/php/8.4/cli/conf.d/
+COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
+COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
+COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php$VERSION/conf.d/
+COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
-RUN ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
+RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
+	&& mkdir /var/run/php \
+	&& ln -sf /usr/bin/php84 /usr/bin/php \
+	&& ln -sf /usr/bin/php84 /bin/php \
+  && chown -R $USER:$GROUPNAME /var/run/php \
+  && ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
 	&& rm -fr /etc/nginx/sites-enabled-default \
-	&& ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
+  && ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
+
 FROM bluespice-prepare AS bluespice-final
-ENV PATH="/app/bin:${PATH}"
-RUN apt-get -y auto-remove \
-	&& apt-get -y clean \
-	&& apt-get -y autoclean \
-	&& rm -Rf /usr/share/doc \
-	&& find /var/log -type f -delete \
-	&& rm -Rf /var/lib/apt/lists/* \
-	&& rm -fr /tmp/*
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
+HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness
 ENTRYPOINT ["/app/bin/entrypoint"]

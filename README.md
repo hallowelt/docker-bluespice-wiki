@@ -20,9 +20,9 @@ docker build -t bluespice/wiki:latest .
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
-| `DB_PREFIX`                  | `''`           | Database prefix                                      | Yes      |
-| `DB_ROOT_PASS`               | `$DB_PASS`     | Database root password *)                            | No       |
-| `DB_ROOT_USER`               | `$DB_USER`     | Database root user                                   | Yes      |
+| `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
+| `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
+| `DB_ROOT_USER`               | ``             | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -52,7 +52,7 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
 | `WIKI_BASE_PATH`             | `''`           | Base path for the wiki. Must be aligned with proxy   | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
-| `WIKI_FARM_DB_PREFIX`        | `wiki_`        | Database name prefix for wiki farm instances **)     | Yes      |
+| `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances **)     | Yes      |
 | `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
@@ -63,6 +63,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
+| `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
 
 *) External cache can be disabled by setting `-` as `CACHE_HOST`.
 **) See section "Database requirements for FARM edition"
@@ -132,3 +133,8 @@ This user can be the same as `DB_USER` or a different one.
 If you want to use a different user, you need to provide the `DB_ROOT_USER` and `DB_ROOT_PASS` during installation.
 
 If `WIKI_FARM_USE_SHARED_DB` is set to `1`, the `FARM` edition will store the wiki instance dbs in `DB_NAME` itself and `DB_USER` does not need permissions to create further databases with the `WIKI_FARM_DB_PREFIX` prefix.
+
+# Liveness and readiness probes
+The container exposes the following commands for liveness and readiness probes:
+- `probe-liveness` - Exists with 0 if the application is healthy
+- `probe-readiness <type>` - Value of `<type>` can be `web` or `task`. Exists with 0 if the application is ready

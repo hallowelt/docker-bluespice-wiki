@@ -22,6 +22,7 @@ if [[ ($1 == "--runAll") ]]; then
 	echo "🏇 Starting TaskRunner"
 fi
 
+echo "" > /tmp/healthcheck
 if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting update"
 	date > /data/maintenance
@@ -29,22 +30,28 @@ if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
 	rm /data/maintenance
 
 	echo "Starting runJobs"
+	echo "parallel-runJobsService" >> /tmp/healthcheck
 	/app/bin/parallel-runJobsService > /proc/1/fd/1 2>&1 &
 fi
 if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting ProcessRunner"
+	echo "parallel-processRunner" >> /tmp/healthcheck
 	/app/bin/parallel-processRunner > /proc/1/fd/1 2>&1 &
 fi
 
 if [[ ( $1 == "--runBackup" ) || ( "$1" == "--runAll" ) ]] && [[ ( ${BACKUP_HOUR:-1} != -1 ) ]]; then
 	echo "Starting Backup-Agent"
 	echo "Backup daily at" ${BACKUP_HOUR:-1}
+	echo "backup-loop" >> /tmp/healthcheck
 	/app/bin/backup-loop > /proc/1/fd/1 2>&1  &
 fi
 if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting SnapshotStatistics cronjobs"
-	/app/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
+	echo "supercronic" >> /tmp/healthcheck
+	/usr/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
 fi
+
+echo "ready" > /tmp/state
 
 sleep inf
 

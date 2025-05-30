@@ -119,14 +119,21 @@ $GLOBALS['wgMathValidModes'] = [ 'mathml' ];
 $GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
 $GLOBALS['wgMaxShellMemory'] = 1228800;
 $GLOBALS['wgHiddenPrefs'][] = 'math';
+// We don't use the `MathMathML` renderer, but `MathMathMLCli`,
+// but `Extension:BlueSpiceInstanceStatus` needs this variable
+$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL(
+	[ 'FORMULA_PROTOCOL', 'http' ],
+	[ 'FORMULA_HOST', 'formula' ],
+	[ 'FORMULA_PORT', '10044' ]
+);
+// By setting `$wgMathoidCli`, `MathMathMLCli` renderer is used
+// instead of `MathMathML`.
 $GLOBALS['wgMathoidCli'] = [
 	'/app/bin/mathoid-remote',
-	bsAssembleURL(
-		[ 'FORMULA_PROTOCOL', 'http' ],
-		[ 'FORMULA_HOST', 'formula' ],
-		[ 'FORMULA_PORT', '10044' ]
-	),
+	$GLOBALS['wgMathMathMLUrl']
 ];
+
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
@@ -159,7 +166,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
 	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
 	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = trim( getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'] );
-	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'wiki_' );
+	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'sfr_' );
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
