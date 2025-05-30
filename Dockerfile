@@ -85,8 +85,10 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
 	&& ln -sf /usr/bin/php84 /usr/bin/php \
 	&& ln -sf /usr/bin/php84 /bin/php \
-	&& chown -R $USER:$GROUPNAME /var/run/php
-
+  && chown -R $USER:$GROUPNAME /var/run/php \
+  && ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
+	&& rm -fr /etc/nginx/sites-enabled-default \
+  && ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
 
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
