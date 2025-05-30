@@ -20,7 +20,16 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
+
 run-logged-update-scripts preupdate
+
+for f in /app/bin/run-updates.d/*; do
+	if [ -f "$f" ]; then
+		echo ""
+		echo "🔧 Running $f"
+		$f
+	fi
+done
 
 run-maintenance update \
 	--quick \
