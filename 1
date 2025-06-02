@@ -51,15 +51,15 @@ server {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
-		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/$1.php;
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	location ~ ^(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
+	location ~ ^###WIKI_BASE_PATH|/###(.*?)/(img_auth|nsfr_img_auth|rest|webdav)\.php(/.*?)$ {
 		include fastcgi.conf;
 		fastcgi_split_path_info ^(.+?\.php)(/.+)$;
 		fastcgi_param PATH_INFO $fastcgi_path_info;
-		fastcgi_param SCRIPT_FILENAME $document_root/$fastcgi_script_name;
+		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/$1.php;
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
@@ -94,6 +94,6 @@ server {
 	}
 
 	location = / {
-		return 301 /wiki/;
+		return 301 ###WIKI_BASE_PATH|/###wiki/;
 	}
 }
