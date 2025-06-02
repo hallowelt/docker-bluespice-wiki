@@ -79,17 +79,15 @@ ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-paral
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php$VERSION/conf.d/
-COPY ./root-fs/etc/nginx/sites-enabled/default /etc/nginx/sites-enabled/default
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
 	&& ln -sf /usr/bin/php84 /usr/bin/php \
 	&& ln -sf /usr/bin/php84 /bin/php \
-  && chown -R $USER:$GROUPNAME /var/run/php \
-  && ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
-	&& rm -fr /etc/nginx/sites-enabled-default \
-  && ln -sf /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default
-
+	&& ln -s /app/bin/config/clamd.conf /etc/clamd.conf \
+	&& mkdir -p /etc/nginx/sites-enabled \
+	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
+  	&& chown -R $USER:$GROUPNAME /var/run/php 
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice
