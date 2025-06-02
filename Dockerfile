@@ -85,7 +85,9 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
 	&& ln -sf /usr/bin/php84 /usr/bin/php \
 	&& ln -sf /usr/bin/php84 /bin/php \
-	&& chown -R $USER:$GROUPNAME /var/run/php
+	&& chown -R $USER:$GROUPNAME /var/run/php \
+	&& mkdir -p /etc/clamav/ \
+	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
 
 
 FROM bluespice-prepare AS bluespice-final
