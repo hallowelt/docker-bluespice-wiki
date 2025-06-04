@@ -9,6 +9,7 @@ RUN apk add \
 	clamav-clamdscan \
 	ca-certificates \
 	imagemagick \
+ 	libc6-compat \
 	ghostscript \
 	xpdf \
 	nginx \
