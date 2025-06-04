@@ -25,5 +25,10 @@ if [ -f /data/.wikienv ]; then
   source /data/.wikienv
   set +a
 fi
+if [ -f /app/.env ]; then
+  set -a
+  source /app/.env
+  set +a
+fi
 
 exec sh -c "$@"
