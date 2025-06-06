@@ -1,0 +1,6 @@
+#!/bin/bash
+
+# Usually oauth keys are only created during the installation process.
+# When updating from `bluespice/wiki:4.5` installations, we may need to
+# create them.
+/app/bin/run-installation.d/040-create-oauth-keypair
