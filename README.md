@@ -61,6 +61,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
+| `WIKI_PROXY`                 | `null`         | IP address(es) of proxy server. Will fall back to `proxy` service of `bluespice-deploy` | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 | `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
 
