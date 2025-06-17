@@ -58,7 +58,7 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                     | Yes      |
-| `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
+| `WIKI_PASSWORDSENDER`        | `no-reply@$WIKI_HOST` | Password sender email                         | Yes      |
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |

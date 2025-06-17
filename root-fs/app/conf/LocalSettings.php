@@ -18,7 +18,8 @@ $GLOBALS['wgLogos'] = [
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
 $GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '' );
-$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) ?: '' );
+$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' )
+	?: 'no-reply@' . trim ( getenv( 'WIKI_HOST' ) ?: 'localhost' ) );
 $GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) ?: 'mysql' );
 $GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) ?: 'database' );
 $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
