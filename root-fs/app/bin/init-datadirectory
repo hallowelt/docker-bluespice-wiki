@@ -19,7 +19,7 @@ directories=(
   /data/simplesamlphp/logs
 )
 
-if [ "${EDITION}" == "farm" ]; then
+if [ "${EDITION}" == "farm" ] || [ "${EDITION}" == "neo" ]; then
 	directories=(
   /data/bluespice/cache
   /data/bluespice/extensions/BlueSpiceFoundation/data
