@@ -8,6 +8,18 @@
 docker build -t bluespice/wiki:latest .
 ```
 
+## Development
+
+Before building the image, run:
+```sh
+cd _codebase
+mkdir bluespice
+git clone --branch $(git ls-remote --tags https://github.com/simplesamlphp/simplesamlphp.git | awk -F/ '{print $3}' | grep -v {} | sort -V | tail -n1) --depth 1 https://github.com/simplesamlphp/simplesamlphp.git simplesamlphp
+cd simplesamlphp && cp config/config.php.dist config/config.php
+composer clear-cache && composer install
+```
+The `bluespice-dev` section of the Dockerfile is development-specific. You can also visit `root-fs/etc/php/8.x/cli/conf.d/99-dev.ini` and `root-fs/etc/php/8.x/fpm/conf.d/99-dev.ini` to modify `php.ini` settings, for example, those related to xdebug.
+
 ## ENV vars
 
 | Variable                     | Default Value  | Description                                          | Optional |

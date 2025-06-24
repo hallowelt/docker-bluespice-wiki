@@ -101,3 +101,16 @@ USER bluespice
 EXPOSE 9090
 HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness
 ENTRYPOINT ["/app/bin/entrypoint"]
+
+FROM bluespice-final AS bluespice-dev
+USER root
+RUN apt-get update \
+	&& apt-get install -y \
+		nano \
+		vim \
+		curl \
+		iputils-ping\
+		php-xdebug \
+	&& apt-get clean \
+	&& rm -rf /var/lib/apt/lists/*
+USER bluespice
