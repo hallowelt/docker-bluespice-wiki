@@ -1,16 +1,12 @@
-FROM debian:trixie-slim AS base
+FROM alpine:3.21 AS base
 ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
-	&& apt-get update  \
-	&& apt-get -y install --no-install-recommends gnupg2 curl  \
-	&& apt-get update \
-	&& apt-get --only-upgrade install zlib1g
-
-FROM base AS bluespice-main
-RUN apt-get -y --no-install-recommends install \
+ENV VERSION=84
+RUN apk add \
+	bash \
+	openssl \
+	clamav-clamdscan \
 	ca-certificates \
 	clamdscan \
 	ghostscript \
