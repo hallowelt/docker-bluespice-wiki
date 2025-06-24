@@ -48,7 +48,7 @@ fi
 if [[ ( $1 == "--runSnapshotStatistics" ) || ( "$1" == "--runAll" ) ]]; then
 	echo "Starting SnapshotStatistics cronjobs"
 	echo "supercronic" >> /tmp/healthcheck
-	/app/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
+	/usr/bin/supercronic /app/cron/snapshot-statistics > /proc/1/fd/1 2>&1  &
 fi
 
 echo "ready" > /tmp/state

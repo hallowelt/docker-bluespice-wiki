@@ -11,4 +11,4 @@ echo "" > /tmp/healthcheck
 echo "php-fpm" >> /tmp/healthcheck # Process name is `php-fpm`, not `php-fpm8.4`
 echo "nginx" >> /tmp/healthcheck
 
-php-fpm8.4 -D && nginx -g "daemon off;"
+php-fpm -D && nginx -g "daemon off;"
