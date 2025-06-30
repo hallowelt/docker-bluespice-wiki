@@ -95,7 +95,6 @@ $GLOBALS['wgFileCacheDirectory'] = "{$GLOBALS['wgUploadDirectory']}/cache";
 $GLOBALS['wgDeletedDirectory'] = "{$GLOBALS['wgUploadDirectory']}/deleted";
 $GLOBALS['wgCacheDirectory'] = "/data/bluespice/cache";
 define( 'BSROOTDIR', '/data/bluespice/extensions/BlueSpiceFoundation' );
-define( 'BSDATADIR', BSROOTDIR . "/data" ); //Present
 
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['bsgSimpleFarmer_instanceDirectory'] = '/data/bluespice/_sf_instances/';
@@ -107,6 +106,12 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/BlueSpiceWikiFarm.php";
+	// We need to fix settings made in https://gitlab.hallowelt.com/BlueSpice/mediawiki/-/blob/cb757575b1752ba20fc8404d4f4fd2e55979a158/settings.d/050-BlueSpiceSemanticData.php#L30-33
+	// We can only check this _after_ Extension:BlueSpiceWikiFarm "Dispatcher" has run.
+	if ( FARMER_IS_ROOT_WIKI_CALL ) {
+		$GLOBALS[ 'mwsgRunJobsTriggerRunnerWorkingDir' ] = BSROOTDIR . "/data";
+		$GLOBALS[ 'smwgConfigFileDir' ] = BSROOTDIR . "/data";
+	}
 }
 else {
 	define( 'BSDATADIR', BSROOTDIR . "/data" ); //Present
