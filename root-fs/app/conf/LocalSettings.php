@@ -169,6 +169,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'sfr_' );
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
+	$GLOBALS['wgWikiFarmConfig_basePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '' );
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
@@ -189,8 +190,9 @@ else {
 $GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
-		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
+                $GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
+                $GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
+                $GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
