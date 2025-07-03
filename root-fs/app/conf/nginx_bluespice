@@ -94,6 +94,6 @@ server {
 	}
 
 	location = / {
-		return 301 /wiki/;
+		return 301 ###WIKI_BASE_PATH|/###w;
 	}
 }
