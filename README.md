@@ -25,6 +25,7 @@ docker build -t bluespice/wiki:latest .
 | `DB_ROOT_USER`               | ``             | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
+| `WIKI_LOG_LEVEL`             | `null`         | Set loglevel for php and nginx                       | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
 | `DEV_WIKI_DEBUG_LOGCHANNELS` | `null`         | Debug log channels, comma separated                  | Yes      |
 | `DIAGRAM_HOST`               | `$WIKI_HOST`   | Hostname of a `bluespice/diagram` compatible service | Yes      |

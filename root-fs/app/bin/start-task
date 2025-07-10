@@ -14,6 +14,7 @@ fi
 ##add Variables to Scripts
 substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
 substitutePlaceholders /app/bin/config/runJobs_conf.yaml
+substitutePlaceholders /app/conf/90-bluespice-overrides.ini
 
 echo ""
 echo "#############################################"

@@ -2,6 +2,23 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+
+case "${WIKI_LOG_LEVEL}" in
+  debug)
+    export WIKI_ERROR_REPORTING="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED"
+    export NGINX_LOG_LEVEL="debug"
+    ;;
+  warn)
+    export WIKI_ERROR_REPORTING="E_ALL &~E_NOTICE &~E_USER_NOTICE &~E_DEPRECATED &~E_USER_DEPRECATED"
+    export NGINX_LOG_LEVEL="warn"
+    ;;
+  error)
+    export WIKI_ERROR_REPORTING="E_ERROR"
+    export NGINX_LOG_LEVEL="error"
+    ;;
+esac
+
+substitutePlaceholders /app/conf/90-bluespice-overrides.ini
 substitutePlaceholders /app/conf/nginx_bluespice
 if [[ -n "${WIKI_BASE_PATH}" && "${WIKI_BASE_PATH}" != "/" ]]; then
 	mkdir -p /app/bluespice${WIKI_BASE_PATH}
