@@ -8,7 +8,6 @@ RUN apk add \
 	openssl \
 	clamav-clamdscan \
 	ca-certificates \
-	imagemagick \
  	libc6-compat \
 	ghostscript \
 	xpdf \
@@ -47,6 +46,7 @@ RUN apk add \
 	rsvg-convert \
 	supercronic \
 	vim \
+	vips \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php84-pecl-excimer@testing
 FROM base AS bluespice-prepare
