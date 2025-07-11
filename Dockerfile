@@ -46,7 +46,7 @@ RUN apk add \
 	rsvg-convert \
 	supercronic \
 	vim \
-	vips \
+	vips-tools \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php84-pecl-excimer@testing
 FROM base AS bluespice-prepare
