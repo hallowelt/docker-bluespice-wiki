@@ -20,7 +20,6 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
-
 run-logged-update-scripts preupdate
 
 for f in /app/bin/run-updates.d/*; do
