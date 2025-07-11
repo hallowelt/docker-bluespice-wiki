@@ -2,8 +2,9 @@
 set -o errexit
 set -o nounset
 set -o pipefail
+
 substitutePlaceholders /app/conf/nginx_bluespice
-if [[ -n "${WIKI_BASE_PATH}" && "${WIKI_BASE_PATH}" != "/" ]]; then
+if [[ "${WIKI_BASE_PATH:-/}" != "/" ]]; then
 	mkdir -p /app/bluespice${WIKI_BASE_PATH}
 	ln -sf /app/bluespice/w /app/bluespice${WIKI_BASE_PATH}w
 fi
