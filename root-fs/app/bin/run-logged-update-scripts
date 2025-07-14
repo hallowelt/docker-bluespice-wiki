@@ -12,6 +12,7 @@ timestamp=$(date +%Y%m%d%H%M%S)
 echo "Running $type scripts"
 
 for f in "$scriptDir"/*; do
+	set -o errexit
 	scriptName=$(basename $f)
 	logFile=/data/bluespice/logs/$type/$scriptName.log
 	errorLogFile=/data/bluespice/logs/$type/$scriptName.$timestamp.error.log
@@ -22,13 +23,13 @@ for f in "$scriptDir"/*; do
 		continue
 	fi
 
-		echo ""
-		echo "$f"
-		$f \
-			| tee -a $logFile
-		if [ $? -ne 0 ]; then
-			echo "Error running $f"
-			mv $logFile $errorLogFile
-			exit 1
-		fi
+	echo ""
+	echo "$f"
+	set +o errexit
+	"$f" | tee -a $logFile
+	if [ $? -ne 0 ]; then
+	       echo "Error running $f"
+	       mv $logFile $errorLogFile
+	       exit 1
+	fi
 done
