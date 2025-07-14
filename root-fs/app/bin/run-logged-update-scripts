@@ -15,11 +15,13 @@ for f in "$scriptDir"/*; do
 	scriptName=$(basename $f)
 	logFile=/data/bluespice/logs/$type/$scriptName.log
 	errorLogFile=/data/bluespice/logs/$type/$scriptName.$timestamp.error.log
+        if [ ! -f "$f" ]; then
+                continue
+        fi
 	if [ -f "$logFile" ]; then
 		continue
 	fi
 
-	if [ -f "$f" ]; then
 		echo ""
 		echo "$f"
 		$f \
@@ -29,5 +31,4 @@ for f in "$scriptDir"/*; do
 			mv $logFile $errorLogFile
 			exit 1
 		fi
-	fi
 done
