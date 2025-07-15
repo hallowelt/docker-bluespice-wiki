@@ -15,6 +15,10 @@ echo "🚀 BlueSpice $blueSpiceEdition $blueSpiceVersion+$blueSpiceBuildInfo"
 echo "---------------------------------------------"
 echo ""
 
+if [ -z "$WIKI_PROXY" ]; then
+  export WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
+fi
+
 export PATH=$PATH:/app/bin
 substitutePlaceholders /app/bin/config/clamd.conf
 
