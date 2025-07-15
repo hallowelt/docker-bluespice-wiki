@@ -20,6 +20,8 @@ fi
 echo "Running updates"
 echo "Version: $version"
 
+run-logged-update-scripts preupdate
+
 for f in /app/bin/run-updates.d/*; do
 	if [ -f "$f" ]; then
 		echo ""
@@ -41,3 +43,5 @@ if [ "${EDITION}" == "farm" ]; then
 		--args='--quick --doshared' \
 		| tee -a /data/bluespice/logs/update-$timestamp.log
 fi
+
+run-logged-update-scripts postupdate
