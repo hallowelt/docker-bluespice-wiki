@@ -48,7 +48,7 @@ RUN apk add \
 	supercronic \
 	vim \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-	&& apk add php84-pecl-excimer@testing
+	&& apk add php$VERSION-pecl-excimer@testing
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
@@ -89,8 +89,8 @@ RUN if [ -n "$EDITION" ]; then \
 
 RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
-	&& ln -sf /usr/bin/php84 /usr/bin/php \
-	&& ln -sf /usr/bin/php84 /bin/php \
+	&& ln -sf /usr/bin/php$VERSION /usr/bin/php \
+	&& ln -sf /usr/bin/php$VERSION /bin/php \
 	&& mkdir -p /etc/nginx/sites-enabled \
 	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
