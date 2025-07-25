@@ -15,6 +15,25 @@ fi
 substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
 substitutePlaceholders /app/bin/config/runJobs_conf.yaml
 
+WIKI_LOG_LEVEL="${WIKI_LOG_LEVEL:-error}"
+
+case "${WIKI_LOG_LEVEL}" in
+  debug)
+    export WIKI_ERROR_REPORTING="E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED"
+    ;;
+  warn)
+    export WIKI_ERROR_REPORTING="E_ALL & ~E_NOTICE & ~E_USER_NOTICE & ~E_PARSE & ~E_DEPRECATED & ~E_USER_DEPRECATED"
+    ;;
+  error)
+    export WIKI_ERROR_REPORTING="E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR"
+    ;;
+esac
+
+echo ""
+echo "#############################################"
+echo "Setting log level to ${WIKI_LOG_LEVEL}"
+substitutePlaceholders /app/conf/90-bluespice-overrides.ini > /dev/null
+
 echo ""
 echo "#############################################"
 
