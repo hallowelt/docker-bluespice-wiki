@@ -29,10 +29,7 @@ case "${WIKI_LOG_LEVEL}" in
     ;;
 esac
 
-echo ""
-echo "#############################################"
-echo "Setting log level to ${WIKI_LOG_LEVEL}"
-substitutePlaceholders /app/conf/90-bluespice-overrides.ini > /dev/null
+substitutePlaceholders /app/conf/90-bluespice-overrides.ini
 
 echo ""
 echo "#############################################"

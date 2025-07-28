@@ -18,21 +18,13 @@ case "${WIKI_LOG_LEVEL}" in
     ;;
 esac
 
-echo ""
-echo "#############################################"
-echo "Setting log level to ${WIKI_LOG_LEVEL}"
-
-substitutePlaceholders /app/conf/90-bluespice-overrides.ini > /dev/null
-substitutePlaceholders /app/conf/nginx_bluespice > /dev/null
+substitutePlaceholders /app/conf/90-bluespice-overrides.ini
+substitutePlaceholders /app/conf/nginx_bluespice
 
 if [[ "${WIKI_BASE_PATH:-/}" != "/" ]]; then
-	echo ""
-	echo "#############################################"
-	echo "Setting WIKI_BASE_PATH to ${WIKI_BASE_PATH}"
 	mkdir -p /app/bluespice${WIKI_BASE_PATH}
 	ln -sf /app/bluespice/w /app/bluespice${WIKI_BASE_PATH}w
 fi
-
 
 echo ""
 echo "#############################################"
