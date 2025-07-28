@@ -46,6 +46,7 @@ RUN apk add \
 	python3 \
 	rsvg-convert \
 	supercronic \
+	tzdata \
 	vim \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php$VERSION-pecl-excimer@testing
