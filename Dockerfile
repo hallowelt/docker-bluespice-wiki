@@ -79,7 +79,6 @@ ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-media
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
-COPY ./root-fs/etc/php/8.x/fpm/conf.d/* /etc/php$VERSION/conf.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
 ARG EDITION
@@ -92,6 +91,7 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& ln -sf /usr/bin/php$VERSION /usr/bin/php \
 	&& ln -sf /usr/bin/php$VERSION /bin/php \
 	&& mkdir -p /etc/nginx/sites-enabled \
+	&& ln -s /app/conf/90-bluespice-overrides.ini /etc/php$VERSION/conf.d/90-bluespice-overrides.ini \
 	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
 	&& mkdir -p /etc/clamav/ \

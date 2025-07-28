@@ -4,7 +4,7 @@ server {
 	root /app/bluespice;
 	client_max_body_size 1024m;
 	access_log /proc/1/fd/1;
-	error_log /proc/1/fd/2 warn;
+	error_log /proc/1/fd/2 ###WIKI_LOG_LEVEL###;
 	server_tokens off;
 	
 	rewrite ^###WIKI_BASE_PATH|/###_sp/(.*)$ ###WIKI_BASE_PATH|/###_sp/$1 last;
