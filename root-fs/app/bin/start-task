@@ -27,6 +27,10 @@ case "${WIKI_LOG_LEVEL}" in
   error)
     export WIKI_ERROR_REPORTING="E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR"
     ;;
+  *)
+    export WIKI_ERROR_REPORTING="E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR"
+    export WIKI_LOG_LEVEL="error"
+    ;;
 esac
 
 substitutePlaceholders /app/conf/90-bluespice-overrides.ini
