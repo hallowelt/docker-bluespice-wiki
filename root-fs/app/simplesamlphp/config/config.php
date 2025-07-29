@@ -37,6 +37,10 @@ $customConfig = [
 		getenv('DB_NAME') .
 		( getenv('DB_PREFIX') ?? '' ) .
 		'SAMLSessionID',
+	'session.authtoken.cookiename' =>
+		getenv('DB_NAME') .
+		( getenv('DB_PREFIX') ?? '' ) .
+		'SAMLAuthToken',
 	'enable.http_post' => true,
 	'secretsalt' => getenv('INTERNAL_SIMPLESAMLPHP_SECRET_SALT'),
 
