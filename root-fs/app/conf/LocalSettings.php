@@ -80,6 +80,12 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
+if ( getenv('WIKI_PROXY') ) {
+	$GLOBALS['wgCdnServersNoPurge'] = explode( ',', trim( getenv( 'WIKI_PROXY' ) ) );
+	array_walk( $GLOBALS['wgCdnServersNoPurge'], function ( &$value ) {
+		$value = trim( $value );
+	} );
+}
 if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
