@@ -18,7 +18,8 @@ $GLOBALS['wgLogos'] = [
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
 $GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '' );
-$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) ?: '' );
+$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' )
+	?: 'no-reply@' . trim ( getenv( 'WIKI_HOST' ) ?: 'localhost' ) );
 $GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) ?: 'mysql' );
 $GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) ?: 'database' );
 $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
@@ -78,6 +79,12 @@ if ( getenv( 'AV_HOST' ) ) {
 	];
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
+}
+if ( getenv('WIKI_PROXY') ) {
+	$GLOBALS['wgCdnServersNoPurge'] = explode( ',', trim( getenv( 'WIKI_PROXY' ) ) );
+	array_walk( $GLOBALS['wgCdnServersNoPurge'], function ( &$value ) {
+		$value = trim( $value );
+	} );
 }
 if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;

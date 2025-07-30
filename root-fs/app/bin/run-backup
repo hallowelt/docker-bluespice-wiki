@@ -30,6 +30,7 @@ if [ $minute == 01 ]; then
 			wiki-backup \
 			--mediawiki-root $mediaWikiRoot \
 			--dest $backupDest \
+			--max-backup-files 4 \
 			--profile /app/bin/config/mediawiki_adm_backup_conf.json
 
 	if [ ! -d "$instancesRoot" ]; then
