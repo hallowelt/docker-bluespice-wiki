@@ -50,7 +50,7 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
-| `TZ`                         | `Europe/Berlin`| Timezone for BlueSpice and container system time     | Yes      |
+| `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
 | `WIKI_BASE_PATH`             | `''`           | Base path for the wiki. Must be aligned with proxy   | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances **)     | Yes      |
