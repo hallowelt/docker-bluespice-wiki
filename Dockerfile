@@ -1,5 +1,4 @@
 FROM alpine:3.21 AS base
-ENV TZ=Europe/Berlin
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV VERSION=84
