@@ -1,5 +1,4 @@
 FROM alpine:3.21 AS base
-ENV TZ=CET
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 ENV VERSION=84
@@ -46,6 +45,7 @@ RUN apk add \
 	python3 \
 	rsvg-convert \
 	supercronic \
+	tzdata \
 	vim \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php$VERSION-pecl-excimer@testing
