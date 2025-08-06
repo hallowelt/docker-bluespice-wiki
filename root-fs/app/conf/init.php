@@ -9,6 +9,7 @@ if ( isset( $_REQUEST['_profiler'] ) ) {
 		$excimer->stop();
 		$profilerType = $_REQUEST['_profiler'] === 'speedscope' ? 'speedscope' : 'trace';
 		$fileExt = $_REQUEST['_profiler'] === 'speedscope' ? 'json' : 'log';
+		unset( $_REQUEST['_profiler'] ); // Prevent `Unrecognized parameter: _profiler.` on API modules
 		$timestamp = ( new DateTime )->format( 'Y-m-d_His_v' );
 		$filename = "/data/bluespice/logs/{$profilerType}-{$timestamp}-" . MW_ENTRY_POINT . ".{$fileExt}";
 		$fileContent = '';
