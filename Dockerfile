@@ -8,6 +8,7 @@ RUN apk add \
 	openssl \
 	clamav-clamdscan \
 	ca-certificates \
+	imagemagick \
  	libc6-compat \
 	ghostscript \
 	xpdf \
