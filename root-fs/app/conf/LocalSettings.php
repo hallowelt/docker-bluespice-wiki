@@ -44,7 +44,7 @@ $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
-$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/convert";
+$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/magick";
 $GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) ?: 'en' );
 $GLOBALS['wgLocaltimezone'] = null;
 $GLOBALS['wgSecretKey'] = trim( getenv( 'INTERNAL_WIKI_SECRETKEY' ) );
@@ -140,7 +140,7 @@ $GLOBALS['wgMathoidCli'] = [
 	$GLOBALS['wgMathMathMLUrl']
 ];
 
-$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?? '' );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
