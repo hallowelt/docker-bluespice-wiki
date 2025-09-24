@@ -1,6 +1,6 @@
 #Raise ServerLimits ERM#44157
 	fastcgi_read_timeout 600;
-   proxy_read_timeout 600;
+    proxy_read_timeout 600;
 
 server {
 	server_name _;
