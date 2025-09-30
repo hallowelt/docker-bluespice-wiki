@@ -98,6 +98,6 @@ server {
 	}
 
 	location = / {
-		return 301 ###WIKI_BASE_PATH|/###w;
+		return 301 ###WIKI_BASE_PATH|/###wiki;
 	}
 }
