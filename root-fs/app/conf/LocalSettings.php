@@ -90,8 +90,8 @@ if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
-$GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
-$GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
+$GLOBALS['wgOAuth2PrivateKey'] = getenv( 'OAUTH2_PRIVATE_KEY' ) ?: '/data/bluespice/oauth_private.key';
+$GLOBALS['wgOAuth2PublicKey'] = getenv( 'OAUTH2_PUBLIC_KEY' ) ?: '/data/bluespice/oauth_public.key';
 
 $GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) ?: 'search' );
 $GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) ?: '9200' );
@@ -206,9 +206,10 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	}
 }
 
-$GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'WIKI_TOKEN_AUTH_SALT' );
-$GLOBALS['mwsgWireServiceApiKey'] = getenv( 'WIRE_API_KEY' );
-// We are intenionally not exposing dedicated variables for `WIRE_HOST, `WIRE_PORT`, ... as 
+$GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
+$GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
+// We are intenionally not exposing dedicated variables for `WIRE_HOST, `WIRE_PORT`, ...
+// as just like with "collabpads", we assume the idenitcal base URL
 $GLOBALS['mwsgWireService'] = $GLOBALS[ 'wgServer' ]. '/_wire';
 $GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
 
@@ -226,7 +227,7 @@ $GLOBALS['wgChatIntegrationBridge'] = [
 		[ 'CHAT_HOST', 'chat' ],
 		[ 'CHAT_PORT', '3000' ]
 	),
-	'token' => getenv( 'CHAT_TOKEN' )
+	'token' => getenv( 'INTERNAL_CHAT_TOKEN' )
 ];
 $GLOBALS['wgChatBotService'] = [
 	'url' => $GLOBALS[ 'wgServer' ] . '/_chat'
