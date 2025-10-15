@@ -15,6 +15,15 @@ echo "🚀 BlueSpice $blueSpiceEdition $blueSpiceVersion+$blueSpiceBuildInfo"
 echo "---------------------------------------------"
 echo ""
 
+# Since 5.2
+for secret in $(find /run/secrets/ -type f -exec basename {} \;); do
+  # For grep:
+  # - CHAT_TOKEN
+  # - WIKI_TOKEN_AUTH_SALT
+  # - WIRE_API_KEY
+  export "$secret"="$(cat /run/secrets/$secret)"
+done
+
 if [ -z "$WIKI_PROXY" ]; then
   export WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
 fi
@@ -25,11 +34,18 @@ substitutePlaceholders /app/bin/config/clamd.conf
 init-datadirectory
 
 if [ -f /data/.wikienv ]; then
+  # For grep:
+  # - INTERNAL_SIMPLESAMLPHP_ADMIN_PASS
+  # - INTERNAL_SIMPLESAMLPHP_SECRET_SALT
+  # - INTERNAL_WIKI_SECRETKEY
+  # - INTERNAL_WIKI_UPGRADEKEY
   set -a
   source /data/.wikienv
   set +a
 fi
 if [ -f /app/.env ]; then
+  # For grep:
+    # - EDITION
   set -a
   source /app/.env
   set +a

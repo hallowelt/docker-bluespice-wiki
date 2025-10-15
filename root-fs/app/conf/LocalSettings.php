@@ -206,4 +206,30 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	}
 }
 
+$GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'WIKI_TOKEN_AUTH_SALT' );
+$GLOBALS['mwsgWireServiceApiKey'] = getenv( 'WIRE_API_KEY' );
+// We are intenionally not exposing dedicated variables for `WIRE_HOST, `WIRE_PORT`, ... as 
+$GLOBALS['mwsgWireService'] = $GLOBALS[ 'wgServer' ]. '/_wire';
+$GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
+
+$GLOBALS['wgWikiRAGTarget'] = [
+	'type' => 'local-directory',
+	'configuration' => [
+		'path' => '/data/bluespice/rag'
+	]
+];
+$GLOBALS['wgWikiRAGPipeline'] = [ 'content.wikitext','content.html', 'repofile', 'meta.json', 'acl.json' ];
+
+$GLOBALS['wgChatIntegrationBridge'] = [
+	'url' => bsAssembleURL(
+		[ 'CHAT_PROTOCOL', 'http' ],
+		[ 'CHAT_HOST', 'chat' ],
+		[ 'CHAT_PORT', '3000' ]
+	),
+	'token' => getenv( 'CHAT_TOKEN' )
+];
+$GLOBALS['wgChatBotService'] = [
+	'url' => $GLOBALS[ 'wgServer' ] . '/_chat'
+];
+
 require_once '/data/bluespice/post-init-settings.php';
