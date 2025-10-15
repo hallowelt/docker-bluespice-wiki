@@ -218,7 +218,7 @@ $GLOBALS['wgWikiRAGTarget'] = [
 		'path' => '/data/bluespice/rag'
 	]
 ];
-$GLOBALS['wgWikiRAGPipeline'] = [ 'content.wikitext','content.html', 'repofile', 'meta.json', 'acl.json' ];
+$GLOBALS['wgWikiRAGPipeline'] = [ 'content.wikitext', 'repofile', 'meta.json', 'acl.json' ];
 
 $GLOBALS['wgChatIntegrationBridge'] = [
 	'url' => bsAssembleURL(
