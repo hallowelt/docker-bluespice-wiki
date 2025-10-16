@@ -207,10 +207,13 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
+
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
-// We are intenionally not exposing dedicated variables for `WIRE_HOST, `WIRE_PORT`, ...
-// as just like with "collabpads", we assume the idenitcal base URL
-$GLOBALS['mwsgWireService'] = $GLOBALS[ 'wgServer' ]. '/_wire';
+$GLOBALS['mwsgWireServiceUrl'] = bsAssembleURL(
+	[ 'WIRE_PROTOCOL', 'http' ],
+	[ 'WIRE_HOST', 'wire' ],
+	[ 'WIRE_PORT', '3333' ]
+);
 $GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
 
 $GLOBALS['wgWikiRAGTarget'] = [
