@@ -90,8 +90,8 @@ if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
-$GLOBALS['wgOAuth2PrivateKey'] = getenv( 'OAUTH2_PRIVATE_KEY' ) ?: '/data/bluespice/oauth_private.key';
-$GLOBALS['wgOAuth2PublicKey'] = getenv( 'OAUTH2_PUBLIC_KEY' ) ?: '/data/bluespice/oauth_public.key';
+$GLOBALS['wgOAuth2PrivateKey'] = getenv( 'INTERNAL_OAUTH2_PRIVATE_KEY' ) ?: '/data/bluespice/oauth_private.key';
+$GLOBALS['wgOAuth2PublicKey'] = getenv( 'INTERNAL_OAUTH2_PUBLIC_KEY' ) ?: '/data/bluespice/oauth_public.key';
 
 $GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) ?: 'search' );
 $GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) ?: '9200' );
