@@ -31,7 +31,7 @@ fi
 
 # Since 5.2
 # Load secrets; Omit subdirectories and non-uppercase filenames
-for secret in $(find /run/secrets/ -maxdepth 1 -type f -regextype posix-egrep -regex '.*/[A-Z_]+$' -exec basename {} \;); do
+for secret in $(find /run/secrets/ -maxdepth 1 -type f | grep -E '/[A-Z_]+$' | xargs -n1 basename); do
   # For grep:
   # - INTERNAL_CHAT_TOKEN
   # - INTERNAL_SIMPLESAMLPHP_ADMIN_PASS
