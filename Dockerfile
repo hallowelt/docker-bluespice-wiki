@@ -95,7 +95,10 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
 	&& mkdir -p /etc/clamav/ \
-	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf
+	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
+	&& touch /app/.env \
+	&& chown $USER:$GROUPNAME /app/.env \
+	&& chmod 660 /app/.env
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice
