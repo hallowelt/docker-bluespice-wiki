@@ -38,6 +38,7 @@ docker build -t bluespice/wiki:latest .
 | `FORMULA_HOST`               | `formula`      | Hostname of a `bluespice/formula` compatible service | Yes      |
 | `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |
 | `FORMULA_PROTOCOL`           | `http`         | Protocol of a `bluespice/formula` compatible service | Yes      |
+| `INTERNAL_CHAT_WIKI_ACCESS_TOKEN` | `null` | Access token `bluespice/chat` | No       |
 | `INTERNAL_WIKI_SECRETKEY`    | `null`         | Secret key for the wiki                              | No       |
 | `INTERNAL_WIKI_UPGRADEKEY`   | `null`         | Upgrade key for the wiki                             | No       |
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |

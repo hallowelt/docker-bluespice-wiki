@@ -208,6 +208,21 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
 
+// While this is not necessarily `bluespice/chat` service specific configuration, we currently assume it is.
+// This may change in future versions. See https://github.com/hallowelt/mwstake-mediawiki-component-token-authenticator/issues/2
+$GLOBALS['mwsgTokenAuthenticatorServiceUser'] = 'ChatBot service user';
+$GLOBALS['mwsgTokenAuthenticatorServiceToken'] = getenv( 'INTERNAL_CHAT_WIKI_ACCESS_TOKEN' );
+$GLOBALS['mwsgTokenAuthenticatorServiceAllowedAPIModules'] = [
+	ApiOpenSearch::class
+];
+$GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
+	'/mws/v1/user-token/verify',
+	'/chatintegration/v1/ping'
+];
+# By default limit to same subnet as the host (container)
+$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] = trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) ) ?: 
+
+// `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
 $GLOBALS['mwsgWireServiceUrl'] = bsAssembleURL(
 	[ 'WIRE_PROTOCOL', 'http' ],
@@ -216,6 +231,7 @@ $GLOBALS['mwsgWireServiceUrl'] = bsAssembleURL(
 );
 $GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
 
+// Extension:WikiRAG configuration
 $GLOBALS['wgWikiRAGTarget'] = [
 	'type' => 'local-directory',
 	'configuration' => [
@@ -224,6 +240,7 @@ $GLOBALS['wgWikiRAGTarget'] = [
 ];
 $GLOBALS['wgWikiRAGPipeline'] = [ 'content.wikitext', 'repofile', 'meta.json', 'acl.json' ];
 
+// Extension:ChatIntegration configuration
 $GLOBALS['wgChatIntegrationBridge'] = [
 	'url' => bsAssembleURL(
 		[ 'CHAT_PROTOCOL', 'http' ],
@@ -232,6 +249,8 @@ $GLOBALS['wgChatIntegrationBridge'] = [
 	),
 	'token' => getenv( 'INTERNAL_CHAT_TOKEN' )
 ];
+
+// Extension:ChatBot configuration
 $GLOBALS['wgChatBotService'] = [
 	'url' => $GLOBALS[ 'wgServer' ] . '/_chat'
 ];
