@@ -220,7 +220,7 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
 	'/chatintegration/v1/ping'
 ];
 # By default limit to same subnet as the host (container)
-$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] = trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) ) ?: 
+$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] = trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) ) ?: '';
 
 // `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
