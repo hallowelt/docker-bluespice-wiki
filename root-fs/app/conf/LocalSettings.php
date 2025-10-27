@@ -140,7 +140,10 @@ $GLOBALS['wgMathoidCli'] = [
 	$GLOBALS['wgMathMathMLUrl']
 ];
 
-$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?? '' );
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] =
+	trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) )
+	?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
+
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
@@ -220,7 +223,9 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
 	'/chatintegration/v1/ping'
 ];
 # By default limit to same subnet as the host (container)
-$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] = trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) ) ?: '';
+$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
+	trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) )
+	?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
 
 // `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
