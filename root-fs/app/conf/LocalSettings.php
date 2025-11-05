@@ -188,6 +188,7 @@ if ( getenv( 'EDITION' ) === 'neo' ) {
 	$GLOBALS['wgWikiFarmConfig_useGlobalAccessControl'] =true;
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
+	$GLOBALS['wgWikiFarmConfig_showInstancesMenu'] = true;
 }
 
 require_once '/data/bluespice/pre-init-settings.php';
