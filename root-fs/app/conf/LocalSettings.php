@@ -10,7 +10,7 @@ $GLOBALS['wgServer'] = bsAssembleURL(
 );
 
 $GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) ?: 'BlueSpice' );
-$GLOBALS['wgScriptPath'] = "/w";
+$GLOBALS['wgScriptPath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) .'w';
 
 $GLOBALS['wgResourceBasePath'] = $GLOBALS['wgScriptPath'];
 $GLOBALS['wgLogos'] = [
@@ -18,7 +18,8 @@ $GLOBALS['wgLogos'] = [
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
 $GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '' );
-$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) ?: '' );
+$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' )
+	?: 'no-reply@' . trim ( getenv( 'WIKI_HOST' ) ?: 'localhost' ) );
 $GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) ?: 'mysql' );
 $GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) ?: 'database' );
 $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
@@ -43,9 +44,9 @@ $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
-$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/convert";
+$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/magick";
 $GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) ?: 'en' );
-$GLOBALS['wgLocaltimezone'] = "UTC";
+$GLOBALS['wgLocaltimezone'] = null;
 $GLOBALS['wgSecretKey'] = trim( getenv( 'INTERNAL_WIKI_SECRETKEY' ) );
 $GLOBALS['wgAuthenticationTokenVersion'] = "1";
 $GLOBALS['wgUpgradeKey'] = trim( getenv( 'INTERNAL_WIKI_UPGRADEKEY' ) );
@@ -78,6 +79,12 @@ if ( getenv( 'AV_HOST' ) ) {
 	];
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
+}
+if ( getenv('WIKI_PROXY') ) {
+	$GLOBALS['wgCdnServersNoPurge'] = explode( ',', trim( getenv( 'WIKI_PROXY' ) ) );
+	array_walk( $GLOBALS['wgCdnServersNoPurge'], function ( &$value ) {
+		$value = trim( $value );
+	} );
 }
 if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
@@ -133,7 +140,7 @@ $GLOBALS['wgMathoidCli'] = [
 	$GLOBALS['wgMathMathMLUrl']
 ];
 
-$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?? '' );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
@@ -169,6 +176,7 @@ if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
 	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'sfr_' );
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
+	$GLOBALS['wgWikiFarmConfig_basePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '' );
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
@@ -194,11 +202,12 @@ else {
 	require_once "$IP/LocalSettings.BlueSpice.php";
 }
 
-$GLOBALS['wgArticlePath'] = '/wiki/$1';
+$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgArticlePath'] = '/' . FARMER_CALLED_INSTANCE . '/wiki/$1';
-		$GLOBALS['wgWebDAVBaseUri'] = '/' . FARMER_CALLED_INSTANCE . '/webdav/';
+		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
+		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';

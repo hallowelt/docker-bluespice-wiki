@@ -50,6 +50,8 @@ docker build -t bluespice/wiki:latest .
 | `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
 | `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
+| `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
+| `WIKI_BASE_PATH`             | `''`           | Base path for the wiki. Must be aligned with proxy   | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances **)     | Yes      |
 | `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
@@ -57,10 +59,12 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
+| `WIKI_LOG_LEVEL`             | `error`        | Set php and Nginx log level (error/warn/debug)       | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                     | Yes      |
-| `WIKI_PASSWORDSENDER`        | `''`           | Password sender email                                | No       |
+| `WIKI_PASSWORDSENDER`        | `no-reply@$WIKI_HOST` | Password sender email                         | Yes      |
 | `WIKI_PORT`                  | `443`          | Port for the wiki                                    | Yes      |
 | `WIKI_PROTOCOL`              | `https`        | Protocol for the wiki                                | Yes      |
+| `WIKI_PROXY`                 | `null`         | IP address(es) of proxy server. Will fall back to `proxy` service of `bluespice-deploy` | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 | `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
 
