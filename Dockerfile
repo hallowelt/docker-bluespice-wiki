@@ -49,7 +49,7 @@ RUN apk add \
 	vim \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php$VERSION-pecl-excimer@testing
-Run echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
+RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
 	&& apk add openjpeg@edge
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
