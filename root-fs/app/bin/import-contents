@@ -11,6 +11,7 @@ if [ -d $sourceDir/files ]; then
 	echo "Importing files from $sourceDir/files"
 	run-maintenance importImages $sourceDir/files
 fi
+# For b/c and compatibility to "migrate-confluence" results we also check for `images/` directory
 if [ -d $sourceDir/images ]; then
 	echo "Importing images from $sourceDir/images"
 	run-maintenance importImages $sourceDir/images
