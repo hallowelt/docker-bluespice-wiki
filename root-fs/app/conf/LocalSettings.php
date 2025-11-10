@@ -185,29 +185,6 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
 }
 
-require_once '/data/bluespice/pre-init-settings.php';
-if ( getenv( 'EDITION' ) === 'farm' ) {
-	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
-}
-else {
-	define( 'BSDATADIR', BSROOTDIR . "/data" ); //Present
-	define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
-	define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
-	define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
-	require_once "$IP/LocalSettings.BlueSpice.php";
-}
-
-$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
-if ( getenv( 'EDITION' ) === 'farm' ) {
-	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
-		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
-		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
-		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
-		// which otherwise causes the cache to be invalidated all the time.
-		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
-	}
-}
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
 
@@ -259,5 +236,29 @@ $GLOBALS['wgChatIntegrationBridge'] = [
 $GLOBALS['wgChatBotService'] = [
 	'url' => $GLOBALS[ 'wgServer' ] . '/_chat'
 ];
+
+require_once '/data/bluespice/pre-init-settings.php';
+if ( getenv( 'EDITION' ) === 'farm' ) {
+	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
+}
+else {
+	define( 'BSDATADIR', BSROOTDIR . "/data" ); //Present
+	define( 'BS_DATA_DIR', "{$GLOBALS['wgUploadDirectory']}/bluespice" ); //Future
+	define( 'BS_CACHE_DIR', "{$GLOBALS['wgFileCacheDirectory']}/bluespice" );
+	define( 'BS_DATA_PATH', "{$GLOBALS['wgUploadPath']}/bluespice" );
+	require_once "$IP/LocalSettings.BlueSpice.php";
+}
+
+$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
+if ( getenv( 'EDITION' ) === 'farm' ) {
+	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
+		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
+		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
+		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
+		// which otherwise causes the cache to be invalidated all the time.
+		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
+	}
+}
 
 require_once '/data/bluespice/post-init-settings.php';
