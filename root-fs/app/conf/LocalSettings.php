@@ -202,7 +202,7 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
 # By default limit to same subnet as the host (container)
 $GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
 	trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) )
-	?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
+	?? Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' );
 
 // `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
