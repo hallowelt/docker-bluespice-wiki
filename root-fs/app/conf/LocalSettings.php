@@ -81,7 +81,7 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
 
-$GLOBALS['wgCdnServersNoPurge'] = Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' );
+$GLOBALS['wgCdnServersNoPurge'] = [ Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' ) ];
 if ( getenv('WIKI_PROXY') ) {
 	$GLOBALS['wgCdnServersNoPurge'] = explode( ',', trim( getenv( 'WIKI_PROXY' ) ) );
 	array_walk( $GLOBALS['wgCdnServersNoPurge'], function ( &$value ) {
