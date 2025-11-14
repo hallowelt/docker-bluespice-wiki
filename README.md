@@ -17,7 +17,7 @@ docker build -t bluespice/wiki:latest .
 | `BACKUP_HOUR`                | `1`            | Hour for daily backup. Set to `-1` to disable        | Yes      |
 | `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service *)| Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
-| `CHAT_HOST` **)              | `chat`         | Hostname of a `bluespice/chat` compatible service    | Yes      |
+| `CHAT_HOST`                  | `chat`         | Hostname of a `bluespice/chat` compatible service **)| Yes      |
 | `CHAT_PORT`                  | `3000`         | Port of a `bluespice/chat` compatible service        | Yes      |
 | `CHAT_PROTOCOL`              | `http`         | Protocol of a `bluespice/chat` compatible service    | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
