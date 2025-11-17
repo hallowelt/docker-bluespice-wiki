@@ -185,6 +185,9 @@ if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
 if ( getenv( 'EDITION' ) === 'neo' ) {
 	$GLOBALS['wgWikiFarmConfig_shareUsers'] = true;
 	$GLOBALS['wgWikiFarmConfig_useUnifiedSearch'] = true;
+	// Do not check for permissions per-title when searching, as it cannot be done on foreign pages
+	// Neo ACL takes care of that on its own
+	$GLOBALS['bsgESSecureResults'] = false;
 	$GLOBALS['wgWikiFarmConfig_useGlobalAccessControl'] =true;
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
