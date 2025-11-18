@@ -198,8 +198,8 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedAPIModules'] = [
 	ApiOpenSearch::class
 ];
 $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
-	'/mws/v1/user-token/verify',
-	'/chatintegration/v1/ping'
+	'/mws/v1/user-token',
+	'/chatintegration'
 ];
 # By default limit to same subnet as the host (container)
 $GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
