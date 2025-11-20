@@ -46,9 +46,7 @@ done
 if [ -f /app/.env ]; then
   # For grep:
     # - EDITION
-  set -a
-  source /app/.env
-  set +a
+  cat /app/.env >> /etc/environment
 fi
 
 exec sh -c "$@"
