@@ -25,14 +25,10 @@ substitutePlaceholders /app/bin/config/clamd.conf
 init-datadirectory
 
 if [ -f /data/.wikienv ]; then
-  set -a
-  source /data/.wikienv
-  set +a
+  cat /app/.wikienv >> /etc/environment
 fi
 if [ -f /app/.env ]; then
-  set -a
-  source /app/.env
-  set +a
+  cat /app/.env >> /etc/environment
 fi
 
 exec sh -c "$@"
