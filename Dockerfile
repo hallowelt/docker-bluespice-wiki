@@ -1,3 +1,31 @@
+FROM alpine:3 AS builder
+
+# We use SimpleSAMLphp SLIM version
+ENV SIMPLESAMLPHP_VERSION=2.4.3
+ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
+ENV SIMPLESAMLPHP_SHA256=bf281c486bedc0b82d02757c292216fd6e1a569bcb0300ae3ab0cacdab6a718e
+
+ARG BLUESPICE_VERSION=5.1.3
+ARG BLUESPICE_EDITION=free
+ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release/releases/download/${BLUESPICE_VERSION}/bluespice-free-${BLUESPICE_VERSION}.tar.gz
+ARG BLUESPICE_SHA256=849aad00aabc5b90853760fc0fcbdf75ac71a24b0cdec988f796548c25c92328
+
+WORKDIR /build
+RUN apk add --no-cache \
+	ca-certificates \
+	tar \
+	wget \
+	&& mkdir -p /build/simplesamlphp \
+	&& mkdir -p /build/bluespice \
+	&& wget -O simplesamlphp.tar.gz $SIMPLESAMLPHP_URL \
+	&& echo "${SIMPLESAMLPHP_SHA256} simplesamlphp.tar.gz" | sha256sum -c - \
+	&& tar -xzf simplesamlphp.tar.gz -C /build/simplesamlphp --strip-components 1 \
+	&& rm simplesamlphp.tar.gz \
+	&& wget -O bluespice.tar.gz $BLUESPICE_URL \
+	&& echo "${BLUESPICE_SHA256} bluespice.tar.gz" | sha256sum -c - \
+	&& tar -xzf bluespice.tar.gz -C /build/bluespice --strip-components 1 \
+	&& rm bluespice.tar.gz
+
 FROM alpine:3 AS base
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -69,8 +97,8 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& mkdir -p /app/bluespice \
 	&& chown $USER:$GROUPNAME /app/bluespice/ \
 	&& chmod -R 777 /var/log
-COPY --chown=$USER:$GROUPNAME ./_codebase/bluespice /app/bluespice/w
-COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
+COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice /app/bluespice/w
+COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
