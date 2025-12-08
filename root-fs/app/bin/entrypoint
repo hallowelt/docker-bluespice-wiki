@@ -22,6 +22,8 @@ fi
 export PATH=$PATH:/app/bin
 substitutePlaceholders /app/bin/config/clamd.conf
 
+umask 0002
+
 init-datadirectory
 
 if [ -f /data/.wikienv ]; then
