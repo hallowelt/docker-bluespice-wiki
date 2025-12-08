@@ -59,9 +59,9 @@ ARG USER
 ENV USER=bluespice
 ENV PATH="/app/bin:${PATH}"
 ARG GID
-ENV GID=$UID
+ENV GID=0
 ARG GROUPNAME
-ENV GROUPNAME=$USER
+ENV GROUPNAME=root
 
 RUN addgroup -g $GID $GROUPNAME \
 	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
@@ -82,6 +82,7 @@ ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-paral
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+RUN chmod -R g=u /app
 
 ARG EDITION
 RUN if [ -n "$EDITION" ]; then \
@@ -96,11 +97,12 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& ln -s /app/conf/90-bluespice-overrides.ini /etc/php$VERSION/conf.d/90-bluespice-overrides.ini \
 	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
+	&& chmod -R g=u /var/run/php \
 	&& mkdir -p /etc/clamav/ \
 	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
-USER bluespice
+USER 1002
 EXPOSE 9090
 HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness
 ENTRYPOINT ["/app/bin/entrypoint"]
