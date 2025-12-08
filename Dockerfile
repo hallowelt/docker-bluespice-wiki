@@ -63,7 +63,7 @@ ENV GID=0
 ARG GROUPNAME
 ENV GROUPNAME=root
 
-RUN addgroup -g $GID $GROUPNAME \
+RUN addgroup -g $GID $GROUPNAME || true \
 	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
 	&& addgroup $USER nginx \
 	&& mkdir -p /app/bluespice \
