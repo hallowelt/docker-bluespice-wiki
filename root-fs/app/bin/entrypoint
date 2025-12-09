@@ -28,7 +28,7 @@ if [ -f /data/.wikienv ]; then
   set -a
   source /data/.wikienv
   set +a
-  cat /app/.wikienv >> /home/bluespice/.bashrc
+  cat /data/.wikienv >> /home/bluespice/.bashrc
   sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
 fi
 if [ -f /app/.env ]; then
