@@ -46,7 +46,11 @@ done
 if [ -f /app/.env ]; then
   # For grep:
     # - EDITION
-  cat /app/.env >> /etc/environment
+  set -a
+  source /app/.env
+  set +a
+  cat /app/.env >> /home/bluespice/.bashrc
+  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
 fi
 
 exec sh -c "$@"
