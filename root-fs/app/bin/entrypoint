@@ -25,10 +25,18 @@ substitutePlaceholders /app/bin/config/clamd.conf
 init-datadirectory
 
 if [ -f /data/.wikienv ]; then
-  cat /app/.wikienv >> /etc/environment
+  set -a
+  source /data/.wikienv
+  set +a
+  cat /app/.wikienv >> /home/bluespice/.bashrc
+  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
 fi
 if [ -f /app/.env ]; then
-  cat /app/.env >> /etc/environment
+  set -a
+  source /app/.env
+  set +a
+  cat /app/.env >> /home/bluespice/.bashrc
+  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
 fi
 
 exec sh -c "$@"
