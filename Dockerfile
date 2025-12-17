@@ -29,6 +29,7 @@ RUN apk add \
 	php$VERSION-opcache \
 	php$VERSION-pdo \
 	php$VERSION-pdo_mysql \
+	php$VERSION-pecl-redis \
 	php$VERSION-phar \
 	php$VERSION-posix \
 	php$VERSION-session \
