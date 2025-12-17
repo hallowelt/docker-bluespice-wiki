@@ -1,3 +1,33 @@
+FROM alpine:3 AS builder
+
+# We use SimpleSAMLphp SLIM version to reduce the image size
+ENV SIMPLESAMLPHP_VERSION=2.4.3
+ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
+ENV SIMPLESAMLPHP_SHA256=bf281c486bedc0b82d02757c292216fd6e1a569bcb0300ae3ab0cacdab6a718e
+
+ENV MATHOIDREMOTE_VERSION=main
+ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote
+ENV MATHOIDREMOTE_SHA256=
+
+ENV MEDIAWIKIADM_VERSION=latest
+ENV MEDIAWIKIADM_URL=https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm
+ENV MEDIAWIKIADM_SHA256=
+
+ENV PARALLELRUNJOBSSERVICE_VERSION=latest
+ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service
+ENV PARALLELRUNJOBSSERVICE_SHA256=
+
+ARG BLUESPICE_VERSION=5.1.4
+ARG BLUESPICE_EDITION=free
+ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release/releases/download/${BLUESPICE_VERSION}/bluespice-free-${BLUESPICE_VERSION}.tar.gz
+ARG BLUESPICE_SHA256=0c264e1da3be9a893698c009597081260e603a6fb291ad88ec002fd041332e92
+
+WORKDIR /build
+ADD --checksum=sha256:${SIMPLESAMLPHP_SHA256} ${SIMPLESAMLPHP_URL} /build/simplesamlphp.tar.gz
+ADD --checksum=sha256:${MATHOIDREMOTE_SHA256} ${MATHOIDREMOTE_URL} /build/mathoid-remote
+ADD --checksum=sha256:${PARALLELRUNJOBSSERVICE_SHA256} ${PARALLELRUNJOBSSERVICE_URL} /build/parallel-runjobs-service
+ADD --checksum=sha256:${BLUESPICE_SHA256} ${BLUESPICE_URL} /build/bluespice.tar.gz
+
 FROM alpine:3 AS base
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
@@ -51,6 +81,7 @@ RUN apk add \
 	&& apk add php$VERSION-pecl-excimer@testing
 RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
 	&& apk add openjpeg@edge
+
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
@@ -69,16 +100,16 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& mkdir -p /app/bluespice \
 	&& chown $USER:$GROUPNAME /app/bluespice/ \
 	&& chmod -R 777 /var/log
-COPY --chown=$USER:$GROUPNAME ./_codebase/bluespice /app/bluespice/w
-COPY --chown=$USER:$GROUPNAME ./_codebase/simplesamlphp/ /app/simplesamlphp
+COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice /app/bluespice/w
+COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/cron /app/cron
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
+COPY --chown=$USER:$GROUPNAME --from=builder --chmod=755 /build/mathoid-remote /app/bin
+COPY --chown=$USER:$GROUPNAME --from=builder --chmod=755 /build/mediawiki-adm /app/bin
+COPY --chown=$USER:$GROUPNAME --from=builder --chmod=755 /build/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf

@@ -4,8 +4,22 @@
 
 ## Build
 
+To pull in the required codebases access tokens need to be provided. While most required codebases are hosted on GitHub and can therefore use the same access token, at least some editions of the BlueSpice codebase may be hosted on a private GitLab instance.
+For the free edition the GitHub can be used for both.
+
+Example FREE edition build command:
 ```bash
-docker build -t bluespice/wiki:latest .
+docker build \
+	--secret id=GIT_AUTH_TOKEN,env=GITHUB_TOKEN \
+	-t bluespice/wiki:latest .
+```
+
+Example PRO edition build command:
+```bash
+docker build \
+	--secret id=GIT_AUTH_TOKEN.gitlab.com,env=GITLAB_TOKEN \
+	--secret id=GIT_AUTH_TOKEN.github.com,env=GITHUB_TOKEN \
+	-t bluespice/wiki:latest .
 ```
 
 ## ENV vars
