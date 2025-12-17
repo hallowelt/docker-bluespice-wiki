@@ -1,7 +1,0 @@
-#!/bin/bash
-
-echo ""
-echo "#############################################"
-echo "Creating and promoting user"
-
-run-maintenance createAndPromote "$@"
