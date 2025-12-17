@@ -75,7 +75,7 @@ server {
 	location ~ ^###WIKI_BASE_PATH|/###w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
 		allow all;
 	}
-	
+
 	location ^~ ###WIKI_BASE_PATH|/###robots.txt {
 		alias /data/bluespice/robots.txt;
 	}
