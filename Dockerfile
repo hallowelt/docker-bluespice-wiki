@@ -84,6 +84,8 @@ COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
 ARG EDITION
+ARG DEV=0
+
 RUN if [ -n "$EDITION" ]; then \
 		echo "EDITION=$EDITION" > /app/.env; \
 	fi
@@ -101,6 +103,15 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& touch /app/.env \
 	&& chown $USER:$GROUPNAME /app/.env \
 	&& chmod 660 /app/.env
+
+RUN if [ "$DEV" -eq "1" ]; then \
+		apk add --no-cache \
+		php$VERSION-xdebug \
+		iputils \
+		curl \
+		&& ln -s /app/conf/99-bluespice-dev.ini /etc/php$VERSION/conf.d/99-bluespice-dev.ini \
+	fi
+
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice
