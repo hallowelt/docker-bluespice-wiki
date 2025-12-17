@@ -30,13 +30,27 @@ $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgSessionCacheType'] = CACHE_DB;
 if ( getenv( 'CACHE_HOST' ) !== '-' ) {
+	$cacheType = trim( getenv( 'CACHE_TYPE' ) ?: 'memcached' );
 	$cacheHost = trim( getenv( 'CACHE_HOST' ) ?: 'cache' );
-	$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '11211' );
-	$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
+	if ( $cacheType === 'memcached' ) {
+		$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '11211' );
+		$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
+		$GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
+		$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
+	}
+	# See https://www.mediawiki.org/wiki/MediaWiki-Docker/Configuration_recipes/Redis
+	if ( $cacheType === 'redis' || $cacheType === 'valkey' ) {
+		$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '6379' );
+		$GLOBALS['wgObjectCaches']['redis'] = [
+			'class' => 'RedisBagOStuff',
+			'servers'=> [ "$cacheHost:$cachePort" ],
+		];
+		$GLOBALS['wgMainCacheType'] = 'redis';
+		$GLOBALS['wgSessionCacheType'] = 'redis';
+		$GLOBALS['wgMainStash'] = 'redis';
+	}
 	unset( $cacheHost );
 	unset( $cachePort );
-	$GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
-	$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
 }
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
@@ -64,6 +78,21 @@ $GLOBALS['wgSMTP'] = [
 	'username' => trim( getenv( 'SMTP_USER' ) ),
 	'password' => trim( getenv( 'SMTP_PASS' ) ),
 ];
+
+if ( getenv( 'JOBQUEUE_HOST' ) && getenv( 'JOBQUEUE_HOST' ) !== '-' ) {
+	$jobQueueHost = trim( getenv( 'JOBQUEUE_HOST' ) ?: 'jobqueue' );
+	$jobQueuePort = trim( getenv( 'JOBQUEUE_PORT' ) ?: '6379' );
+	$GLOBALS['wgJobTypeConf']['default'] = [
+		'class' => 'JobQueueRedis',
+		'redisServer' => "$jobQueueHost:$jobQueuePort",
+		'redisConfig' => [],
+		'claimTTL' => 3600,
+		'daemonized' => true
+	];
+	unset( $jobQueueHost );
+	unset( $jobQueuePort );
+}
+
 if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirusSetup'] = [
 		'clamav' => [
