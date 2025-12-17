@@ -1,7 +1,9 @@
 environment:
     php: "/usr/bin/php"
 wiki:
-    type: "###EDITION###"
+    # BlueSpice Neo is a farm. But paralle-runjobs-service has no setting for neo. Therefore we hardode it.
+    # This must be changed in a unified image for classic/neo
+    type: "farm"
     path: "/app/bluespice/w"
 database:
     dbserver: "###DB_HOST###"
