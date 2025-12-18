@@ -76,7 +76,7 @@ COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/conf
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/cron /app/cron
-ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/main/_client/mathoid-remote /app/bin
+ADD --chown=$USER:$GROUPNAME --chmod=755 https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.2.x/_client/mathoid-remote /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm /app/bin
 ADD --chown=$USER:$GROUPNAME --chmod=755 https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
