@@ -160,15 +160,26 @@ if ( getenv( 'FILESTORE_HOST' ) ) {
 	$GLOBALS['wgAWSCredentials'] = [
 		'key' => trim( getenv( 'FILESTORE_ACCESS_KEY' ) ?: '' ),
 		'secret' => trim( getenv( 'FILESTORE_SECRET_KEY' ) ?: '' ),
-		'token' => false
+		'token' => trim( getenv( 'FILESTORE_TOKEN' ) ?: false ),
 	];
 	$GLOBALS['wgAWSBucketName'] = trim( getenv( 'FILESTORE_BUCKET_NAME' ) ?: $GLOBALS['wgDBname'].$GLOBALS['wgDBprefix'] );
-	// By default we use the WikiID ( $wgDBname + $wgDBprefix ) as bucket name _and_ top subdirectory
+	// Use `img_auth.php` or `nsfr_img_auth.php` for frontend URLs
+	$GLOBALS['wgAWSBucketDomain'] = $GLOBALS['wgServer'] . $GLOBALS['wgUploadPath'];
+	// Has to be set to make AWS SDK work; Not required for non-AWS S3 services
+	$GLOBALS['wgAWSRegion'] = trim( getenv( 'FILESTORE_REGION' ) ?: 'us-east-1' );
+	// By default we use the `$wgScriptPath` as top subdirectory
 	// For farm instances we change the top subdirectory to the respective Sub-WikiID
-	$GLOBALS['wgAWSBucketTopSubdirectory'] = '/' . trim( getenv( 'FILESTORE_BUCKET_NAME' ) ?: $GLOBALS['wgDBname'].$GLOBALS['wgDBprefix'] );
-	#$GLOBALS['wgAWSBucketDomain'] = '$1.my-custom-url'; // To be evaluated
-	#$GLOBALS['wgFileBackends']['s3']['endpoint'] = 'https://my-custom-url'; // To be evaluated
+	$GLOBALS['wgAWSBucketTopSubdirectory'] = $GLOBALS['wgScriptPath'];
+	// For b/c to legacy FS layout
+	$GLOBALS['wgAWSRepoHashLevels'] = '2';
+	$GLOBALS['wgAWSRepoDeletedHashLevels'] = '3';
+
 	$GLOBALS['wgFileBackends']['s3']['use_path_style_endpoint'] = true;
+	$GLOBALS['wgFileBackends']['s3']['endpoint'] = bsAssembleURL(
+		[ 'FILESTORE_PROTOCOL', 'http' ],
+		[ 'FILESTORE_HOST', 'filestore' ],
+		[ 'FILESTORE_PORT', '9000' ]
+	);
 }
 
 # b/c to legacy FS layout
@@ -283,8 +294,8 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
-		// Overwrite S3 bucket top subdirectory to use Sub-WikiID
-		$GLOBALS['wgAWSBucketTopSubdirectory'] = '/' . trim( getenv( 'FILESTORE_BUCKET_NAME' ) ?: $GLOBALS['wgDBname'].$GLOBALS['wgDBprefix'] );
+		// Overwrite S3 bucket top subdirectory to use Sub-WikiID (see above)
+		$GLOBALS['wgAWSBucketTopSubdirectory'] = $GLOBALS['wgScriptPath'];
 	}
 }
 
