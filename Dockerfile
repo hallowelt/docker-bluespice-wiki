@@ -21,12 +21,18 @@ ARG BLUESPICE_SHA256=795a1195001e19ee1b4004cd5ea95104bc8d4edb57b00f4215872018df8
 WORKDIR /build
 ADD --checksum=sha256:${SIMPLESAMLPHP_SHA256} ${SIMPLESAMLPHP_URL} /build/simplesamlphp.tar.gz
 ADD --checksum=sha256:${MATHOIDREMOTE_SHA256} ${MATHOIDREMOTE_URL} /build/mathoid-remote
+ADD --checksum=sha256:${MEDIAWIKIADM_SHA256} ${MEDIAWIKIADM_URL} /build/mediawiki-adm
 ADD --checksum=sha256:${PARALLELRUNJOBSSERVICE_SHA256} ${PARALLELRUNJOBSSERVICE_URL} /build/parallel-runjobs-service
 ADD ${BLUESPICE_URL} /build/bluespice.tar.gz
+
 # We allow to explicitly set `BLUESPICE_SHA256` to `-`, to skip checksum verification. This is required for "pre-release" or "custom-edition" builds
 RUN if [ "${BLUESPICE_SHA256}" != "-" ]; then \
 		echo "${BLUESPICE_SHA256}  /build/bluespice.tar.gz" | sha256sum -c -; \
 	fi
+
+RUN mkdir -p /build/simplesamlphp /build/bluespice && \
+	tar -xzf /build/simplesamlphp.tar.gz -C /build/simplesamlphp --strip-components=1 && \
+	tar -xzf /build/bluespice.tar.gz -C /build/bluespice --strip-components=1
 
 FROM alpine:3 AS base
 ENV LANG=C.UTF-8
