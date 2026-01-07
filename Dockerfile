@@ -1,32 +1,32 @@
 FROM alpine:3 AS builder
 
 # We use SimpleSAMLphp SLIM version to reduce the image size
-ENV SIMPLESAMLPHP_VERSION=2.4.3
+ENV SIMPLESAMLPHP_VERSION=2.4.4
 ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
-ENV SIMPLESAMLPHP_SHA256=bf281c486bedc0b82d02757c292216fd6e1a569bcb0300ae3ab0cacdab6a718e
+ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974b3168a57e
 
-ENV MATHOIDREMOTE_VERSION=5.1.x
 ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.1.x/_client/mathoid-remote
-ENV MATHOIDREMOTE_SHA256=
+ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
 
-ENV MEDIAWIKIADM_VERSION=latest
 ENV MEDIAWIKIADM_URL=https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm
-ENV MEDIAWIKIADM_SHA256=
+ENV MEDIAWIKIADM_SHA256=c038de94ce49c66584556bc03c58bf0f9388d109b9428c800d0b74c90b528f15
 
-ENV PARALLELRUNJOBSSERVICE_VERSION=latest
 ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service
-ENV PARALLELRUNJOBSSERVICE_SHA256=
+ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
 
 ARG BLUESPICE_VERSION=5.1.4
-ARG BLUESPICE_EDITION=free
 ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release/releases/download/${BLUESPICE_VERSION}/bluespice-free-${BLUESPICE_VERSION}.tar.gz
-ARG BLUESPICE_SHA256=0c264e1da3be9a893698c009597081260e603a6fb291ad88ec002fd041332e92
+ARG BLUESPICE_SHA256=795a1195001e19ee1b4004cd5ea95104bc8d4edb57b00f4215872018df8f4d8d
 
 WORKDIR /build
 ADD --checksum=sha256:${SIMPLESAMLPHP_SHA256} ${SIMPLESAMLPHP_URL} /build/simplesamlphp.tar.gz
 ADD --checksum=sha256:${MATHOIDREMOTE_SHA256} ${MATHOIDREMOTE_URL} /build/mathoid-remote
 ADD --checksum=sha256:${PARALLELRUNJOBSSERVICE_SHA256} ${PARALLELRUNJOBSSERVICE_URL} /build/parallel-runjobs-service
-ADD --checksum=sha256:${BLUESPICE_SHA256} ${BLUESPICE_URL} /build/bluespice.tar.gz
+ADD ${BLUESPICE_URL} /build/bluespice.tar.gz
+# We allow to explicitly set `BLUESPICE_SHA256` to `-`, to skip checksum verification. This is required for "pre-release" or "custom-edition" builds
+RUN if [ "${BLUESPICE_SHA256}" != "-" ]; then \
+		echo "${BLUESPICE_SHA256}  /build/bluespice.tar.gz" | sha256sum -c -; \
+	fi
 
 FROM alpine:3 AS base
 ENV LANG=C.UTF-8
