@@ -8,10 +8,7 @@ Example FREE edition build command:
 Assuming you have a valid access token for https://github.com/BlueSpice-Wiki/bluespice-free-release stored in `~/github-token.txt`, you can run
 
 ```bash
-GIT_AUTH_TOKEN=$(cat ~/github-token.txt) \
-docker build \
-	--secret id=GIT_AUTH_TOKEN \
-	-t bluespice/wiki:latest .
+docker build -t bluespice/wiki:latest .
 ```
 
 Example custom edition build command:
