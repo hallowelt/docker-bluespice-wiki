@@ -5,8 +5,6 @@ For the free edition the GitHub can be used for both.
 
 Example FREE edition build command:
 
-Assuming you have a valid access token for https://github.com/BlueSpice-Wiki/bluespice-free-release stored in `~/github-token.txt`, you can run
-
 ```bash
 docker build -t bluespice/wiki:latest .
 ```
