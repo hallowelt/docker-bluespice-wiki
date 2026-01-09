@@ -64,7 +64,7 @@ RUN apk add \
 	php$VERSION-posix \
 	php$VERSION-session \
 	php$VERSION-simplexml \
- 	php$VERSION-tokenizer \
+	php$VERSION-tokenizer \
 	php$VERSION-xml \
 	php$VERSION-xml \
 	php$VERSION-xmlreader \
