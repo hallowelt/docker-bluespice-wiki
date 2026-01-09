@@ -15,24 +15,19 @@ ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjob
 ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
 
 ARG BLUESPICE_VERSION=5.1.4
-ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release/releases/download/${BLUESPICE_VERSION}/bluespice-free-${BLUESPICE_VERSION}.tar.gz
-ARG BLUESPICE_SHA256=795a1195001e19ee1b4004cd5ea95104bc8d4edb57b00f4215872018df8f4d8d
+ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release.git
 
 WORKDIR /build
 ADD --checksum=sha256:${SIMPLESAMLPHP_SHA256} ${SIMPLESAMLPHP_URL} /build/simplesamlphp.tar.gz
 ADD --checksum=sha256:${MATHOIDREMOTE_SHA256} ${MATHOIDREMOTE_URL} /build/mathoid-remote
 ADD --checksum=sha256:${MEDIAWIKIADM_SHA256} ${MEDIAWIKIADM_URL} /build/mediawiki-adm
 ADD --checksum=sha256:${PARALLELRUNJOBSSERVICE_SHA256} ${PARALLELRUNJOBSSERVICE_URL} /build/parallel-runjobs-service
-ADD ${BLUESPICE_URL} /build/bluespice.tar.gz
+# HINT: Based on the type of URL, this can already be a tarball ( "Release-URL" ) or a git repository checkout ( "pre-release"/"custom-edition" )
+ADD ${BLUESPICE_URL}#${BLUESPICE_VERSION} /build/bluespice
 
-# We allow to explicitly set `BLUESPICE_SHA256` to `-`, to skip checksum verification. This is required for "pre-release" or "custom-edition" builds
-RUN if [ "${BLUESPICE_SHA256}" != "-" ]; then \
-		echo "${BLUESPICE_SHA256}  /build/bluespice.tar.gz" | sha256sum -c -; \
-	fi
-
-RUN mkdir -p /build/simplesamlphp /build/bluespice && \
-	tar -xzf /build/simplesamlphp.tar.gz -C /build/simplesamlphp --strip-components=1 && \
-	tar -xzf /build/bluespice.tar.gz -C /build/bluespice --strip-components=1
+RUN mkdir -p /build/simplesamlphp && \
+	tar -xzf /build/simplesamlphp.tar.gz -C /build/simplesamlphp --strip-components=1
+RUN rm -rf /build/.git
 
 FROM alpine:3 AS base
 ENV LANG=C.UTF-8
@@ -120,7 +115,7 @@ COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
-ARG EDITION
+ARG EDITION=free
 RUN if [ -n "$EDITION" ]; then \
 		echo "EDITION=$EDITION" > /app/.env; \
 	fi

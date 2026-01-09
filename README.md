@@ -16,17 +16,17 @@ docker build \
 
 Example custom edition build command:
 
-Assuming you have a valid access token for <url-to-custom-edition-tarball> stored in `~/gitlab-token.txt`, you can run
+Assuming you have a valid access token for <url-to-custom-edition-repo> stored in `~/gitlab-token.txt`, you can run
 
 ```bash
 GIT_AUTH_TOKEN=$(cat ~/gitlab-token.txt) \
 docker build \
 	--secret id=GIT_AUTH_TOKEN \
-	--build-arg BLUESPICE_SHA256=... \
+	--build-arg BLUESPICE_URL=<url-to-custom-edition-repo> \
+	--build-arg BLUESPICE_VERSION=<branch-or-tag> \
+	--build-arg EDITION=<edition> \
 	-t bluespice/wiki:latest .
 ```
-
-!Hint: You can disable checksum verification by setting `BLUESPICE_SHA256` to `-`.
 
 ## ENV vars
 
