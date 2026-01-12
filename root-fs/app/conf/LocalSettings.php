@@ -64,7 +64,7 @@ $GLOBALS['wgSMTP'] = [
 	'username' => trim( getenv( 'SMTP_USER' ) ),
 	'password' => trim( getenv( 'SMTP_PASS' ) ),
 ];
-if ( getenv( 'AV_HOST' ) ) {
+if ( getenv( 'AV_HOST' ) !== '-' ) {
 	$GLOBALS['wgAntivirusSetup'] = [
 		'clamav' => [
 			'command' => 'clamdscan --no-summary',
