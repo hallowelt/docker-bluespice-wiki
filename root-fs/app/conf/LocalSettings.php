@@ -4,29 +4,28 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 }
 
 $GLOBALS['wgServer'] = bsAssembleURL( 'WIKI_PROTOCOL', 'WIKI_HOST', 'WIKI_PORT' );
-$GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) ?: 'BlueSpice' );
-$GLOBALS['wgScriptPath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) .'w';
+$GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) );
+$GLOBALS['wgScriptPath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ) ) .'w';
 
 $GLOBALS['wgResourceBasePath'] = $GLOBALS['wgScriptPath'];
 $GLOBALS['wgLogos'] = [
 	'1x' => $GLOBALS['wgResourceBasePath'] . '/resources/assets/change-your-logo.svg',
 	'icon' => $GLOBALS['wgResourceBasePath']. '/resources/assets/change-your-logo-icon.svg',
 ];
-$GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) ?: '' );
-$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' )
-	?: 'no-reply@' . trim ( getenv( 'WIKI_HOST' ) ?: 'localhost' ) );
-$GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) ?: 'mysql' );
-$GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) ?: 'database' );
-$GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) ?: 'bluespice' );
-$GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) ?: 'bluespice' );
+$GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) );
+$GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) );
+$GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) );
+$GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) );
+$GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) );
+$GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) );
 $GLOBALS['wgDBpassword'] = trim(  getenv( 'DB_PASS' ) );
-$GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) ?: '' );
+$GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) );
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgSessionCacheType'] = CACHE_DB;
 if ( getenv( 'CACHE_HOST' ) !== '-' ) {
-	$cacheHost = trim( getenv( 'CACHE_HOST' ) ?: 'cache' );
-	$cachePort = trim( getenv( 'CACHE_PORT' ) ?: '11211' );
+	$cacheHost = trim( getenv( 'CACHE_HOST' ) );
+	$cachePort = trim( getenv( 'CACHE_PORT' ) );
 	$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 	unset( $cacheHost );
 	unset( $cachePort );
@@ -40,7 +39,7 @@ $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
 $GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/magick";
-$GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) ?: 'en' );
+$GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) );
 $GLOBALS['wgLocaltimezone'] = null;
 $GLOBALS['wgSecretKey'] = trim( getenv( 'INTERNAL_WIKI_SECRETKEY' ) );
 $GLOBALS['wgAuthenticationTokenVersion'] = "1";
@@ -54,7 +53,7 @@ $GLOBALS['wgPhpCli'] = '/bin/php';
 $GLOBALS['wgSMTP'] = [
 	'host' => trim( getenv( 'SMTP_HOST' ) ),
 	'IDHost' => trim( getenv( 'SMTP_IDHOST' ) ),
-	'port' => trim( getenv( 'SMTP_PORT' ) ?: 25 ),
+	'port' => trim( getenv( 'SMTP_PORT' ) ),
 	'auth' => getenv( 'SMTP_USER' ) ? true : false,
 	'username' => trim( getenv( 'SMTP_USER' ) ),
 	'password' => trim( getenv( 'SMTP_PASS' ) ),
@@ -90,11 +89,11 @@ if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 $GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
 $GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
 
-$GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) ?: 'search' );
-$GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) ?: '9200' );
-$GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) ?: 'http' );
-$GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) ?: '' );
-$GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) ?: '' );
+$GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) );
+$GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) );
+$GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) );
+$GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) );
+$GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) );
 
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL( 'PDF_PROTOCOL', 'PDF_HOST', 'PDF_PORT' );
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
@@ -123,7 +122,7 @@ $GLOBALS['wgMathoidCli'] = [
 	$GLOBALS['wgMathMathMLUrl']
 ];
 
-$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?? '' );
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
@@ -156,10 +155,10 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
 	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
 	$GLOBALS['wgWikiFarmConfig_dbAdminPassword'] = trim( getenv( 'DB_ROOT_PASS' ) ?: $GLOBALS['wgDBpassword'] );
-	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) ?: 'sfr_' );
+	$GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) );
 	$GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = "$IP/LocalSettings.BlueSpice.php";
 	$GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
-	$GLOBALS['wgWikiFarmConfig_basePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '' );
+	$GLOBALS['wgWikiFarmConfig_basePath'] = trim( getenv( 'WIKI_BASE_PATH' ) );
 	$GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 	$GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
@@ -177,12 +176,12 @@ else {
 	require_once "$IP/LocalSettings.BlueSpice.php";
 }
 
-$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
+$GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ) ) . 'wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
-		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
-		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
+		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE;
+		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/webdav/';
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
