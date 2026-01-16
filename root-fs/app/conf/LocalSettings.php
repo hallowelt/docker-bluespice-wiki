@@ -86,8 +86,8 @@ if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
-$GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
-$GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
+$GLOBALS['wgOAuth2PrivateKey'] = trim( getenv( 'WIKI_OAUTH2_PRIVATE_KEY_FILE' ) );
+$GLOBALS['wgOAuth2PublicKey'] = trim( getenv( 'WIKI_OAUTH2_PUBLIC_KEY_FILE' ) );
 
 $GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) );
 $GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) );
@@ -164,7 +164,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
 }
 
-require_once '/data/bluespice/pre-init-settings.php';
+require_once trim( getenv( 'WIKI_PRE_INIT_SETTINGS_FILE' ) );
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
 }
@@ -188,4 +188,4 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	}
 }
 
-require_once '/data/bluespice/post-init-settings.php';
+require_once trim( getenv( 'WIKI_POST_INIT_SETTINGS_FILE' ) );
