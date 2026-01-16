@@ -3,12 +3,7 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	exit;
 }
 
-$GLOBALS['wgServer'] = bsAssembleURL(
-	[ 'WIKI_PROTOCOL', 'https' ],
-	[ 'WIKI_HOST', 'localhost' ],
-	[ 'WIKI_PORT', '443' ]
-);
-
+$GLOBALS['wgServer'] = bsAssembleURL( 'WIKI_PROTOCOL', 'WIKI_HOST', 'WIKI_PORT' );
 $GLOBALS['wgSitename'] = trim(  getenv( 'WIKI_NAME' ) ?: 'BlueSpice' );
 $GLOBALS['wgScriptPath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) .'w';
 
@@ -101,11 +96,7 @@ $GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) ?: 'http' 
 $GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) ?: '' );
 $GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) ?: '' );
 
-$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL(
-	[ 'PDF_PROTOCOL', 'http' ],
-	[ 'PDF_HOST', 'pdf' ],
-	[ 'PDF_PORT', '8080' ]
-);
+$GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL( 'PDF_PROTOCOL', 'PDF_HOST', 'PDF_PORT' );
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
 
 $GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
@@ -115,13 +106,7 @@ $GLOBALS['wgPdftoText'] = '/usr/bin/pdftotext';
 
 if ( getenv( 'EDITION' ) !== 'free' ) {
 	// FREE edition uses public diagrams.net service
-	// HINT: Keep in sync with assembly of $GLOBALS['wgServer']
-	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL(
-		[ 'DIAGRAM_PROTOCOL', trim( getenv( 'WIKI_PROTOCOL' ) ?: 'https' ) ],
-		[ 'DIAGRAM_HOST', trim( getenv( 'WIKI_HOST' ) ?: 'localhost' ) ],
-		[ 'DIAGRAM_PORT', trim( getenv( 'WIKI_PORT' ) ?: '443' ) ],
-		[ 'DIAGRAM_PATH', '/_diagram/' ]
-	);
+	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL( 'DIAGRAM_PROTOCOL', 'DIAGRAM_HOST', 'DIAGRAM_PORT', 'DIAGRAM_PATH' );
 }
 
 $GLOBALS['wgMathValidModes'] = [ 'mathml' ];
@@ -130,11 +115,7 @@ $GLOBALS['wgMaxShellMemory'] = 1228800;
 $GLOBALS['wgHiddenPrefs'][] = 'math';
 // We don't use the `MathMathML` renderer, but `MathMathMLCli`,
 // but `Extension:BlueSpiceInstanceStatus` needs this variable
-$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL(
-	[ 'FORMULA_PROTOCOL', 'http' ],
-	[ 'FORMULA_HOST', 'formula' ],
-	[ 'FORMULA_PORT', '10044' ]
-);
+$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL( 'FORMULA_PROTOCOL', 'FORMULA_HOST', 'FORMULA_PORT' );
 // By setting `$wgMathoidCli`, `MathMathMLCli` renderer is used
 // instead of `MathMathML`.
 $GLOBALS['wgMathoidCli'] = [

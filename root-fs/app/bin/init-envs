@@ -25,6 +25,7 @@ export DEV_WIKI_DEBUG=${DEV_WIKI_DEBUG:-}
 export DEV_WIKI_DEBUG_LOGCHANNELS=${DEV_WIKI_DEBUG_LOGCHANNELS:-}
 
 # Diagram service defaults (depend on WIKI_* vars, set later)
+# Additional ones see below
 export DIAGRAM_PATH=${DIAGRAM_PATH:-/_diagram/}
 
 # Edition defaults

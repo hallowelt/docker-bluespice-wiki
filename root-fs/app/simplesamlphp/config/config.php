@@ -2,11 +2,7 @@
 
 include (__DIR__ . '/config.php.dist');
 
-$baseUrl = $GLOBALS['wgServer'] = bsAssembleURL(
-	[ 'WIKI_PROTOCOL', 'https' ],
-	[ 'WIKI_HOST', 'localhost' ],
-	[ 'WIKI_PORT', '443' ]
-);
+$baseUrl = $GLOBALS['wgServer'] = bsAssembleURL( 'WIKI_PROTOCOL', 'WIKI_HOST', 'WIKI_PORT' );
 
 // TODO calculate from environment variable
 $loglevel = SimpleSAML\Logger::WARNING;
