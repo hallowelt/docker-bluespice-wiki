@@ -1,9 +1,9 @@
 FROM alpine:3 AS builder
 
 # We use SimpleSAMLphp SLIM version to reduce the image size
-ENV SIMPLESAMLPHP_VERSION=2.4.4
+ENV SIMPLESAMLPHP_VERSION=2.3.10
 ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
-ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974b3168a57e
+ENV SIMPLESAMLPHP_SHA256=a19dc981423d170942d665f047e8c821328d588f198c4ff4f685634f8e81b1a0
 
 ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.1.x/_client/mathoid-remote
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
