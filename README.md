@@ -89,7 +89,7 @@ docker build \
 | `WIRE_HOST`                  | `wire`         | Hostname of a `bluespice/wire` compatible service    | Yes      |
 | `WIRE_PORT`                  | `3333`         | Port of a `bluespice/wire` compatible service        | Yes      |
 | `WIRE_PROTOCOL`              | `http`         | Protocol of a `bluespice/wire` compatible service    | Yes      |
-
+| `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)     | Yes      |
 
 *) External cache can be disabled by setting `-` as `CACHE_HOST`.
 **) Functions requiring `bluespice/chat` can be disabled by setting `-` as `CHAT_HOST`.
