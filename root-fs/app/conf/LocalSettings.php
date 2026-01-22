@@ -143,8 +143,8 @@ $GLOBALS['wgMathoidCli'] = [
 ];
 
 $GLOBALS['bsgInstanceStatusCheckAllowedIP'] =
-       trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) )
-       ?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
+	trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) )
+	?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
