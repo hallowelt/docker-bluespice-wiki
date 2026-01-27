@@ -6,7 +6,7 @@ For the free edition the GitHub can be used for both.
 Example FREE edition build command:
 
 ```bash
-docker build -t bluespice/wiki:latest .
+docker build --build-arg EDITION=free -t bluespice/wiki:latest .
 ```
 
 Example custom edition build command:
