@@ -69,10 +69,14 @@ RUN apk add \
 	php$VERSION-opcache \
 	php$VERSION-pdo \
 	php$VERSION-pdo_mysql \
+	php$VERSION-pdo_pgsql \
+	php$VERSION-pdo_sqlite \
+	php$VERSION-pgsql \
 	php$VERSION-phar \
 	php$VERSION-posix \
 	php$VERSION-session \
 	php$VERSION-simplexml \
+	php$VERSION-sqlite3 \
 	php$VERSION-tokenizer \
 	php$VERSION-xml \
 	php$VERSION-xml \
