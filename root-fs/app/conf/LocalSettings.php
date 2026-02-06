@@ -44,9 +44,9 @@ $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
 $GLOBALS['wgUseImageMagick'] = true;
-$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/convert";
+$GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/magick";
 $GLOBALS['wgLanguageCode'] = trim( getenv( 'WIKI_LANG' ) ?: 'en' );
-$GLOBALS['wgLocaltimezone'] = "UTC";
+$GLOBALS['wgLocaltimezone'] = null;
 $GLOBALS['wgSecretKey'] = trim( getenv( 'INTERNAL_WIKI_SECRETKEY' ) );
 $GLOBALS['wgAuthenticationTokenVersion'] = "1";
 $GLOBALS['wgUpgradeKey'] = trim( getenv( 'INTERNAL_WIKI_UPGRADEKEY' ) );
@@ -80,6 +80,8 @@ if ( getenv( 'AV_HOST' ) ) {
 	$GLOBALS['wgAntivirus'] = 'clamav';
 	$GLOBALS['wgAntivirusRequired'] = true;
 }
+
+$GLOBALS['wgCdnServersNoPurge'] = [ Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' ) ];
 if ( getenv('WIKI_PROXY') ) {
 	$GLOBALS['wgCdnServersNoPurge'] = explode( ',', trim( getenv( 'WIKI_PROXY' ) ) );
 	array_walk( $GLOBALS['wgCdnServersNoPurge'], function ( &$value ) {
@@ -90,8 +92,8 @@ if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
 	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
-$GLOBALS['wgOAuth2PrivateKey'] = '/data/bluespice/oauth_private.key';
-$GLOBALS['wgOAuth2PublicKey'] = '/data/bluespice/oauth_public.key';
+$GLOBALS['wgOAuth2PrivateKey'] = getenv( 'INTERNAL_OAUTH2_PRIVATE_KEY' ) ?: '/data/bluespice/oauth_private.key';
+$GLOBALS['wgOAuth2PublicKey'] = getenv( 'INTERNAL_OAUTH2_PUBLIC_KEY' ) ?: '/data/bluespice/oauth_public.key';
 
 $GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) ?: 'search' );
 $GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) ?: '9200' );
@@ -140,7 +142,10 @@ $GLOBALS['wgMathoidCli'] = [
 	$GLOBALS['wgMathMathMLUrl']
 ];
 
-$GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) ?: null );
+$GLOBALS['bsgInstanceStatusCheckAllowedIP'] =
+	trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) )
+	?? Wikimedia\IPUtils::sanitizeRange( $_SERVER['SERVER_ADDR'] . '/24' );
+
 
 $GLOBALS['wgSimpleSAMLphp_InstallDir'] = '/app/simplesamlphp';
 
@@ -182,6 +187,61 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
 }
 
+
+$GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
+
+// While this is not necessarily `bluespice/chat` service specific configuration, we currently assume it is.
+// This may change in future versions. See https://github.com/hallowelt/mwstake-mediawiki-component-token-authenticator/issues/2
+$GLOBALS['mwsgTokenAuthenticatorServiceUser'] = 'ChatBot service user';
+$GLOBALS['mwsgTokenAuthenticatorServiceToken'] = getenv( 'INTERNAL_CHAT_WIKI_ACCESS_TOKEN' );
+$GLOBALS['mwsgTokenAuthenticatorServiceAllowedAPIModules'] = [
+	ApiOpenSearch::class
+];
+$GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
+	'/mws/v1/user-token',
+	'/chatintegration'
+];
+# By default limit to same subnet as the host (container)
+$GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
+	trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) )
+	?? Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' );
+
+// `bluespice/wire` service configuration
+$GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
+$GLOBALS['mwsgWireServiceUrl'] = bsAssembleURL(
+	[ 'WIRE_PROTOCOL', 'http' ],
+	[ 'WIRE_HOST', 'wire' ],
+	[ 'WIRE_PORT', '3333' ]
+);
+$GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
+
+// Extension:WikiRAG configuration
+$GLOBALS['wgWikiRAGTarget'] = [
+	'type' => 'local-directory',
+	'configuration' => [
+		'path' => '/data/bluespice/rag'
+	]
+];
+$GLOBALS['wgWikiRAGPipeline'] = [ 'content.wikitext', 'repofile', 'meta.json', 'acl.json' ];
+
+// We allow explictly disabling Chat extensions
+if ( getenv( 'CHAT_HOST' ) !== '-' ) {
+	// Extension:ChatIntegration configuration
+	$GLOBALS['wgChatIntegrationBridge'] = [
+		'url' => bsAssembleURL(
+			[ 'CHAT_PROTOCOL', 'http' ],
+			[ 'CHAT_HOST', 'chat' ],
+			[ 'CHAT_PORT', '3000' ]
+		),
+		'token' => getenv( 'INTERNAL_CHAT_TOKEN' )
+	];
+
+	// Extension:ChatBot configuration
+	$GLOBALS['wgChatBotService'] = [
+		'url' => $GLOBALS[ 'wgServer' ] . '/_chat'
+	];
+}
+
 require_once '/data/bluespice/pre-init-settings.php';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
@@ -197,13 +257,33 @@ else {
 $GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . 'wiki/$1';
 if ( getenv( 'EDITION' ) === 'farm' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
-                $GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
-                $GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
-                $GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
+		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE;
+		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
+		$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) . FARMER_CALLED_INSTANCE . '/webdav/';
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
 	}
+}
+if ( getenv( 'MAX_UPLOAD_SIZE' ) ) {
+	$uploadSize = getenv( 'MAX_UPLOAD_SIZE' );
+	if (preg_match('/^(\d+)([a-zA-Z]+)$/', $uploadSize, $matches)) {
+        $value = (int)$matches[1];
+        $suffix = strtolower($matches[2]);
+
+        if ($suffix === "m") {
+            $GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * $value;
+        } 
+		elseif ($suffix === "g") {
+            $GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * 1024 * $value;
+        }
+		//If Value is not Readable default = 1024*1024*1024		
+
+	}
+	unset( $uploadSize );
+	unset( $value );
+	unset( $suffix );
+	unset( $matches );
 }
 
 require_once '/data/bluespice/post-init-settings.php';
