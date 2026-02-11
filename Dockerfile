@@ -79,7 +79,6 @@ RUN apk add \
 	php$VERSION-sqlite3 \
 	php$VERSION-tokenizer \
 	php$VERSION-xml \
-	php$VERSION-xml \
 	php$VERSION-xmlreader \
 	php$VERSION-xmlwriter \
 	php$VERSION-zip \
