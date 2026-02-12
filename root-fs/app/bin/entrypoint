@@ -29,6 +29,8 @@ if [ -f /data/.wikienv ]; then
   sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
 fi
 if [ -f /app/.env ]; then
+  # For grep:
+  # - EDITION
   set -a
   source /app/.env
   set +a
