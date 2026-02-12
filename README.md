@@ -36,7 +36,7 @@ docker build \
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
-| `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
+| `DB_ROOT_PASS`               | `$DB_PASS`     | Database root password **)                           | Yes      |
 | `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
