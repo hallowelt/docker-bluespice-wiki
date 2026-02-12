@@ -14,9 +14,11 @@ export CACHE_PORT=${CACHE_PORT:-11211}
 # Database defaults
 export DB_HOST=${DB_HOST:-database}
 export DB_NAME=${DB_NAME:-bluespice}
-# DB_PASS is mandatory and has no default value
+# DB_PASS is mandatory and cannot be empty
+# Without it, the container should instantly die
+: "${DB_PASS:?Error: DB_PASS environment variable is required and cannot be empty}"
 export DB_PREFIX=${DB_PREFIX:-}
-export DB_ROOT_PASS=${DB_ROOT_PASS:-}
+export DB_ROOT_PASS=${DB_ROOT_PASS:-$DB_PASS}
 export DB_ROOT_USER=${DB_ROOT_USER:-root}
 export DB_TYPE=${DB_TYPE:-mysql}
 export DB_USER=${DB_USER:-bluespice}
