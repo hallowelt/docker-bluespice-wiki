@@ -93,4 +93,4 @@ echo "DIAGRAM_PORT=\${DIAGRAM_PORT:-\$WIKI_PORT}" >> /home/bluespice/.bashrc
 echo "DIAGRAM_PROTOCOL=\${DIAGRAM_PROTOCOL:-\$WIKI_PROTOCOL}" >> /home/bluespice/.bashrc
 
 # Path adjustments
-echo "PATH=\$PATH:/app/bin
+echo "PATH=\$PATH:/app/bin" >> /home/bluespice/.bashrc
