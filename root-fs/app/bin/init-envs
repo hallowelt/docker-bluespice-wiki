@@ -1,106 +1,106 @@
 #!/bin/bash
 
 # Antivirus service defaults
-export AV_HOST=${AV_HOST:--}
-export AV_PORT=${AV_PORT:-3310}
+echo "AV_HOST=\${AV_HOST:--}" >> /home/bluespice/.bashrc
+echo "AV_PORT=\${AV_PORT:-3310}" >> /home/bluespice/.bashrc
 
 # Backup defaults
-export BACKUP_HOUR=${BACKUP_HOUR:-1}
+echo "BACKUP_HOUR=\${BACKUP_HOUR:-1}" >> /home/bluespice/.bashrc
 
 # Cache service defaults
-export CACHE_HOST=${CACHE_HOST:-cache}
-export CACHE_PORT=${CACHE_PORT:-11211}
+echo "CACHE_HOST=\${CACHE_HOST:-cache}" >> /home/bluespice/.bashrc
+echo "CACHE_PORT=\${CACHE_PORT:-11211}" >> /home/bluespice/.bashrc
 
 # Chat defaults
-export CHAT_HOST=${CHAT_HOST:-chat}
-export CHAT_PORT=${CHAT_PORT:-3000}
-export CHAT_PROTOCOL=${CHAT_PROTOCOL:-http}
+echo "CHAT_HOST=\${CHAT_HOST:-chat}" >> /home/bluespice/.bashrc
+echo "CHAT_PORT=\${CHAT_PORT:-3000}" >> /home/bluespice/.bashrc
+echo "CHAT_PROTOCOL=\${CHAT_PROTOCOL:-http}" >> /home/bluespice/.bashrc
 
 # Database defaults
-export DB_HOST=${DB_HOST:-database}
-export DB_NAME=${DB_NAME:-bluespice}
+echo "DB_HOST=\${DB_HOST:-database}" >> /home/bluespice/.bashrc
+echo "DB_NAME=\${DB_NAME:-bluespice}" >> /home/bluespice/.bashrc
 # DB_PASS is mandatory and has no default value
-export DB_PREFIX=${DB_PREFIX:-}
-export DB_ROOT_PASS=${DB_ROOT_PASS:-}
-export DB_ROOT_USER=${DB_ROOT_USER:-root}
-export DB_TYPE=${DB_TYPE:-mysql}
-export DB_USER=${DB_USER:-bluespice}
+echo "DB_PREFIX=\${DB_PREFIX:-}" >> /home/bluespice/.bashrc
+echo "DB_ROOT_PASS=\${DB_ROOT_PASS:-}" >> /home/bluespice/.bashrc
+echo "DB_ROOT_USER=\${DB_ROOT_USER:-root}" >> /home/bluespice/.bashrc
+echo "DB_TYPE=\${DB_TYPE:-mysql}" >> /home/bluespice/.bashrc
+echo "DB_USER=\${DB_USER:-bluespice}" >> /home/bluespice/.bashrc
 
 # Development/Debug defaults
-export DEV_WIKI_DEBUG=${DEV_WIKI_DEBUG:-}
-export DEV_WIKI_DEBUG_LOGCHANNELS=${DEV_WIKI_DEBUG_LOGCHANNELS:-}
+echo "DEV_WIKI_DEBUG=\${DEV_WIKI_DEBUG:-}" >> /home/bluespice/.bashrc
+echo "DEV_WIKI_DEBUG_LOGCHANNELS=\${DEV_WIKI_DEBUG_LOGCHANNELS:-}" >> /home/bluespice/.bashrc
 
 # Diagram service defaults (depend on WIKI_* vars, set later)
 # Additional ones see below
-export DIAGRAM_PATH=${DIAGRAM_PATH:-/_diagram/}
+echo "DIAGRAM_PATH=\${DIAGRAM_PATH:-/_diagram/}" >> /home/bluespice/.bashrc
 
 # Edition defaults
-export EDITION=${EDITION:-}
+echo "EDITION=\${EDITION:-}" >> /home/bluespice/.bashrc
 
 # Formula service defaults
-export FORMULA_HOST=${FORMULA_HOST:-formula}
-export FORMULA_PORT=${FORMULA_PORT:-10044}
-export FORMULA_PROTOCOL=${FORMULA_PROTOCOL:-http}
+echo "FORMULA_HOST=\${FORMULA_HOST:-formula}" >> /home/bluespice/.bashrc
+echo "FORMULA_PORT=\${FORMULA_PORT:-10044}" >> /home/bluespice/.bashrc
+echo "FORMULA_PROTOCOL=\${FORMULA_PROTOCOL:-http}" >> /home/bluespice/.bashrc
 
 # PDF service defaults
-export PDF_HOST=${PDF_HOST:-pdf}
-export PDF_PORT=${PDF_PORT:-8080}
-export PDF_PROTOCOL=${PDF_PROTOCOL:-http}
+echo "PDF_HOST=\${PDF_HOST:-pdf}" >> /home/bluespice/.bashrc
+echo "PDF_PORT=\${PDF_PORT:-8080}" >> /home/bluespice/.bashrc
+echo "PDF_PROTOCOL=\${PDF_PROTOCOL:-http}" >> /home/bluespice/.bashrc
 
 # Search service defaults
-export SEARCH_HOST=${SEARCH_HOST:-search}
-export SEARCH_PASS=${SEARCH_PASS:-}
-export SEARCH_PORT=${SEARCH_PORT:-9200}
-export SEARCH_PROTOCOL=${SEARCH_PROTOCOL:-http}
-export SEARCH_USER=${SEARCH_USER:-}
+echo "SEARCH_HOST=\${SEARCH_HOST:-search}" >> /home/bluespice/.bashrc
+echo "SEARCH_PASS=\${SEARCH_PASS:-}" >> /home/bluespice/.bashrc
+echo "SEARCH_PORT=\${SEARCH_PORT:-9200}" >> /home/bluespice/.bashrc
+echo "SEARCH_PROTOCOL=\${SEARCH_PROTOCOL:-http}" >> /home/bluespice/.bashrc
+echo "SEARCH_USER=\${SEARCH_USER:-}" >> /home/bluespice/.bashrc
 
 # SMTP defaults
-export SMTP_HOST=${SMTP_HOST:-}
-export SMTP_IDHOST=${SMTP_IDHOST:-}
-export SMTP_PASS=${SMTP_PASS:-}
-export SMTP_PORT=${SMTP_PORT:-25}
-export SMTP_USER=${SMTP_USER:-}
+echo "SMTP_HOST=\${SMTP_HOST:-}" >> /home/bluespice/.bashrc
+echo "SMTP_IDHOST=\${SMTP_IDHOST:-}" >> /home/bluespice/.bashrc
+echo "SMTP_PASS=\${SMTP_PASS:-}" >> /home/bluespice/.bashrc
+echo "SMTP_PORT=\${SMTP_PORT:-25}" >> /home/bluespice/.bashrc
+echo "SMTP_USER=\${SMTP_USER:-}" >> /home/bluespice/.bashrc
 
 # Timezone defaults
-export TZ=${TZ:-UTC}
+echo "TZ=\${TZ:-UTC}" >> /home/bluespice/.bashrc
 
 # Wiki defaults
-export WIKI_BASE_PATH=${WIKI_BASE_PATH:-/}
-export WIKI_EMERGENCYCONTACT=${WIKI_EMERGENCYCONTACT:-}
-export WIKI_FARM_DB_PREFIX=${WIKI_FARM_DB_PREFIX:-sfr_}
-export WIKI_FARM_USE_SHARED_DB=${WIKI_FARM_USE_SHARED_DB:-}
-export WIKI_HOST=${WIKI_HOST:-localhost}
-export WIKI_INITIAL_ADMIN_PASS=${WIKI_INITIAL_ADMIN_PASS:-}
-export WIKI_INITIAL_ADMIN_USER=${WIKI_INITIAL_ADMIN_USER:-Admin}
-export WIKI_LANG=${WIKI_LANG:-en}
-export WIKI_LOG_LEVEL=${WIKI_LOG_LEVEL:-error}
-export WIKI_NAME=${WIKI_NAME:-BlueSpice}
-export WIKI_OAUTH2_PRIVATE_KEY_FILE=${WIKI_OAUTH2_PRIVATE_KEY_FILE:-/data/bluespice/oauth_private.key}
-export WIKI_OAUTH2_PUBLIC_KEY_FILE=${WIKI_OAUTH2_PUBLIC_KEY_FILE:-/data/bluespice/oauth_public.key}
-export WIKI_PORT=${WIKI_PORT:-443}
-export WIKI_POST_INIT_SETTINGS_FILE=${WIKI_POST_INIT_SETTINGS_FILE:-/data/bluespice/post-init-settings.php}
-export WIKI_PRE_INIT_SETTINGS_FILE=${WIKI_PRE_INIT_SETTINGS_FILE:-/data/bluespice/pre-init-settings.php}
-export WIKI_PROTOCOL=${WIKI_PROTOCOL:-https}
-export WIKI_SUBSCRIPTION_KEY=${WIKI_SUBSCRIPTION_KEY:-}
-export WIKI_STATUSCHECK_ALLOWED=${WIKI_STATUSCHECK_ALLOWED:-}
+echo "WIKI_BASE_PATH=\${WIKI_BASE_PATH:-/}" >> /home/bluespice/.bashrc
+echo "WIKI_EMERGENCYCONTACT=\${WIKI_EMERGENCYCONTACT:-}" >> /home/bluespice/.bashrc
+echo "WIKI_FARM_DB_PREFIX=\${WIKI_FARM_DB_PREFIX:-sfr_}" >> /home/bluespice/.bashrc
+echo "WIKI_FARM_USE_SHARED_DB=\${WIKI_FARM_USE_SHARED_DB:-}" >> /home/bluespice/.bashrc
+echo "WIKI_HOST=\${WIKI_HOST:-localhost}" >> /home/bluespice/.bashrc
+echo "WIKI_INITIAL_ADMIN_PASS=\${WIKI_INITIAL_ADMIN_PASS:-}" >> /home/bluespice/.bashrc
+echo "WIKI_INITIAL_ADMIN_USER=\${WIKI_INITIAL_ADMIN_USER:-Admin}" >> /home/bluespice/.bashrc
+echo "WIKI_LANG=\${WIKI_LANG:-en}" >> /home/bluespice/.bashrc
+echo "WIKI_LOG_LEVEL=\${WIKI_LOG_LEVEL:-error}" >> /home/bluespice/.bashrc
+echo "WIKI_NAME=\${WIKI_NAME:-BlueSpice}" >> /home/bluespice/.bashrc
+echo "WIKI_OAUTH2_PRIVATE_KEY_FILE=\${WIKI_OAUTH2_PRIVATE_KEY_FILE:-/data/bluespice/oauth_private.key}" >> /home/bluespice/.bashrc
+echo "WIKI_OAUTH2_PUBLIC_KEY_FILE=\${WIKI_OAUTH2_PUBLIC_KEY_FILE:-/data/bluespice/oauth_public.key}" >> /home/bluespice/.bashrc
+echo "WIKI_PORT=\${WIKI_PORT:-443}" >> /home/bluespice/.bashrc
+echo "WIKI_POST_INIT_SETTINGS_FILE=\${WIKI_POST_INIT_SETTINGS_FILE:-/data/bluespice/post-init-settings.php}" >> /home/bluespice/.bashrc
+echo "WIKI_PRE_INIT_SETTINGS_FILE=\${WIKI_PRE_INIT_SETTINGS_FILE:-/data/bluespice/pre-init-settings.php}" >> /home/bluespice/.bashrc
+echo "WIKI_PROTOCOL=\${WIKI_PROTOCOL:-https}" >> /home/bluespice/.bashrc
+echo "WIKI_SUBSCRIPTION_KEY=\${WIKI_SUBSCRIPTION_KEY:-}" >> /home/bluespice/.bashrc
+echo "WIKI_STATUSCHECK_ALLOWED=\${WIKI_STATUSCHECK_ALLOWED:-}" >> /home/bluespice/.bashrc
 
 # WIKI_PROXY - more sophisticated detection
-if [ -z "$WIKI_PROXY" ]; then
-  export WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
+if [ -z "\$WIKI_PROXY" ]; then
+  echo "WIKI_PROXY=\$(getent hosts proxy | awk '{ print \$1 ; exit }')" >> /home/bluespice/.bashrc
 fi
 
 # WIKI_PASSWORDSENDER - depends on WIKI_HOST
-export WIKI_PASSWORDSENDER=${WIKI_PASSWORDSENDER:-no-reply@$WIKI_HOST}
+echo "WIKI_PASSWORDSENDER=\${WIKI_PASSWORDSENDER:-no-reply@\$WIKI_HOST}" >> /home/bluespice/.bashrc
 
 # Wire defaults
-export WIRE_HOST=${WIRE_HOST:-wire}
-export WIRE_PORT=${WIRE_PORT:-3333}
-export WIRE_PROTOCOL=${WIRE_PROTOCOL:-http}
+echo "WIRE_HOST=\${WIRE_HOST:-wire}" >> /home/bluespice/.bashrc
+echo "WIRE_PORT=\${WIRE_PORT:-3333}" >> /home/bluespice/.bashrc
+echo "WIRE_PROTOCOL=\${WIRE_PROTOCOL:-http}" >> /home/bluespice/.bashrc
 
 # Diagram service defaults that depend on WIKI_* vars
-export DIAGRAM_HOST=${DIAGRAM_HOST:-$WIKI_HOST}
-export DIAGRAM_PORT=${DIAGRAM_PORT:-$WIKI_PORT}
-export DIAGRAM_PROTOCOL=${DIAGRAM_PROTOCOL:-$WIKI_PROTOCOL}
+echo "DIAGRAM_HOST=\${DIAGRAM_HOST:-\$WIKI_HOST}" >> /home/bluespice/.bashrc
+echo "DIAGRAM_PORT=\${DIAGRAM_PORT:-\$WIKI_PORT}" >> /home/bluespice/.bashrc
+echo "DIAGRAM_PROTOCOL=\${DIAGRAM_PROTOCOL:-\$WIKI_PROTOCOL}" >> /home/bluespice/.bashrc
 
 # Path adjustments
-export PATH=$PATH:/app/bin
+echo "PATH=\$PATH:/app/bin" >> /home/bluespice/.bashrc
