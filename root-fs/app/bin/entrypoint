@@ -35,7 +35,7 @@ if [ -f /app/.env ]; then
   source /app/.env
   set +a
   cat /app/.env >> /home/bluespice/.bashrc
-  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc 
+  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc
 fi
 
 exec sh -c "$@"
