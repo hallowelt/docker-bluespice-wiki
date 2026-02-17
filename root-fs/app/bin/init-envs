@@ -1,103 +1,17 @@
 #!/bin/bash
 
-# Antivirus service defaults
-echo "AV_HOST=${AV_HOST:--}" >> /app/.env
-echo "AV_PORT=${AV_PORT:-3310}" >> /app/.env
+# Export all environment variables to /app/.env for consumption by other scripts
+# This handles both variables set in Dockerfile and runtime overrides
 
-# Backup defaults
-echo "BACKUP_HOUR=${BACKUP_HOUR:-1}" >> /app/.env
+# Handle dependent variables - set defaults based on other variables if not explicitly provided
+: ${DIAGRAM_HOST:=$WIKI_HOST}
+: ${DIAGRAM_PORT:=$WIKI_PORT}
+: ${DIAGRAM_PROTOCOL:=$WIKI_PROTOCOL}
+: ${WIKI_PASSWORDSENDER:=no-reply@$WIKI_HOST}
 
-# Cache service defaults
-echo "CACHE_HOST=${CACHE_HOST:-cache}" >> /app/.env
-echo "CACHE_PORT=${CACHE_PORT:-11211}" >> /app/.env
-
-# Chat defaults
-echo "CHAT_HOST=${CHAT_HOST:-chat}" >> /app/.env
-echo "CHAT_PORT=${CHAT_PORT:-3000}" >> /app/.env
-echo "CHAT_PROTOCOL=${CHAT_PROTOCOL:-http}" >> /app/.env
-
-# Database defaults
-echo "DB_HOST=${DB_HOST:-database}" >> /app/.env
-echo "DB_NAME=${DB_NAME:-bluespice}" >> /app/.env
-# DB_PASS is mandatory and has no default value
-echo "DB_PREFIX=${DB_PREFIX:-}" >> /app/.env
-echo "DB_ROOT_PASS=${DB_ROOT_PASS:-}" >> /app/.env
-echo "DB_ROOT_USER=${DB_ROOT_USER:-root}" >> /app/.env
-echo "DB_TYPE=${DB_TYPE:-mysql}" >> /app/.env
-echo "DB_USER=${DB_USER:-bluespice}" >> /app/.env
-
-# Development/Debug defaults
-echo "DEV_WIKI_DEBUG=${DEV_WIKI_DEBUG:-}" >> /app/.env
-echo "DEV_WIKI_DEBUG_LOGCHANNELS=${DEV_WIKI_DEBUG_LOGCHANNELS:-}" >> /app/.env
-
-# Additional ones see below
-echo "DIAGRAM_PATH=${DIAGRAM_PATH:-/_diagram/}" >> /app/.env
-echo "DIAGRAM_HOST=${DIAGRAM_HOST:-${WIKI_HOST:-localhost}}" >> /app/.env
-echo "DIAGRAM_PORT=${DIAGRAM_PORT:-${WIKI_PORT:-443}}" >> /app/.env
-echo "DIAGRAM_PROTOCOL=${DIAGRAM_PROTOCOL:-${WIKI_PROTOCOL:-https}}" >> /app/.env
-
-# Edition defaults
-echo "EDITION=${EDITION:-}" >> /app/.env
-
-# Formula service defaults
-echo "FORMULA_HOST=${FORMULA_HOST:-formula}" >> /app/.env
-echo "FORMULA_PORT=${FORMULA_PORT:-10044}" >> /app/.env
-echo "FORMULA_PROTOCOL=${FORMULA_PROTOCOL:-http}" >> /app/.env
-
-# PDF service defaults
-echo "PDF_HOST=${PDF_HOST:-pdf}" >> /app/.env
-echo "PDF_PORT=${PDF_PORT:-8080}" >> /app/.env
-echo "PDF_PROTOCOL=${PDF_PROTOCOL:-http}" >> /app/.env
-
-# Search service defaults
-echo "SEARCH_HOST=${SEARCH_HOST:-search}" >> /app/.env
-echo "SEARCH_PASS=${SEARCH_PASS:-}" >> /app/.env
-echo "SEARCH_PORT=${SEARCH_PORT:-9200}" >> /app/.env
-echo "SEARCH_PROTOCOL=${SEARCH_PROTOCOL:-http}" >> /app/.env
-echo "SEARCH_USER=${SEARCH_USER:-}" >> /app/.env
-
-# SMTP defaults
-echo "SMTP_HOST=${SMTP_HOST:-}" >> /app/.env
-echo "SMTP_IDHOST=${SMTP_IDHOST:-}" >> /app/.env
-echo "SMTP_PASS=${SMTP_PASS:-}" >> /app/.env
-echo "SMTP_PORT=${SMTP_PORT:-25}" >> /app/.env
-echo "SMTP_USER=${SMTP_USER:-}" >> /app/.env
-
-# Timezone defaults
-echo "TZ=${TZ:-UTC}" >> /app/.env
-
-# Wiki defaults
-echo "WIKI_BASE_PATH=${WIKI_BASE_PATH:-/}" >> /app/.env
-echo "WIKI_EMERGENCYCONTACT=${WIKI_EMERGENCYCONTACT:-}" >> /app/.env
-echo "WIKI_FARM_DB_PREFIX=${WIKI_FARM_DB_PREFIX:-sfr_}" >> /app/.env
-echo "WIKI_FARM_USE_SHARED_DB=${WIKI_FARM_USE_SHARED_DB:-}" >> /app/.env
-echo "WIKI_HOST=${WIKI_HOST:-localhost}" >> /app/.env
-echo "WIKI_INITIAL_ADMIN_PASS=${WIKI_INITIAL_ADMIN_PASS:-}" >> /app/.env
-echo "WIKI_INITIAL_ADMIN_USER=${WIKI_INITIAL_ADMIN_USER:-Admin}" >> /app/.env
-echo "WIKI_LANG=${WIKI_LANG:-en}" >> /app/.env
-echo "WIKI_LOG_LEVEL=${WIKI_LOG_LEVEL:-error}" >> /app/.env
-echo "WIKI_NAME=${WIKI_NAME:-BlueSpice}" >> /app/.env
-echo "WIKI_OAUTH2_PRIVATE_KEY_FILE=${WIKI_OAUTH2_PRIVATE_KEY_FILE:-/data/bluespice/oauth_private.key}" >> /app/.env
-echo "WIKI_OAUTH2_PUBLIC_KEY_FILE=${WIKI_OAUTH2_PUBLIC_KEY_FILE:-/data/bluespice/oauth_public.key}" >> /app/.env
-echo "WIKI_PORT=${WIKI_PORT:-443}" >> /app/.env
-echo "WIKI_POST_INIT_SETTINGS_FILE=${WIKI_POST_INIT_SETTINGS_FILE:-/data/bluespice/post-init-settings.php}" >> /app/.env
-echo "WIKI_PRE_INIT_SETTINGS_FILE=${WIKI_PRE_INIT_SETTINGS_FILE:-/data/bluespice/pre-init-settings.php}" >> /app/.env
-echo "WIKI_PROTOCOL=${WIKI_PROTOCOL:-https}" >> /app/.env
-echo "WIKI_SUBSCRIPTION_KEY=${WIKI_SUBSCRIPTION_KEY:-}" >> /app/.env
-echo "WIKI_STATUSCHECK_ALLOWED=${WIKI_STATUSCHECK_ALLOWED:-}" >> /app/.env
-
-# WIKI_PROXY - more sophisticated detection
+# WIKI_PROXY - runtime detection if not set
 if [ -z "$WIKI_PROXY" ]; then
-  echo "WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')" >> /app/.env
+  WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
 fi
 
-# WIKI_PASSWORDSENDER - depends on WIKI_HOST
-echo "WIKI_PASSWORDSENDER=${WIKI_PASSWORDSENDER:-no-reply@$WIKI_HOST}" >> /app/.env
-
-# Wire defaults
-echo "WIRE_HOST=${WIRE_HOST:-wire}" >> /app/.env
-echo "WIRE_PORT=${WIRE_PORT:-3333}" >> /app/.env
-echo "WIRE_PROTOCOL=${WIRE_PROTOCOL:-http}" >> /app/.env
-
-# Path adjustments
-echo "PATH=$PATH:/app/bin" >> /app/.env
+$PATH=$PATH:/app/bin
