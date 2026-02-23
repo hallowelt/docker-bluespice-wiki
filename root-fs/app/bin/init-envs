@@ -22,7 +22,7 @@ export DB_NAME=${DB_NAME:-bluespice}
 # DB_PASS is mandatory and has no default value
 export DB_PREFIX=${DB_PREFIX:-}
 export DB_ROOT_PASS=${DB_ROOT_PASS:-}
-export DB_ROOT_USER=${DB_ROOT_USER:-root}
+export DB_ROOT_USER=${DB_ROOT_USER:-}
 export DB_TYPE=${DB_TYPE:-mysql}
 export DB_USER=${DB_USER:-bluespice}
 
