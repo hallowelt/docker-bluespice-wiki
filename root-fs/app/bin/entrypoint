@@ -16,26 +16,8 @@ echo "---------------------------------------------"
 echo ""
 
 init-envs
+source /app/.env
 
 substitutePlaceholders /app/bin/config/clamd.conf
-
-init-datadirectory
-
-if [ -f /data/.wikienv ]; then
-  set -a
-  source /data/.wikienv
-  set +a
-  cat /data/.wikienv >> /home/bluespice/.bashrc
-  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc
-fi
-if [ -f /app/.env ]; then
-  # For grep:
-  # - EDITION
-  set -a
-  source /app/.env
-  set +a
-  cat /app/.env >> /home/bluespice/.bashrc
-  sed -i 's/^\([^=]\+\)/export \1/' /home/bluespice/.bashrc
-fi
 
 exec sh -c "$@"
