@@ -103,7 +103,7 @@ export DIAGRAM_PROTOCOL=${DIAGRAM_PROTOCOL:-$WIKI_PROTOCOL}
 export PATH=$PATH:/app/bin
 EOF
 
-
+# Load ENV vars created during installation
 if [ -f /data/.wikienv ]; then
   cat /data/.wikienv >> /app/.env
 fi

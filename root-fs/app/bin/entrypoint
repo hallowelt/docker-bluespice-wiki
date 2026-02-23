@@ -20,4 +20,6 @@ source /app/.env
 
 substitutePlaceholders /app/bin/config/clamd.conf
 
+init-datadirectory
+
 exec sh -c "$@"
