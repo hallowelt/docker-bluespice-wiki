@@ -13,11 +13,6 @@ export BACKUP_HOUR=${BACKUP_HOUR:-1}
 export CACHE_HOST=${CACHE_HOST:-cache}
 export CACHE_PORT=${CACHE_PORT:-11211}
 
-# Chat defaults
-export CHAT_HOST=${CHAT_HOST:-chat}
-export CHAT_PORT=${CHAT_PORT:-3000}
-export CHAT_PROTOCOL=${CHAT_PROTOCOL:-http}
-
 # Database defaults
 export DB_HOST=${DB_HOST:-database}
 export DB_NAME=${DB_NAME:-bluespice}
@@ -88,11 +83,6 @@ export WIKI_PROXY=${WIKI_PROXY:-$(getent hosts proxy | awk '{ print $1 ; exit }'
 
 # WIKI_PASSWORDSENDER - depends on WIKI_HOST
 export WIKI_PASSWORDSENDER=${WIKI_PASSWORDSENDER:-no-reply@$WIKI_HOST}
-
-# Wire defaults
-export WIRE_HOST=${WIRE_HOST:-wire}
-export WIRE_PORT=${WIRE_PORT:-3333}
-export WIRE_PROTOCOL=${WIRE_PROTOCOL:-http}
 
 # Diagram service defaults that depend on WIKI_* vars
 export DIAGRAM_HOST=${DIAGRAM_HOST:-$WIKI_HOST}
