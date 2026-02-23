@@ -1,106 +1,106 @@
 #!/bin/bash
 
 # Antivirus service defaults
-echo "AV_HOST=\${AV_HOST:--}" >> /app/.env
-echo "AV_PORT=\${AV_PORT:-3310}" >> /app/.env
+export AV_HOST=${AV_HOST:--}
+export AV_PORT=${AV_PORT:-3310}
 
 # Backup defaults
-echo "BACKUP_HOUR=\${BACKUP_HOUR:-1}" >> /app/.env
+export BACKUP_HOUR=${BACKUP_HOUR:-1}
 
 # Cache service defaults
-echo "CACHE_HOST=\${CACHE_HOST:-cache}" >> /app/.env
-echo "CACHE_PORT=\${CACHE_PORT:-11211}" >> /app/.env
+export CACHE_HOST=${CACHE_HOST:-cache}
+export CACHE_PORT=${CACHE_PORT:-11211}
 
 # Chat defaults
-echo "CHAT_HOST=\${CHAT_HOST:-chat}" >> /app/.env
-echo "CHAT_PORT=\${CHAT_PORT:-3000}" >> /app/.env
-echo "CHAT_PROTOCOL=\${CHAT_PROTOCOL:-http}" >> /app/.env
+export CHAT_HOST=${CHAT_HOST:-chat}
+export CHAT_PORT=${CHAT_PORT:-3000}
+export CHAT_PROTOCOL=${CHAT_PROTOCOL:-http}
 
 # Database defaults
-echo "DB_HOST=\${DB_HOST:-database}" >> /app/.env
-echo "DB_NAME=\${DB_NAME:-bluespice}" >> /app/.env
+export DB_HOST=${DB_HOST:-database}
+export DB_NAME=${DB_NAME:-bluespice}
 # DB_PASS is mandatory and has no default value
-echo "DB_PREFIX=\${DB_PREFIX:-}" >> /app/.env
-echo "DB_ROOT_PASS=\${DB_ROOT_PASS:-}" >> /app/.env
-echo "DB_ROOT_USER=\${DB_ROOT_USER:-root}" >> /app/.env
-echo "DB_TYPE=\${DB_TYPE:-mysql}" >> /app/.env
-echo "DB_USER=\${DB_USER:-bluespice}" >> /app/.env
+export DB_PREFIX=${DB_PREFIX:-}
+export DB_ROOT_PASS=${DB_ROOT_PASS:-}
+export DB_ROOT_USER=${DB_ROOT_USER:-root}
+export DB_TYPE=${DB_TYPE:-mysql}
+export DB_USER=${DB_USER:-bluespice}
 
 # Development/Debug defaults
-echo "DEV_WIKI_DEBUG=\${DEV_WIKI_DEBUG:-}" >> /app/.env
-echo "DEV_WIKI_DEBUG_LOGCHANNELS=\${DEV_WIKI_DEBUG_LOGCHANNELS:-}" >> /app/.env
+export DEV_WIKI_DEBUG=${DEV_WIKI_DEBUG:-}
+export DEV_WIKI_DEBUG_LOGCHANNELS=${DEV_WIKI_DEBUG_LOGCHANNELS:-}
 
 # Diagram service defaults (depend on WIKI_* vars, set later)
 # Additional ones see below
-echo "DIAGRAM_PATH=\${DIAGRAM_PATH:-/_diagram/}" >> /app/.env
+export DIAGRAM_PATH=${DIAGRAM_PATH:-/_diagram/}
 
 # Edition defaults
-echo "EDITION=\${EDITION:-}" >> /app/.env
+export EDITION=${EDITION:-}
 
 # Formula service defaults
-echo "FORMULA_HOST=\${FORMULA_HOST:-formula}" >> /app/.env
-echo "FORMULA_PORT=\${FORMULA_PORT:-10044}" >> /app/.env
-echo "FORMULA_PROTOCOL=\${FORMULA_PROTOCOL:-http}" >> /app/.env
+export FORMULA_HOST=${FORMULA_HOST:-formula}
+export FORMULA_PORT=${FORMULA_PORT:-10044}
+export FORMULA_PROTOCOL=${FORMULA_PROTOCOL:-http}
 
 # PDF service defaults
-echo "PDF_HOST=\${PDF_HOST:-pdf}" >> /app/.env
-echo "PDF_PORT=\${PDF_PORT:-8080}" >> /app/.env
-echo "PDF_PROTOCOL=\${PDF_PROTOCOL:-http}" >> /app/.env
+export PDF_HOST=${PDF_HOST:-pdf}
+export PDF_PORT=${PDF_PORT:-8080}
+export PDF_PROTOCOL=${PDF_PROTOCOL:-http}
 
 # Search service defaults
-echo "SEARCH_HOST=\${SEARCH_HOST:-search}" >> /app/.env
-echo "SEARCH_PASS=\${SEARCH_PASS:-}" >> /app/.env
-echo "SEARCH_PORT=\${SEARCH_PORT:-9200}" >> /app/.env
-echo "SEARCH_PROTOCOL=\${SEARCH_PROTOCOL:-http}" >> /app/.env
-echo "SEARCH_USER=\${SEARCH_USER:-}" >> /app/.env
+export SEARCH_HOST=${SEARCH_HOST:-search}
+export SEARCH_PASS=${SEARCH_PASS:-}
+export SEARCH_PORT=${SEARCH_PORT:-9200}
+export SEARCH_PROTOCOL=${SEARCH_PROTOCOL:-http}
+export SEARCH_USER=${SEARCH_USER:-}
 
 # SMTP defaults
-echo "SMTP_HOST=\${SMTP_HOST:-}" >> /app/.env
-echo "SMTP_IDHOST=\${SMTP_IDHOST:-}" >> /app/.env
-echo "SMTP_PASS=\${SMTP_PASS:-}" >> /app/.env
-echo "SMTP_PORT=\${SMTP_PORT:-25}" >> /app/.env
-echo "SMTP_USER=\${SMTP_USER:-}" >> /app/.env
+export SMTP_HOST=${SMTP_HOST:-}
+export SMTP_IDHOST=${SMTP_IDHOST:-}
+export SMTP_PASS=${SMTP_PASS:-}
+export SMTP_PORT=${SMTP_PORT:-25}
+export SMTP_USER=${SMTP_USER:-}
 
 # Timezone defaults
-echo "TZ=\${TZ:-UTC}" >> /app/.env
+export TZ=${TZ:-UTC}
 
 # Wiki defaults
-echo "WIKI_BASE_PATH=\${WIKI_BASE_PATH:-/}" >> /app/.env
-echo "WIKI_EMERGENCYCONTACT=\${WIKI_EMERGENCYCONTACT:-}" >> /app/.env
-echo "WIKI_FARM_DB_PREFIX=\${WIKI_FARM_DB_PREFIX:-sfr_}" >> /app/.env
-echo "WIKI_FARM_USE_SHARED_DB=\${WIKI_FARM_USE_SHARED_DB:-}" >> /app/.env
-echo "WIKI_HOST=\${WIKI_HOST:-localhost}" >> /app/.env
-echo "WIKI_INITIAL_ADMIN_PASS=\${WIKI_INITIAL_ADMIN_PASS:-}" >> /app/.env
-echo "WIKI_INITIAL_ADMIN_USER=\${WIKI_INITIAL_ADMIN_USER:-Admin}" >> /app/.env
-echo "WIKI_LANG=\${WIKI_LANG:-en}" >> /app/.env
-echo "WIKI_LOG_LEVEL=\${WIKI_LOG_LEVEL:-error}" >> /app/.env
-echo "WIKI_NAME=\${WIKI_NAME:-BlueSpice}" >> /app/.env
-echo "WIKI_OAUTH2_PRIVATE_KEY_FILE=\${WIKI_OAUTH2_PRIVATE_KEY_FILE:-/data/bluespice/oauth_private.key}" >> /app/.env
-echo "WIKI_OAUTH2_PUBLIC_KEY_FILE=\${WIKI_OAUTH2_PUBLIC_KEY_FILE:-/data/bluespice/oauth_public.key}" >> /app/.env
-echo "WIKI_PORT=\${WIKI_PORT:-443}" >> /app/.env
-echo "WIKI_POST_INIT_SETTINGS_FILE=\${WIKI_POST_INIT_SETTINGS_FILE:-/data/bluespice/post-init-settings.php}" >> /app/.env
-echo "WIKI_PRE_INIT_SETTINGS_FILE=\${WIKI_PRE_INIT_SETTINGS_FILE:-/data/bluespice/pre-init-settings.php}" >> /app/.env
-echo "WIKI_PROTOCOL=\${WIKI_PROTOCOL:-https}" >> /app/.env
-echo "WIKI_SUBSCRIPTION_KEY=\${WIKI_SUBSCRIPTION_KEY:-}" >> /app/.env
-echo "WIKI_STATUSCHECK_ALLOWED=\${WIKI_STATUSCHECK_ALLOWED:-}" >> /app/.env
+export WIKI_BASE_PATH=${WIKI_BASE_PATH:-/}
+export WIKI_EMERGENCYCONTACT=${WIKI_EMERGENCYCONTACT:-}
+export WIKI_FARM_DB_PREFIX=${WIKI_FARM_DB_PREFIX:-sfr_}
+export WIKI_FARM_USE_SHARED_DB=${WIKI_FARM_USE_SHARED_DB:-}
+export WIKI_HOST=${WIKI_HOST:-localhost}
+export WIKI_INITIAL_ADMIN_PASS=${WIKI_INITIAL_ADMIN_PASS:-}
+export WIKI_INITIAL_ADMIN_USER=${WIKI_INITIAL_ADMIN_USER:-Admin}
+export WIKI_LANG=${WIKI_LANG:-en}
+export WIKI_LOG_LEVEL=${WIKI_LOG_LEVEL:-error}
+export WIKI_NAME=${WIKI_NAME:-BlueSpice}
+export WIKI_OAUTH2_PRIVATE_KEY_FILE=${WIKI_OAUTH2_PRIVATE_KEY_FILE:-/data/bluespice/oauth_private.key}
+export WIKI_OAUTH2_PUBLIC_KEY_FILE=${WIKI_OAUTH2_PUBLIC_KEY_FILE:-/data/bluespice/oauth_public.key}
+export WIKI_PORT=${WIKI_PORT:-443}
+export WIKI_POST_INIT_SETTINGS_FILE=${WIKI_POST_INIT_SETTINGS_FILE:-/data/bluespice/post-init-settings.php}
+export WIKI_PRE_INIT_SETTINGS_FILE=${WIKI_PRE_INIT_SETTINGS_FILE:-/data/bluespice/pre-init-settings.php}
+export WIKI_PROTOCOL=${WIKI_PROTOCOL:-https}
+export WIKI_SUBSCRIPTION_KEY=${WIKI_SUBSCRIPTION_KEY:-}
+export WIKI_STATUSCHECK_ALLOWED=${WIKI_STATUSCHECK_ALLOWED:-}
 
 # WIKI_PROXY - more sophisticated detection
-if [ -z "\$WIKI_PROXY" ]; then
-  echo "WIKI_PROXY=\$(getent hosts proxy | awk '{ print \$1 ; exit }')" >> /app/.env
+if [ -z "$WIKI_PROXY" ]; then
+  export WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
 fi
 
 # WIKI_PASSWORDSENDER - depends on WIKI_HOST
-echo "WIKI_PASSWORDSENDER=\${WIKI_PASSWORDSENDER:-no-reply@\$WIKI_HOST}" >> /app/.env
+export WIKI_PASSWORDSENDER=${WIKI_PASSWORDSENDER:-no-reply@$WIKI_HOST}
 
 # Wire defaults
-echo "WIRE_HOST=\${WIRE_HOST:-wire}" >> /app/.env
-echo "WIRE_PORT=\${WIRE_PORT:-3333}" >> /app/.env
-echo "WIRE_PROTOCOL=\${WIRE_PROTOCOL:-http}" >> /app/.env
+export WIRE_HOST=${WIRE_HOST:-wire}
+export WIRE_PORT=${WIRE_PORT:-3333}
+export WIRE_PROTOCOL=${WIRE_PROTOCOL:-http}
 
 # Diagram service defaults that depend on WIKI_* vars
-echo "DIAGRAM_HOST=\${DIAGRAM_HOST:-\$WIKI_HOST}" >> /app/.env
-echo "DIAGRAM_PORT=\${DIAGRAM_PORT:-\$WIKI_PORT}" >> /app/.env
-echo "DIAGRAM_PROTOCOL=\${DIAGRAM_PROTOCOL:-\$WIKI_PROTOCOL}" >> /app/.env
+export DIAGRAM_HOST=${DIAGRAM_HOST:-$WIKI_HOST}
+export DIAGRAM_PORT=${DIAGRAM_PORT:-$WIKI_PORT}
+export DIAGRAM_PROTOCOL=${DIAGRAM_PROTOCOL:-$WIKI_PROTOCOL}
 
 # Path adjustments
-echo "PATH=\$PATH:/app/bin" >> /app/.env
+export PATH=$PATH:/app/bin
