@@ -50,14 +50,16 @@ $GLOBALS['wgRightsText'] = "";
 $GLOBALS['wgRightsIcon'] = "";
 $GLOBALS['wgMetaNamespace'] = "Site";
 $GLOBALS['wgPhpCli'] = '/bin/php';
-$GLOBALS['wgSMTP'] = [
-	'host' => trim( getenv( 'SMTP_HOST' ) ),
-	'IDHost' => trim( getenv( 'SMTP_IDHOST' ) ),
-	'port' => trim( getenv( 'SMTP_PORT' ) ),
-	'auth' => getenv( 'SMTP_USER' ) ? true : false,
-	'username' => trim( getenv( 'SMTP_USER' ) ),
-	'password' => trim( getenv( 'SMTP_PASS' ) ),
-];
+if ( trim( getenv( 'SMTP_HOST' ) ) ) {
+	$GLOBALS['wgSMTP'] = [
+		'host' => trim( getenv( 'SMTP_HOST' ) ),
+		'IDHost' => trim( getenv( 'SMTP_IDHOST' ) ) ?: null,
+		'port' => (int) trim( getenv( 'SMTP_PORT' ) ) ?: 25,
+		'auth' => getenv( 'SMTP_USER' ) ? true : false,
+		'username' => trim( getenv( 'SMTP_USER' ) ),
+		'password' => trim( getenv( 'SMTP_PASS' ) ),
+	];
+}
 if ( getenv( 'AV_HOST' ) !== '-' ) {
 	$GLOBALS['wgAntivirusSetup'] = [
 		'clamav' => [

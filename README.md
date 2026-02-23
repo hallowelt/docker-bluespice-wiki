@@ -39,8 +39,8 @@ docker build \
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix ***)                                 | Yes      |
-| `DB_ROOT_PASS`               | ``             | Database root password ***)                          | Yes      |
-| `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
+| `DB_ROOT_PASS`               | `null`         | Database root password ***)                          | Yes      |
+| `DB_ROOT_USER`               | `null`         | Database root user ***)                              | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -60,17 +60,17 @@ docker build \
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
 | `PDF_PROTOCOL`               | `http`         | Protocol of a `bluespice/pdf` compatible service     | Yes      |
 | `SEARCH_HOST`                | `search`       | Hostname of a `bluespice/search` compatible service  | Yes      |
-| `SEARCH_PASS`                | ``             | Password of a `bluespice/search` compatible service  | Yes      |
+| `SEARCH_PASS`                | `""`           | Password of a `bluespice/search` compatible service  | Yes      |
 | `SEARCH_PORT`                | `9200`         | Port of a `bluespice/search` compatible service      | Yes      |
 | `SEARCH_PROTOCOL`            | `http`         | Protocol of a `bluespice/search` compatible service  | Yes      |
-| `SEARCH_USER`                | ``             | User of a `bluespice/search` compatible service      | Yes      |
-| `SMTP_HOST`                  | `null`         | SMTP host                                            | Yes      |
-| `SMTP_IDHOST`                | `null`         | SMTP ID host                                         | Yes      |
-| `SMTP_PASS`                  | `null`         | SMTP password                                        | Yes      |
+| `SEARCH_USER`                | `""`           | User of a `bluespice/search` compatible service      | Yes      |
+| `SMTP_HOST`                  | `""`           | SMTP host                                            | Yes      |
+| `SMTP_IDHOST`                | `""`           | SMTP ID host (used for the Message-ID email header)  | Yes      |
+| `SMTP_PASS`                  | `""`           | SMTP password                                        | Yes      |
 | `SMTP_PORT`                  | `25`           | SMTP port                                            | Yes      |
-| `SMTP_USER`                  | `null`         | SMTP username                                        | Yes      |
+| `SMTP_USER`                  | `""`           | SMTP username                                        | Yes      |
 | `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
-| `WIKI_BASE_PATH`             | `''`           | Base path for the wiki. Must be aligned with proxy   | Yes      |
+| `WIKI_BASE_PATH`             | `/`            | Base path for the wiki. Must be aligned with proxy   | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
 | `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances ***)     | Yes      |
 | `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` ***)           | Yes      |
@@ -93,7 +93,7 @@ docker build \
 
 *) External cache can be disabled by setting `-` as `CACHE_HOST`.
 **) Functions requiring `bluespice/chat` can be disabled by setting `-` as `CHAT_HOST`.
-***) See section "Database requirements for FARM edition"
+***) See section [Database requirements for FARM edition](#database-requirements-for-farm-edition)
 
 ## Directories and Volumes
 

@@ -14,4 +14,14 @@ if [ -z "$WIKI_PROXY" ]; then
   WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
 fi
 
-$PATH=$PATH:/app/bin
+PATH=$PATH:/app/bin
+
+# Write computed variables to /app/.env so entrypoint can source them
+{
+  echo "DIAGRAM_HOST=$DIAGRAM_HOST"
+  echo "DIAGRAM_PORT=$DIAGRAM_PORT"
+  echo "DIAGRAM_PROTOCOL=$DIAGRAM_PROTOCOL"
+  echo "WIKI_PASSWORDSENDER=$WIKI_PASSWORDSENDER"
+  echo "WIKI_PROXY=$WIKI_PROXY"
+  echo "PATH=$PATH"
+} >> /app/.env

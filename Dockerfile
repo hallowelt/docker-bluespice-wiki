@@ -172,10 +172,6 @@ ENV DB_ROOT_USER="root"
 ENV DB_TYPE="mysql"
 ENV DB_USER="bluespice"
 
-# Development/Debug defaults
-ENV DEV_WIKI_DEBUG=""
-ENV DEV_WIKI_DEBUG_LOGCHANNELS=""
-
 # Formula service defaults
 ENV FORMULA_HOST="formula"
 ENV FORMULA_PORT="10044"
@@ -207,9 +203,7 @@ ENV TZ="UTC"
 ENV WIKI_BASE_PATH="/"
 ENV WIKI_EMERGENCYCONTACT=""
 ENV WIKI_FARM_DB_PREFIX="sfr_"
-ENV WIKI_FARM_USE_SHARED_DB=""
 ENV WIKI_HOST="localhost"
-ENV WIKI_INITIAL_ADMIN_PASS=""
 ENV WIKI_INITIAL_ADMIN_USER="Admin"
 ENV WIKI_LANG="en"
 ENV WIKI_LOG_LEVEL="error"
@@ -221,15 +215,10 @@ ENV WIKI_PORT="443"
 ENV WIKI_POST_INIT_SETTINGS_FILE="/data/bluespice/post-init-settings.php"
 ENV WIKI_PRE_INIT_SETTINGS_FILE="/data/bluespice/pre-init-settings.php"
 ENV WIKI_PROTOCOL="https"
-# Ignore SecretsUsedInArgOrEnv as this is not sensitive
-ENV WIKI_SUBSCRIPTION_KEY=""
-ENV WIKI_STATUSCHECK_ALLOWED=""
 
 # Diagram defaults
 ENV DIAGRAM_PATH="/_diagram/"
-ENV DIAGRAM_HOST=""
-ENV DIAGRAM_PORT=""
-ENV DIAGRAM_PROTOCOL=""
+# DIAGRAM_HOST, DIAGRAM_PORT and DIAGRAM_PROTOCOL are calculated in init-envs
 
 # Wire defaults
 ENV WIRE_HOST="wire"

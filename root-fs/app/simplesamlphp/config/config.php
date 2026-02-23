@@ -57,15 +57,6 @@ $customConfig = [
 
 	'technicalcontact_name' => getenv('WIKI_NAME'),
 	'technicalcontact_email' => getenv('WIKI_EMERGENCYCONTACT'),
-	'mail.transport.method' => 'smtp',
-	'mail.transport.options' => [
-		'host' => getenv( 'SMTP_HOST' ),
-		'port' => getenv( 'SMTP_PORT' ),
-		'username' => getenv( 'SMTP_USER' ),
-		'password' => getenv( 'SMTP_PASS' ),
-		'security' => 'tls'
-	],
-	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT'),
 
 	'store.type' => 'sql',
 	'store.sql.dsn' => 'mysql:dbname=' . ( getenv('DB_NAME') ) . ';host=' . getenv('DB_HOST'),
@@ -73,6 +64,18 @@ $customConfig = [
 	'store.sql.password' => getenv('DB_PASS'),
 	'store.sql.prefix' => ( getenv('DB_PREFIX') ) . 'SimpleSAMLphp_',
 ];
+
+if ( trim( getenv( 'SMTP_HOST' ) ) ) {
+	$customConfig['mail.transport.method'] = 'smtp';
+	$customConfig['mail.transport.options'] = [
+		'host' => trim( getenv( 'SMTP_HOST' ) ),
+		'port' => (int) trim( getenv( 'SMTP_PORT' ) ) ?: 25,
+		'username' => trim( getenv( 'SMTP_USER' ) ),
+		'password' => trim( getenv( 'SMTP_PASS' ) ),
+		'security' => 'tls'
+	];
+	$customConfig['sendmail_from'] = getenv('WIKI_PASSWORDSENDER');
+}
 
 $config = $customConfig + $config;
 
