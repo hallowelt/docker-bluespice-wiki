@@ -127,11 +127,6 @@ COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
-ARG EDITION # Intentionally left uninitialized
-RUN if [ -n "$EDITION" ]; then \
-		echo "EDITION=$EDITION" > /app/.env; \
-	fi
-
 RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
 	&& ln -sf /usr/bin/php$VERSION /usr/bin/php \
@@ -142,10 +137,15 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
 	&& mkdir -p /etc/clamav/ \
 	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
-	&& sed -i '1i/app/bin/init-envs' /etc/bash/bashrc \
 	&& touch /app/.env \
 	&& chown $USER:$GROUPNAME /app/.env \
-	&& chmod 660 /app/.env
+	&& chmod 660 /app/.env \
+	&& sed -i '1isource /app/.env' /etc/bash/bashrc
+
+ARG EDITION # Intentionally left uninitialized
+RUN if [ -n "$EDITION" ]; then \
+		echo "EDITION=$EDITION" > /app/.env; \
+	fi
 
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
