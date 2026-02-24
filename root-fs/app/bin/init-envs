@@ -95,5 +95,7 @@ EOF
 
 # Load ENV vars created during installation
 if [ -f /data/.wikienv ]; then
-  cat /data/.wikienv >> /app/.env
+  echo "# Secrets loaded from /data/.wikienv" >> /app/.env
+  sed -n '/^[A-Za-z_]/s/^/export /p; /^#/p' /data/.wikienv >> /app/.env
+  echo "" >> /app/.env
 fi
