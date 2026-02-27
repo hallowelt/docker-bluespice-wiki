@@ -151,7 +151,7 @@ $GLOBALS['wgDeletedDirectory'] = "{$GLOBALS['wgUploadDirectory']}/deleted";
 $GLOBALS['wgCacheDirectory'] = "/data/bluespice/cache";
 define( 'BSROOTDIR', '/data/bluespice/extensions/BlueSpiceFoundation' );
 
-if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
+if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_instanceDirectory'] = '/data/bluespice/farm-instances/';
 	$GLOBALS['wgWikiFarmConfig_archiveDirectory'] = '/data/bluespice/farm-archives/';
 	$GLOBALS['wgWikiFarmConfig_dbAdminUser'] = trim( getenv( 'DB_ROOT_USER' ) ?: $GLOBALS['wgDBuser'] );
@@ -165,7 +165,7 @@ if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
 	$GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
 }
 
-if ( getenv( 'EDITION' ) === 'neo' ) {
+if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_shareUsers'] = true;
 	$GLOBALS['wgWikiFarmConfig_useUnifiedSearch'] = true;
 	// Do not check for permissions per-title when searching, as it cannot be done on foreign pages
@@ -228,7 +228,7 @@ if ( getenv( 'CHAT_HOST' ) !== '-' ) {
 }
 
 require_once trim( getenv( 'WIKI_PRE_INIT_SETTINGS_FILE' ) );
-if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
+if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 	require_once "$IP/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php";
 }
 else {
@@ -240,7 +240,7 @@ else {
 }
 
 $GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ) ) . 'wiki/$1';
-if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'neo' ) {
+if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE;
 		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/wiki/$1';
