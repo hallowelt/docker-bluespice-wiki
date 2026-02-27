@@ -1,11 +1,26 @@
-# BlueSpice MediaWiki
-
-<img style="display:block;margin:auto" src="./root-fs/var/www/html/Bluespice_Icon.svg" width="100" height="100" alt="BlueSpice MediaWiki" />
-
 ## Build
 
+To pull in the required codebases access tokens need to be provided. While most required codebases are hosted on GitHub and can therefore use the same access token, at least some editions of the BlueSpice codebase may be hosted on a private GitLab instance.
+For the free edition the GitHub can be used for both.
+
+Example FREE edition build command:
+
 ```bash
-docker build -t bluespice/wiki:latest .
+docker build --build-arg EDITION=free -t bluespice/wiki:latest .
+```
+
+Example custom edition build command:
+
+Assuming you have a valid access token for <url-to-custom-edition-repo> stored in `~/gitlab-token.txt`, you can run
+
+```bash
+GIT_AUTH_TOKEN=$(cat ~/gitlab-token.txt) \
+docker build \
+	--secret id=GIT_AUTH_TOKEN \
+	--build-arg BLUESPICE_URL=<url-to-custom-edition-repo> \
+	--build-arg BLUESPICE_VERSION=<branch-or-tag> \
+	--build-arg EDITION=<edition> \
+	-t bluespice/wiki:latest .
 ```
 
 ## ENV vars
@@ -17,12 +32,15 @@ docker build -t bluespice/wiki:latest .
 | `BACKUP_HOUR`                | `1`            | Hour for daily backup. Set to `-1` to disable        | Yes      |
 | `CACHE_HOST`                 | `cache`        | Hostname of a `bluespice/cache` compatible service *)| Yes      |
 | `CACHE_PORT`                 | `11211`        | Port of a `bluespice/cache` compatible service       | Yes      |
+| `CHAT_HOST`                  | `chat`         | Hostname of a `bluespice/chat` compatible service **)| Yes      |
+| `CHAT_PORT`                  | `3000`         | Port of a `bluespice/chat` compatible service        | Yes      |
+| `CHAT_PROTOCOL`              | `http`         | Protocol of a `bluespice/chat` compatible service    | Yes      |
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
-| `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
-| `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
-| `DB_ROOT_USER`               | ``             | Database root user                                   | Yes      |
+| `DB_PREFIX`                  | `''`           | Database prefix ***)                                 | Yes      |
+| `DB_ROOT_PASS`               | ``             | Database root password ***)                          | Yes      |
+| `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -35,6 +53,7 @@ docker build -t bluespice/wiki:latest .
 | `FORMULA_HOST`               | `formula`      | Hostname of a `bluespice/formula` compatible service | Yes      |
 | `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |
 | `FORMULA_PROTOCOL`           | `http`         | Protocol of a `bluespice/formula` compatible service | Yes      |
+| `INTERNAL_CHAT_WIKI_ACCESS_TOKEN` | `null` | Access token `bluespice/chat` | No       |
 | `INTERNAL_WIKI_SECRETKEY`    | `null`         | Secret key for the wiki                              | No       |
 | `INTERNAL_WIKI_UPGRADEKEY`   | `null`         | Upgrade key for the wiki                             | No       |
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |
@@ -53,8 +72,8 @@ docker build -t bluespice/wiki:latest .
 | `TZ`                         | `UTC`          | Timezone for BlueSpice and container system time     | Yes      |
 | `WIKI_BASE_PATH`             | `''`           | Base path for the wiki. Must be aligned with proxy   | Yes      |
 | `WIKI_EMERGENCYCONTACT`      | `''`           | Emergency contact email                              | No       |
-| `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances **)     | Yes      |
-| `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` **)           | Yes      |
+| `WIKI_FARM_DB_PREFIX`        | `sfr_`         | Database name prefix for wiki farm instances ***)     | Yes      |
+| `WIKI_FARM_USE_SHARED_DB`    | `null`         | Store wiki farm instances in `DB_NAME` ***)           | Yes      |
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
@@ -67,9 +86,14 @@ docker build -t bluespice/wiki:latest .
 | `WIKI_PROXY`                 | `null`         | IP address(es) of proxy server. Will fall back to `proxy` service of `bluespice-deploy` | Yes      |
 | `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
 | `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
+| `WIRE_HOST`                  | `wire`         | Hostname of a `bluespice/wire` compatible service    | Yes      |
+| `WIRE_PORT`                  | `3333`         | Port of a `bluespice/wire` compatible service        | Yes      |
+| `WIRE_PROTOCOL`              | `http`         | Protocol of a `bluespice/wire` compatible service    | Yes      |
+| `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)     | Yes      |
 
 *) External cache can be disabled by setting `-` as `CACHE_HOST`.
-**) See section "Database requirements for FARM edition"
+**) Functions requiring `bluespice/chat` can be disabled by setting `-` as `CHAT_HOST`.
+***) See section "Database requirements for FARM edition"
 
 ## Directories and Volumes
 
@@ -104,6 +128,20 @@ The main directory for application data is `/data/`. The setup routine will crea
 |
 ├── initialAdminPassword         -> Automatically created during installation.
 └── .wikienv                     -> Automatically created during installation. Contains various keys.
+```
+
+## Custom content import
+If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki.
+
+Example:
+
+```
+/data/bluespice/content-install
+├── files
+│   ├── HappyGnu.jpg
+│   └── Desiderata.pdf
+├── 01-templates.xml
+└── 02-pages.xml
 ```
 
 ## Custom SSL certificates

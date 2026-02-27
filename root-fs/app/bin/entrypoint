@@ -15,24 +15,9 @@ echo "🚀 BlueSpice $blueSpiceEdition $blueSpiceVersion+$blueSpiceBuildInfo"
 echo "---------------------------------------------"
 echo ""
 
-if [ -z "$WIKI_PROXY" ]; then
-  export WIKI_PROXY=$(getent hosts proxy | awk '{ print $1 ; exit }')
-fi
+init-envs
+source /app/.env
 
-export PATH=$PATH:/app/bin
 substitutePlaceholders /app/bin/config/clamd.conf
-
-init-datadirectory
-
-if [ -f /data/.wikienv ]; then
-  set -a
-  source /data/.wikienv
-  set +a
-fi
-if [ -f /app/.env ]; then
-  set -a
-  source /app/.env
-  set +a
-fi
 
 exec sh -c "$@"

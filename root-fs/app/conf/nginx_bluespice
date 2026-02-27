@@ -6,11 +6,12 @@ server {
 	server_name _;
 	listen 9090 default_server;
 	root /app/bluespice;
-	client_max_body_size 1024m;
+	client_max_body_size ###MAX_UPLOAD_SIZE|1024m###;
 	access_log /proc/1/fd/1;
 	error_log /proc/1/fd/2 ###WIKI_LOG_LEVEL###;
 	server_tokens off;
-	
+
+	rewrite ^###WIKI_BASE_PATH|/###robots\.txt$ ###WIKI_BASE_PATH|/###robots.txt last;
 	rewrite ^###WIKI_BASE_PATH|/###_sp/(.*)$ ###WIKI_BASE_PATH|/###_sp/$1 last;
 	rewrite ^###WIKI_BASE_PATH|/###webdav/(.*)$ ###WIKI_BASE_PATH|/###w/webdav.php/$1?$args last;
 	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/webdav/(.*)$ ###WIKI_BASE_PATH|/###w/webdav.php/$2?sfr=$1&$args last;
@@ -73,6 +74,10 @@ server {
 
 	location ~ ^###WIKI_BASE_PATH|/###w/skins/BlueSpiceDiscovery/resources/images/favicon\.ico$ {
 		allow all;
+	}
+
+	location ^~ ###WIKI_BASE_PATH|/###robots.txt {
+		alias /data/bluespice/robots.txt;
 	}
 
 	location ^~ ###WIKI_BASE_PATH|/###_sp {
