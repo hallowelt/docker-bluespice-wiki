@@ -51,7 +51,7 @@ if ( isset( $_REQUEST['_profiler'] ) ) {
  * @param array|string $password
  * @return string The assembled URL
  */
-function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = [], $password = [] ) {
+function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = ["",""], $password = ["",""] ) {
 
 	// Allow for ENV variable names without fallback, as fallbacks are now
 	// set centrally in `/app/bin/init-envs`
