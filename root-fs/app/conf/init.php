@@ -51,7 +51,7 @@ if ( isset( $_REQUEST['_profiler'] ) ) {
  * @param array|string $password
  * @return string The assembled URL
  */
-function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = ["",""], $password = ["",""] ) {
+function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = [], $password = [] ) {
 
 	// Allow for ENV variable names without fallback, as fallbacks are now
 	// set centrally in `/app/bin/init-envs`
@@ -79,13 +79,16 @@ function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = ["",""
 		$portSuffix = '';
 	}
 
-	$username = trim( getenv( $username[0] ) ?: $username[1] );
-	$password = trim( getenv( $password[0] ) ?: $password[1] );
 	$auth = '';
-	if ( $username && $password ) {
-		$encUsername = urlencode( $username );
-		$encPassword = urlencode( $password );
-		$auth = "$encUsername:$encPassword@";
+	if ( !empty( $username ) && !empty( $password ) ) {
+		$username = trim( getenv( $username[0] ) ?: $username[1] );
+		$password = trim( getenv( $password[0] ) ?: $password[1] );
+		
+		if ( $username && $password ) {
+			$encUsername = urlencode( $username );
+			$encPassword = urlencode( $password );
+			$auth = "$encUsername:$encPassword@";
+		}
 	}
 
 	return "$protocol://$auth$host{$portSuffix}$path";
