@@ -205,7 +205,7 @@ $GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
 // `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
 $GLOBALS['mwsgWireServiceUrl'] = bsAssembleURL( 'WIRE_PROTOCOL', 'WIRE_HOST', 'WIRE_PORT' );
-$GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . '/_wire';
+$GLOBALS['mwsgWireServiceWebsocketUrl'] = $GLOBALS[ 'wgServer' ] . ( trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . '_wire';
 
 // Extension:WikiRAG configuration
 $GLOBALS['wgWikiRAGTarget'] = [
