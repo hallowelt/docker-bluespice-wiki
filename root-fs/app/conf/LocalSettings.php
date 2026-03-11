@@ -174,6 +174,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	// Do not check for permissions per-title when searching, as it cannot be done on foreign pages
 	// Neo ACL takes care of that on its own
 	$GLOBALS['bsgESSecureResults'] = false;
+	$GLOBALS['bsgESIndexPrefix'] = 'farm-shared-index';
 	$GLOBALS['wgWikiFarmConfig_useGlobalAccessControl'] =true;
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
