@@ -1,3 +1,0 @@
-#!/bin/bash
-
-/usr/bin/php /app/bluespice/w/maintenance/run.php "$@"

@@ -18,6 +18,4 @@ echo ""
 init-envs
 source /app/.env
 
-substitutePlaceholders /app/bin/config/clamd.conf
-
 exec sh -c "$@"

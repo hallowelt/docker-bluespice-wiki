@@ -1,17 +1,11 @@
-environment:
-    php: "/usr/bin/php"
 wiki:
-    type: "###EDITION###"
+    type: "###EDITION###"    # standalone or farm
     path: "/app/bluespice/w"
-database:
-    dbserver: "###DB_HOST###"
-    dbport: 3306
-    dbname: "###DB_NAME###"
-    dbuser: "###DB_USER###"
-    dbpassword: "###DB_PASS###"
-    dbprefix: "###DB_PREFIX###"
+    reference: "/app/bin/config/runJobs_settings.php" # LocalSettings.php for DB credentials
 runjobs:
-    cooldown: 5
-farm:
-    include-instances: []
-    exclude-instances: []
+    percentage: 50      # Maximum percentage of total jobs. (Per wiki, per cycle)
+    maxtime: 20         # Maximum life time of a runJobs.php (Per wiki, per cycle) - Seconds
+    cooldown: 3        # Wait time after each cycle - Seconds
+    maxforkprocesses: 5 # Maximum number of sub processes that can be spawned for parallel processing
+exclude-instances: []
+include-instances: []

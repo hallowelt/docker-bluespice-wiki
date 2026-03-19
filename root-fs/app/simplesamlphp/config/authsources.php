@@ -2,22 +2,19 @@
 
 $idpRemoteMetaData = require( __DIR__ . '/_bluespice-saml20-idp-remote-meta.php' );
 
-$baseUrl = $GLOBALS['wgServer'] = bsAssembleURL( 'WIKI_PROTOCOL', 'WIKI_HOST', 'WIKI_PORT' );
-
 $config = [
 	'admin' => [
 		'core:AdminPassword',
 	],
 	'default-sp' => [
 		'saml:SP',
-		'entityID' => $baseUrl,
+		'entityID' => null,
 		'idp' => $idpRemoteMetaData['entityid'],
 		'discoURL' => null,
-		'privatekey' => '/data/simplesamlphp/certs/saml.pem',
-		'certificate' => '/data/simplesamlphp/certs/saml.crt',
-		'NameIDPolicy' => []
+		'privatekey' => '/data/simplesamlphp/saml.pem',
+		'certificate' => '/data/simplesamlphp/saml.crt',
+		'NameIDPolicy' => false
 	]
 ];
 
 unset( $idpRemoteMetaData );
-unset( $baseUrl );
