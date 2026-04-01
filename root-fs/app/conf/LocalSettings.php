@@ -123,7 +123,10 @@ $GLOBALS['wgMathoidCli'] = [
 ];
 
 $GLOBALS['wgNeoWikiNeo4jInternalWriteUrl'] = $GLOBALS['wgNeoWikiNeo4jInternalReadUrl']
-	= bsAssembleURL( 'METADATASTORE_PROTOCOL', 'METADATASTORE_HOST', 'METADATASTORE_PORT', '', 'METADATASTORE_USER', 'METADATASTORE_PASS' );
+	= bsAssembleURL(
+		'METADATASTORE_PROTOCOL', 'METADATASTORE_HOST', 'METADATASTORE_PORT', '',
+		[ 'METADATASTORE_USER', 'neo4j' ], [ 'METADATASTORE_PASS', '' ]
+	);
 
 $GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) );
 
