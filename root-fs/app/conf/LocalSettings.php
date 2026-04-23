@@ -29,6 +29,8 @@ $GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) ?: '' );
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgMainCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgSessionCacheType'] = CACHE_DB;
+
+$cacheUsed = false;
 if ( getenv( 'CACHE_HOST' ) !== '-' ) {
 	$cacheType = trim( getenv( 'CACHE_TYPE' ) ?: 'memcached' );
 	$cacheHost = trim( getenv( 'CACHE_HOST' ) ?: 'cache' );
@@ -49,6 +51,7 @@ if ( getenv( 'CACHE_HOST' ) !== '-' ) {
 		$GLOBALS['wgSessionCacheType'] = 'redis';
 		$GLOBALS['wgMainStash'] = 'redis';
 	}
+	$cacheUsed = $cacheType;
 	unset( $cacheHost );
 	unset( $cachePort );
 }
@@ -292,7 +295,33 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
+
+		// Setup process runner/wikicron to use Redis, if configured
+		// Has to be done in post-init due to farm consts
+		if ( $cacheUsed === 'redis' || $cacheUsed === 'valkey' ) {
+			$GLOBALS['mwsgProcessManagerQueueConfig']['farm-redis'] = [
+				'class' => \BlueSpice\WikiFarm\ProcessQueue\FarmRedisProcessQueue::class,
+				'args' => [ [
+					'redisConfig' => [],
+					'redisServer' => $GLOBALS['wgObjectCaches']['redis']['servers'][0],
+					'isRoot' => FARMER_IS_ROOT_WIKI_CALL,
+					'forInstance' => FARMER_CALLED_INSTANCE
+				] ]
+			];
+			$GLOBALS['mwsgProcessManagerQueue'] = 'farm-redis';
+
+			$GLOBALS['mwsgWikiCronStore'] = [
+				'class' => \BlueSpice\WikiFarm\ProcessQueue\WikiCronRedisStore::class,
+				'args' => [ [
+					'redisConfig' => [],
+					'redisServer' => $GLOBALS['wgObjectCaches']['redis']['servers'][0],
+					'isRoot' => FARMER_IS_ROOT_WIKI_CALL,
+					'forInstance' => FARMER_CALLED_INSTANCE
+				] ]
+			];
+		}
 	}
 }
+unset( $cacheUsed );
 
 require_once '/data/bluespice/post-init-settings.php';
