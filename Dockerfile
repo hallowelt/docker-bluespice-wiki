@@ -91,7 +91,7 @@ RUN apk add \
 	vim \
 	xpdf \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-	&& apk add php$VERSION-pecl-excimer@testing
+	&& apk add php$VERSION-pecl-excimer@testing php$VERSION-pecl-memcached@testing
 RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
 	&& apk add openjpeg@edge
 FROM base AS bluespice-prepare
