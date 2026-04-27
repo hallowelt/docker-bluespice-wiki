@@ -23,7 +23,7 @@ ENV MEDIAWIKIADM_SHA256=c038de94ce49c66584556bc03c58bf0f9388d109b9428c800d0b74c9
 ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service
 ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
 
-ARG BLUESPICE_VERSION=5.2.1
+ARG BLUESPICE_VERSION=5.2.4
 ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release.git
 
 WORKDIR /build
@@ -79,7 +79,6 @@ RUN apk add \
 	php$VERSION-sqlite3 \
 	php$VERSION-tokenizer \
 	php$VERSION-xml \
-	php$VERSION-xml \
 	php$VERSION-xmlreader \
 	php$VERSION-xmlwriter \
 	php$VERSION-zip \
@@ -96,7 +95,6 @@ RUN apk add \
 	&& apk add php$VERSION-pecl-excimer@testing
 RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
 	&& apk add openjpeg@edge
-
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
@@ -129,10 +127,7 @@ COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
 
-ARG EDITION # Intentionally left uninitialized
-RUN if [ -n "$EDITION" ]; then \
-		echo "EDITION=$EDITION" > /app/.env; \
-	fi
+ENV BASH_ENV=/app/.env
 
 RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& mkdir /var/run/php \
@@ -146,7 +141,16 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
 	&& touch /app/.env \
 	&& chown $USER:$GROUPNAME /app/.env \
-	&& chmod 660 /app/.env
+	&& chmod 660 /app/.env \
+	&& sed -i '1isource /app/.env' /etc/bash/bashrc
+
+ARG EDITION # Intentionally left uninitialized
+RUN if [ -n "$EDITION" ]; then \
+		echo "EDITION=$EDITION" > /app/.env; \
+	fi
+RUN if [[ $(cat /app/bluespice/w/BLUESPICE-EDITION) == "cloud" ]] ; then \
+	apk add curl; \
+	fi
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice

@@ -38,9 +38,9 @@ docker build \
 | `DB_HOST`                    | `database`     | Database host                                        | Yes      |
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
-| `DB_PREFIX`                  | `''`           | Database prefix ***)                                  | Yes      |
-| `DB_ROOT_PASS`               | ``             | Database root password ***)                           | Yes      |
-| `DB_ROOT_USER`               | ``             | Database root user                                   | Yes      |
+| `DB_PREFIX`                  | `''`           | Database prefix ***)                                 | Yes      |
+| `DB_ROOT_PASS`               | ``             | Database root password ***)                          | Yes      |
+| `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
@@ -56,6 +56,7 @@ docker build \
 | `INTERNAL_CHAT_WIKI_ACCESS_TOKEN` | `null` | Access token `bluespice/chat` | No       |
 | `INTERNAL_WIKI_SECRETKEY`    | `null`         | Secret key for the wiki                              | No       |
 | `INTERNAL_WIKI_UPGRADEKEY`   | `null`         | Upgrade key for the wiki                             | No       |
+| `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)    | Yes      |
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
 | `PDF_PROTOCOL`               | `http`         | Protocol of a `bluespice/pdf` compatible service     | Yes      |
@@ -89,7 +90,6 @@ docker build \
 | `WIRE_HOST`                  | `wire`         | Hostname of a `bluespice/wire` compatible service    | Yes      |
 | `WIRE_PORT`                  | `3333`         | Port of a `bluespice/wire` compatible service        | Yes      |
 | `WIRE_PROTOCOL`              | `http`         | Protocol of a `bluespice/wire` compatible service    | Yes      |
-| `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)     | Yes      |
 
 *) External cache can be disabled by setting `-` as `CACHE_HOST`.
 **) Functions requiring `bluespice/chat` can be disabled by setting `-` as `CHAT_HOST`.
