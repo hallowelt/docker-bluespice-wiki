@@ -160,10 +160,6 @@ if ( getenv( 'FILESTORE_HOST' ) ) {
 	);
 }
 
-# b/c to legacy FS layout
-#$wgAWSRepoHashLevels = '2';
-#$wgAWSRepoDeletedHashLevels = '3';
-
 if ( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) {
 	$logChannels = explode( ',', trim( getenv( 'DEV_WIKI_DEBUG_LOGCHANNELS' ) ) );
 	$logChannels = array_map( 'trim', $logChannels );
