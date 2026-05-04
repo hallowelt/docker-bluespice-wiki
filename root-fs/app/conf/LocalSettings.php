@@ -29,8 +29,8 @@ if ( getenv( 'CACHE_HOST' ) !== '-' ) {
 	$GLOBALS['wgMemCachedServers'] = [ "$cacheHost:$cachePort" ];
 	unset( $cacheHost );
 	unset( $cachePort );
-	$GLOBALS['wgMainCacheType'] = CACHE_MEMCACHED;
-	$GLOBALS['wgSessionCacheType'] = CACHE_MEMCACHED;
+	$GLOBALS['wgMainCacheType'] = 'memcached-pecl';
+	$GLOBALS['wgSessionCacheType'] = 'memcached-pecl';
 }
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
