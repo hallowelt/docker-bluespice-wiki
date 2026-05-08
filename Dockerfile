@@ -1,10 +1,10 @@
 FROM composer:2 AS workaround-erm-45965
 # Build SimpleSAMLphp from source, bypassing the original way of loading
-ENV SIMPLESAMLPHP_VERSION=2.3.10
+ENV SIMPLESAMLPHP_VERSION=2.3.11
 WORKDIR /build
 RUN git clone https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
 	cd /build/simplesamlphp && \
-	composer require psr/http-message:^1.1 psr/container:^1.1 --update-no-dev --prefer-dist --optimize-autoloader && \
+	composer require psr/http-message:^1.1 psr/container:^1.1 symfony/expression-language:^6.0 --update-no-dev --prefer-dist --optimize-autoloader && \
 	rm -rf /build/simplesamlphp/.git
 
 FROM alpine:3 AS builder
@@ -71,6 +71,7 @@ RUN apk add \
 	php$VERSION-pdo_mysql \
 	php$VERSION-pdo_pgsql \
 	php$VERSION-pdo_sqlite \
+	php$VERSION-pecl-redis \
 	php$VERSION-pgsql \
 	php$VERSION-phar \
 	php$VERSION-posix \
