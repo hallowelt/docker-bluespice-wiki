@@ -118,6 +118,8 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& chown $USER:$GROUPNAME /app/bluespice/ \
 	&& chmod -R 777 /var/log
 COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice /app/bluespice/w
+#COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
+# original load mechanism replaced by the following workaround:
 COPY --chown=$USER:$GROUPNAME --from=workaround-erm-45965 /build/simplesamlphp /app/simplesamlphp
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
