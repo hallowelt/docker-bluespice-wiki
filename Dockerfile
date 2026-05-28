@@ -60,6 +60,7 @@ RUN apk add \
 	php$VERSION-cli \
 	php$VERSION-ctype \
 	php$VERSION-curl \
+	php$VERSION-exif \
 	php$VERSION-fileinfo \
 	php$VERSION-fpm \
 	php$VERSION-gd \
@@ -71,6 +72,7 @@ RUN apk add \
 	php$VERSION-mbstring \
 	php$VERSION-mysqli \
 	php$VERSION-opcache \
+	php$VERSION-pcntl \
 	php$VERSION-pdo \
 	php$VERSION-pdo_mysql \
 	php$VERSION-pdo_pgsql \
