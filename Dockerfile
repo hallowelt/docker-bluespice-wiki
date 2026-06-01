@@ -96,6 +96,7 @@ RUN apk add \
 	supercronic \
 	tzdata \
 	vim \
+	vips-tools \
 	xpdf \
 	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
 	&& apk add php$VERSION-pecl-excimer@testing
