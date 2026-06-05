@@ -89,7 +89,6 @@ RUN apk add \
 	procps \
 	python3 \
 	rsvg-convert \
-	supercronic \
 	tzdata \
 	vim \
 	vips-tools \
