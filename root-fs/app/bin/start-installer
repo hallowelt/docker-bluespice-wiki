@@ -1,12 +1,8 @@
 #!/bin/bash
+set -eo pipefail
 
-check-database
-if [ $? -ne 0 ]; then
+if ! check-database; then
 	date > /data/maintenance
 	run-installation
-	if [ $? -ne 0 ]; then
-		echo "Installation failed"
-		exit 1
-	fi
 	rm /data/maintenance
 fi

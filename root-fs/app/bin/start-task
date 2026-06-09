@@ -1,4 +1,5 @@
 #!/bin/bash
+set -eo pipefail
 
 ##add Variables to Scripts
 substitutePlaceholders /app/bin/config/mediawiki_adm_backup_conf.json
