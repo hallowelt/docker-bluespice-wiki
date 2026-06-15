@@ -169,6 +169,8 @@ if ( getenv( 'DEV_WIKI_DEBUG' ) ) {
 $s3Used = false;
 if ( getenv( 'FILESTORE_HOST' ) ) {
 	$s3Used = true;
+	$GLOBALS['mwsgFileStorageUseS3'] = true;
+
 	$GLOBALS['wgAWSCredentials'] = [
 		'key' => trim( getenv( 'FILESTORE_ACCESS_KEY' ) ?: '' ),
 		'secret' => trim( getenv( 'FILESTORE_SECRET_KEY' ) ?: '' ),
