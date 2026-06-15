@@ -241,6 +241,25 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
 	$GLOBALS['wgWikiFarmConfig_showInstancesMenu'] = true;
+	// Share notifications
+	$GLOBALS['wgSharedTables'][] = 'notifications_event';
+	$GLOBALS['wgSharedTables'][] = 'notifications_instance';
+	$GLOBALS['wgSharedTables'][] = 'notifications_web_query_store';
+	// Share PageReadConfirmations
+	$GLOBALS['wgSharedTables'][] = 'page_read_confirmations';
+	$GLOBALS['wgSharedTables'][] = 'page_read_confirmations_assignments';
+	$GLOBALS['wgSharedTables'][] = 'page_read_confirmations_requests';
+	// Share PageVersions
+	$GLOBALS['wgSharedTables'][] = 'page_version';
+	// Share Appointments
+	$GLOBALS['wgSharedTables'][] = 'calendars';
+	$GLOBALS['wgSharedTables'][] = 'appointments';
+	$GLOBALS['wgSharedTables'][] = 'appointment_participant_assignments';
+	$GLOBALS['wgSharedTables'][] = 'appointment_participants';
+	$GLOBALS['wgSharedTables'][] = 'appointment_event_types';
+	$GLOBALS['wgSharedTables'][] = 'appointment_event_type_assignments';
+	// Share user index, to enable global user store (restricted further by access control)
+	$GLOBALS['wgSharedTables'][] = 'mws_user_index';
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
