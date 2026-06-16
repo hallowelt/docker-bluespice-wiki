@@ -260,6 +260,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'appointment_event_type_assignments';
 	// Share user index, to enable global user store (restricted further by access control)
 	$GLOBALS['wgSharedTables'][] = 'mws_user_index';
+	$GLOBALS['wgSharedTables'][] = 'wikifarm_groups';
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
