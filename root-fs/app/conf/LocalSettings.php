@@ -262,6 +262,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'mws_user_index';
 	$GLOBALS['wgSharedTables'][] = 'wikifarm_groups';
 	$GLOBALS['wgSharedTables'][] = 'mws_data_stash';
+	$GLOBALS['wgSharedTables'][] = 'page_excerpts';
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
