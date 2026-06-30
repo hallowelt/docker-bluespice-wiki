@@ -262,6 +262,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'mws_user_index';
 	$GLOBALS['wgSharedTables'][] = 'wikifarm_groups';
 	$GLOBALS['wgSharedTables'][] = 'mws_data_stash';
+	$GLOBALS['wgSharedTables'][] = 'mws_title_index';
 	$GLOBALS['wgSharedTables'][] = 'page_excerpts';
 }
 
