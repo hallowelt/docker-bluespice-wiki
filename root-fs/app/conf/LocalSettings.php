@@ -166,7 +166,11 @@ if ( getenv( 'DEV_WIKI_DEBUG' ) ) {
 }
 
 # See https://github.com/edwardspec/mediawiki-aws-s3/tree/master?tab=readme-ov-file#using-another-s3-compatible-service-not-amazon-s3-itself
+$s3Used = false;
 if ( getenv( 'FILESTORE_HOST' ) ) {
+	$s3Used = true;
+	$GLOBALS['mwsgFileStorageUseS3'] = true;
+
 	$GLOBALS['wgAWSCredentials'] = [
 		'key' => trim( getenv( 'FILESTORE_ACCESS_KEY' ) ?: '' ),
 		'secret' => trim( getenv( 'FILESTORE_SECRET_KEY' ) ?: '' ),
@@ -296,8 +300,22 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 		// We must store L10N cache file of ROOT_WIKI and INSTANCEs independently, as they have different extensions enabled,
 		// which otherwise causes the cache to be invalidated all the time.
 		$GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = '/tmp/cache/l10n-instances';
-		// Overwrite S3 bucket top subdirectory to use Sub-WikiID (see above)
-		$GLOBALS['wgAWSBucketTopSubdirectory'] = $GLOBALS['wgScriptPath'];
+
+		// Setup file storage of uploadfiles _and_ farm instance vaults/archives to use S3, if configured
+		if ( $s3Used ) {
+			// Overwrite S3 bucket top subdirectory to use Sub-WikiID (see above)
+			$GLOBALS['wgAWSBucketTopSubdirectory'] = $GLOBALS['wgScriptPath'];
+			$GLOBALS['wgWikiFarmConfig_instanceStorageBackend'] = $GLOBALS['mwsgFileStorageBackend'];
+			$GLOBALS['wgHooks']['SetupAfterCache'][] = static function () {
+				// Setup "global" repo for farm. Actual bucket root
+				$bucketName = $GLOBALS['wgAWSBucketName'];
+				$wikiId = \MediaWiki\WikiMap\WikiMap::getCurrentWikiId();
+				$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-instances-public"] = $bucketName;
+				$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-archive-public"] = "$bucketName/_archive";
+			};
+			// Original local FS backend configured in Extension:BlueSpiceWikiFarm is not used.
+			unset( $GLOBALS['wgFileBackends']['_instances'] );
+		}
 
 		// Setup process runner/wikicron to use Redis, if configured
 		// Has to be done in post-init due to farm consts
@@ -327,6 +345,7 @@ if ( getenv( 'EDITION' ) === 'farm' ) {
 }
 
 unset( $cacheUsed );
+unset( $s3Used );
 
 if ( getenv( 'MAX_UPLOAD_SIZE' ) ) {
 	$uploadSize = getenv( 'MAX_UPLOAD_SIZE' );
