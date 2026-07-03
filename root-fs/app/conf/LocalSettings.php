@@ -180,7 +180,7 @@ if ( getenv( 'FILESTORE_HOST' ) ) {
 	// Use `img_auth.php` or `nsfr_img_auth.php` for frontend URLs
 	$GLOBALS['wgAWSBucketDomain'] = $GLOBALS['wgServer'] . $GLOBALS['wgUploadPath'];
 	// Has to be set to make AWS SDK work; Not required for non-AWS S3 services
-	$GLOBALS['wgAWSRegion'] = trim( getenv( 'FILESTORE_REGION' ) ?: 'us-east-1' );
+	$GLOBALS['wgAWSRegion'] = trim( getenv( 'FILESTORE_REGION' ) ?: 'eu-north-1' );
 	// By default we use the `$wgScriptPath` as top subdirectory
 	// For farm instances we change the top subdirectory to the respective Sub-WikiID
 	$GLOBALS['wgAWSBucketTopSubdirectory'] = $GLOBALS['wgScriptPath'];
