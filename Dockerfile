@@ -5,10 +5,10 @@ WORKDIR /build
 RUN git clone https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
 	cd /build/simplesamlphp && \
 	sed -i '/"simplesamlphp\/simplesamlphp-test-framework": "\^1\.9\.2",/d' composer.json && \
-	composer update --no-dev --prefer-dist --optimize-autoloader --no-cache && \
+	composer update --no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
 	composer require symfony/expression-language:^6.0 \
 		psr/container:1.1.2 psr/http-message:1.1 psr/log:1.1.4 symfony/yaml:5.4.52 \
-		--update-no-dev --prefer-dist --optimize-autoloader --no-cache && \
+		--update-no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
 	rm -rf /build/simplesamlphp/.git
 # The specific versions are taken from composer.json of MediaWiki REL1_43
 # To force psr/log:1.1.4, we remove simplesamlphp-test-framework (require-dev only)
