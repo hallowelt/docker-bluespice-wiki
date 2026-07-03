@@ -7,8 +7,7 @@ RUN git clone --depth 1 https://github.com/simplesamlphp/simplesamlphp.git -b v$
 	composer require psr/http-message:^1.1 psr/container:^1.1 symfony/expression-language:^6.0 \
 		twig/twig:^3.26 twig/intl-extra:^3.26 symfony/twig-bridge:^6.4 \
 		symfony/cache:^6.4.40 symfony/routing:^6.4.40 symfony/yaml:^6.4.40 \
-		--no-cache --update-no-dev --prefer-dist --optimize-autoloader && \
-	# several 6.4.40 packages are specifically called, as symfony/console and symfony/string miss 6.4.40 tags
+		--no-cache --update-no-dev --prefer-dist --optimize-autoloader
 
 FROM alpine:3 AS builder
 
