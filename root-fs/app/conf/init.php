@@ -83,10 +83,10 @@ function bsAssembleURL( $proto, $hostname, $port, $path = [], $username = [], $p
 	if ( !empty( $username ) && !empty( $password ) ) {
 		$username = trim( getenv( $username[0] ) ?: $username[1] );
 		$password = trim( getenv( $password[0] ) ?: $password[1] );
-		
+
 		if ( $username && $password ) {
-			$encUsername = urlencode( $username );
-			$encPassword = urlencode( $password );
+			$encUsername = rawurlencode( $username );
+			$encPassword = rawurlencode( $password );
 			$auth = "$encUsername:$encPassword@";
 		}
 	}
