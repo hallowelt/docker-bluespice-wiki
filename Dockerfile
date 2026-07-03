@@ -4,14 +4,11 @@ ENV SIMPLESAMLPHP_VERSION=2.3.11
 WORKDIR /build
 RUN git clone --depth 1 https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
 	cd /build/simplesamlphp && \
-	sed -i '/"simplesamlphp\/simplesamlphp-test-framework": "\^1\.9\.2",/d' composer.json && \
-	composer update --no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
-	composer require symfony/expression-language:^6.0 \
-		psr/container:1.1.2 psr/http-message:1.1 psr/log:1.1.4 symfony/yaml:5.4.52 \
-		--update-no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
-	rm -rf /build/simplesamlphp/.git
-# The specific versions are taken from composer.json of MediaWiki REL1_43
-# To force psr/log:1.1.4, we remove simplesamlphp-test-framework (require-dev only)
+	composer require psr/http-message:^1.1 psr/container:^1.1 symfony/expression-language:^6.0 \
+		twig/twig:^3.26 twig/intl-extra:^3.26 symfony/twig-bridge:^6.4 \
+		symfony/cache:^6.4.40 symfony/routing:^6.4.40 symfony/yaml:^6.4.40 \
+		--no-cache --update-no-dev --prefer-dist --optimize-autoloader && \
+	# several 6.4.40 packages are specifically called, as symfony/console and symfony/string miss 6.4.40 tags
 
 FROM alpine:3 AS builder
 
