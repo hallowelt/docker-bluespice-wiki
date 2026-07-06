@@ -21,7 +21,7 @@ ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974
 ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.1.x/_client/mathoid-remote
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
 
-ENV MEDIAWIKIADM_URL=https://github.com/hallowelt/misc-mediawiki-adm/releases/latest/download/mediawiki-adm
+ENV MEDIAWIKIADM_URL=https://github.com/hallowelt/misc-mediawiki-adm/releases/download/1.2.3/mediawiki-adm
 ENV MEDIAWIKIADM_SHA256=1e5609d76f0c3ade1a33fd0bf204463747c8b99d86a49004ce00d50d8886666f
 
 ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service
