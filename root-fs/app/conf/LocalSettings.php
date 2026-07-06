@@ -149,8 +149,6 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL( 'DIAGRAM_PROTOCOL', 'DIAGRAM_HOST', 'DIAGRAM_PORT', 'DIAGRAM_PATH' );
 }
 
-// $GLOBALS['wgMathValidModes'] = [ 'mathml' ];
-// $GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
 $GLOBALS['wgMathValidModes'] = [ 'native' ];
 $GLOBALS['wgDefaultUserOptions']['math'] = 'native';
 $GLOBALS['wgDefaultUserOptions']['math-popups'] = '1';
@@ -362,15 +360,15 @@ unset( $s3Used );
 if ( getenv( 'MAX_UPLOAD_SIZE' ) ) {
 	$uploadSize = getenv( 'MAX_UPLOAD_SIZE' );
 	if ( preg_match( '/^(\d+)([a-zA-Z]+)$/', $uploadSize, $matches ) ) {
-                $value = (int)$matches[1];
-                $suffix = strtolower( $matches[2] );
+		$value = (int)$matches[1];
+		$suffix = strtolower( $matches[2] );
 
-                if ( $suffix === "m" ) {
-                $GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * $value;
-                } 
-                        elseif ( $suffix === "g" ) {
-                $GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * 1024 * $value;
-                }
+		if ( $suffix === "m" ) {
+		$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * $value;
+		} 
+			elseif ( $suffix === "g" ) {
+		$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * 1024 * $value;
+		}
 		//If Value is not Readable default = 1024*1024*1024
 	}
 	unset( $uploadSize );
