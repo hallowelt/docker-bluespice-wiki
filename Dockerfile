@@ -1,24 +1,9 @@
-FROM composer:2 AS workaround-erm-45965
-# Build SimpleSAMLphp from source, bypassing the original way of loading
-ENV SIMPLESAMLPHP_VERSION=2.3.11
-WORKDIR /build
-RUN git clone --depth 1 https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
-	cd /build/simplesamlphp && \
-	sed -i '/"simplesamlphp\/simplesamlphp-test-framework": "\^1\.9\.2",/d' composer.json && \
-	composer update --no-dev --prefer-dist --optimize-autoloader --no-cache && \
-	composer require symfony/expression-language:^6.0 \
-		psr/container:1.1.2 psr/http-message:1.1 psr/log:1.1.4 symfony/yaml:5.4.52 \
-		--update-no-dev --prefer-dist --optimize-autoloader --no-cache && \
-	rm -rf /build/simplesamlphp/.git
-# The specific versions are taken from composer.json of MediaWiki REL1_43
-# To force psr/log:1.1.4, we remove simplesamlphp-test-framework (require-dev only)
-
 FROM alpine:3 AS builder
 
 # We use SimpleSAMLphp SLIM version to reduce the image size
-ENV SIMPLESAMLPHP_VERSION=2.4.4
+ENV SIMPLESAMLPHP_VERSION=2.5.2
 ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
-ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974b3168a57e
+ENV SIMPLESAMLPHP_SHA256=6bf7945e8981db9815e20af2bb17db8e44d265f0b1646bfa51e6dd755fef1ea6
 
 ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.1.x/_client/mathoid-remote
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
@@ -122,9 +107,12 @@ RUN addgroup -g $GID $GROUPNAME \
 	&& chown $USER:$GROUPNAME /app/bluespice/ \
 	&& chmod -R 777 /var/log
 COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice /app/bluespice/w
-#COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
-# original load mechanism replaced by the following workaround:
-COPY --chown=$USER:$GROUPNAME --from=workaround-erm-45965 /build/simplesamlphp /app/simplesamlphp
+COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
+RUN if [ -f /app/bluespice/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php ]; then \
+		cp -rp \
+			/app/bluespice/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php \
+			/app/simplesamlphp/public/api/session.php; \
+	fi
 COPY --chown=$USER:$GROUPNAME --chmod=755 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
