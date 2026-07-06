@@ -113,15 +113,6 @@ $GLOBALS['wgDefaultUserOptions']['math'] = 'native';
 $GLOBALS['wgDefaultUserOptions']['math-popups'] = '1';
 $GLOBALS['wgMaxShellMemory'] = 1228800;
 $GLOBALS['wgHiddenPrefs'][] = 'math';
-// We don't use the `MathMathML` renderer, but `MathMathMLCli`,
-// but `Extension:BlueSpiceInstanceStatus` needs this variable
-$GLOBALS['wgMathMathMLUrl'] = bsAssembleURL( 'FORMULA_PROTOCOL', 'FORMULA_HOST', 'FORMULA_PORT' );
-// By setting `$wgMathoidCli`, `MathMathMLCli` renderer is used
-// instead of `MathMathML`.
-$GLOBALS['wgMathoidCli'] = [
-	'/app/bin/mathoid-remote',
-	$GLOBALS['wgMathMathMLUrl']
-];
 
 $GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_ALLOWED' ) );
 
