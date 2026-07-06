@@ -2,14 +2,12 @@ FROM composer:2 AS workaround-erm-45965
 # Build SimpleSAMLphp from source, bypassing the original way of loading
 ENV SIMPLESAMLPHP_VERSION=2.3.11
 WORKDIR /build
-RUN git clone https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
+RUN git clone --depth 1 https://github.com/simplesamlphp/simplesamlphp.git -b v${SIMPLESAMLPHP_VERSION} /build/simplesamlphp && \
 	cd /build/simplesamlphp && \
-	sed -i '/"simplesamlphp\/simplesamlphp-test-framework": "\^1\.9\.2",/d' composer.json && \
-	composer update --no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
-	composer require symfony/expression-language:^6.0 \
-		psr/container:1.1.2 psr/http-message:1.1 psr/log:1.1.4 symfony/yaml:5.4.52 \
-		--update-no-dev --prefer-dist --optimize-autoloader --no-cache --ignore-platform-reqs && \
-	rm -rf /build/simplesamlphp/.git
+	composer require psr/http-message:^1.1 psr/container:^1.1 symfony/expression-language:^6.0 \
+		twig/twig:^3.26 twig/intl-extra:^3.26 symfony/twig-bridge:^6.4 \
+		symfony/cache:^6.4.40 symfony/routing:^6.4.40 symfony/yaml:^6.4.40 \
+		--no-cache --update-no-dev --prefer-dist --optimize-autoloader
 # The specific versions are taken from composer.json of MediaWiki REL1_43
 # To force psr/log:1.1.4, we remove simplesamlphp-test-framework (require-dev only)
 
@@ -23,6 +21,9 @@ ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974
 # HINT: This version is valid for 5.1 and 5.2; Later versions don't use this tool anymore. For the sake of reproducable builds, we hardcode the version here and adapt manually on demand
 ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/80786798646fe1bb105db2228a07c86f546d9f56/_client/mathoid-remote
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
+
+ENV MEDIAWIKIADM_URL=https://github.com/hallowelt/misc-mediawiki-adm/releases/download/1.2.3/mediawiki-adm
+ENV MEDIAWIKIADM_SHA256=1e5609d76f0c3ade1a33fd0bf204463747c8b99d86a49004ce00d50d8886666f
 
 ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.1/parallel-runjobs-service
 ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
