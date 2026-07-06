@@ -20,10 +20,11 @@ ENV SIMPLESAMLPHP_VERSION=2.4.4
 ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
 ENV SIMPLESAMLPHP_SHA256=1c351342293d218447b27df9a03d2da7561d3831303524c173e8974b3168a57e
 
-ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/5.1.x/_client/mathoid-remote
+# HINT: This version is valid for 5.1 and 5.2; Later versions don't use this tool anymore. For the sake of reproducable builds, we hardcode the version here and adapt manually on demand
+ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/80786798646fe1bb105db2228a07c86f546d9f56/_client/mathoid-remote
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
 
-ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/latest/download/parallel-runjobs-service
+ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.1/parallel-runjobs-service
 ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
 
 ARG BLUESPICE_VERSION=5.2.x
