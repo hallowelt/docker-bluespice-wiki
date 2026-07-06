@@ -237,11 +237,10 @@ if ( getenv( 'MAX_UPLOAD_SIZE' ) ) {
 		$value = (int)$matches[1];
 		$suffix = strtolower( $matches[2] );
 
-		if ( $suffix === "m" ) {
-		$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * $value;
-		} 
-			elseif ( $suffix === "g" ) {
-		$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * 1024 * $value;
+			$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * $value;
+		}
+		elseif ( $suffix === "g" ) {
+			$GLOBALS['wgMaxUploadSize']  = 1024 * 1024 * 1024 * $value;
 		}
 		//If Value is not Readable default = 1024*1024*1024
 	}
