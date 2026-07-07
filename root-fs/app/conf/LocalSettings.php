@@ -140,11 +140,8 @@ if ( getenv( 'EDITION' ) !== 'free' ) {
 	$GLOBALS['wgDrawioEditorBackendUrl'] = bsAssembleURL( 'DIAGRAM_PROTOCOL', 'DIAGRAM_HOST', 'DIAGRAM_PORT', 'DIAGRAM_PATH' );
 }
 
-// $GLOBALS['wgMathValidModes'] = [ 'mathml' ];
-// $GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
-$GLOBALS['wgMathValidModes'] = [ 'native' ];
-$GLOBALS['wgDefaultUserOptions']['math'] = 'native';
-$GLOBALS['wgDefaultUserOptions']['math-popups'] = '1';
+$GLOBALS['wgMathValidModes'] = [ 'mathml' ];
+$GLOBALS['wgDefaultUserOptions']['math'] = 'mathml';
 $GLOBALS['wgMaxShellMemory'] = 1228800;
 $GLOBALS['wgHiddenPrefs'][] = 'math';
 // We don't use the `MathMathML` renderer, but `MathMathMLCli`,
