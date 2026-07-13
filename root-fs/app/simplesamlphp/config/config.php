@@ -3,13 +3,13 @@
 include (__DIR__ . '/config.php.dist');
 
 $serverUrl = bsAssembleURL( 'WIKI_PROTOCOL', 'WIKI_HOST', 'WIKI_PORT' );
-$baseUrl = $GLOBALS['wgServer'] = $serverUrl;
+$baseUrl = $GLOBALS['wgServer'] = $serverUrl . rtrim(getenv('WIKI_BASE_PATH') ?: '', '/');
 
 // TODO calculate from environment variable
 $loglevel = SimpleSAML\Logger::WARNING;
 
 $customConfig = [
-	'baseurlpath' => $serverUrl . rtrim(getenv('WIKI_BASE_PATH') ?: '', '/') . '/_sp/',
+    'baseurlpath' => $baseUrl . '/_sp/',
 	'application' => [
 		'baseURL' => $serverUrl
 	],
