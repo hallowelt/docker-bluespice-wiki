@@ -89,6 +89,9 @@ $customConfig = [
 	'store.sql.username' => getenv('DB_USER'),
 	'store.sql.password' => getenv('DB_PASS'),
 	'store.sql.prefix' => ( getenv('DB_PREFIX') ) . 'SimpleSAMLphp_',
+
+	'mediawiki.sessionapi.token' => getenv( 'SIMPLESAMLPHP_SESSION_API_TOKEN' ) ?: '',
+	'mediawiki.sessionapi.allowedcallers' => getenv( 'SIMPLESAMLPHP_SESSION_API_ALLOWED' ) ?: '',
 ];
 
 $config = $customConfig + $config;

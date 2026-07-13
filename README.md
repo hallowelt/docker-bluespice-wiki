@@ -56,6 +56,9 @@ docker build \
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
 | `PDF_PROTOCOL`               | `http`         | Protocol of a `bluespice/pdf` compatible service     | Yes      |
+| `SIMPLESAMLPHP_SESSION_API_ALLOWED`| `null`       | Allowed CIDR range for SAML session API endpoint. Will default to internal Docker network CIDR | Yes      |
+| `SIMPLESAMLPHP_SESSION_API_TOKEN`| `null`         | Token for SAML session API endpoint. Auto-generated during installation | Yes      |
+| `SAML_LOG_LEVEL`             | `$WIKI_LOG_LEVEL` | Log level for SAML operations.                    | Yes      |
 | `SEARCH_HOST`                | `search`       | Hostname of a `bluespice/search` compatible service  | Yes      |
 | `SEARCH_PASS`                | ``             | Password of a `bluespice/search` compatible service  | Yes      |
 | `SEARCH_PORT`                | `9200`         | Port of a `bluespice/search` compatible service      | Yes      |
