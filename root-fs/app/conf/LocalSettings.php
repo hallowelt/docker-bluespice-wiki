@@ -342,6 +342,7 @@ else {
 }
 
 $GLOBALS['wgArticlePath'] = ( trim(  getenv( 'WIKI_BASE_PATH' ) ) ) . 'wiki/$1';
+
 if ( $s3Used ) {
 	$GLOBALS['wgAWSBucketDomain'] = $GLOBALS['wgServer'] . $GLOBALS['wgUploadPath'];
 	$GLOBALS['wgHooks']['SetupAfterCache'][] = static function () {
