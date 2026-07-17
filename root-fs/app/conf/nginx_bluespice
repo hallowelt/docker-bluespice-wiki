@@ -27,28 +27,6 @@ server {
 	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/(.+)$ ###WIKI_BASE_PATH|/###w/$2 last;
 	rewrite ^###WIKI_BASE_PATH|/###([^/]+)/?$ ###WIKI_BASE_PATH|/###w/index.php?sfr=$1 last;
 
-	if (-f /data/maintenance) {
-		return 503;
-	}
-
-	error_page 503 /maintenance.html;
-	location = /maintenance.html {
-		root /var/www/html;
-		internal;
-		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-		add_header Pragma "no-cache";
-		add_header Expires "0";
-	}
-
-	error_page 500 502 504 505 /error.html;
-	location = /var/www/html {
-		root /var/www/error_pages;
-		internal;
-		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-		add_header Pragma "no-cache";
-		add_header Expires "0";
-	}
-
 	location /w {
 		deny all;
 	}
