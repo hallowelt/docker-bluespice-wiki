@@ -69,7 +69,7 @@ $customConfig = [
 	'sendmail_from' => getenv('WIKI_EMERGENCYCONTACT'),
 
 	'store.type' => 'sql',
-	'store.sql.dsn' => 'mysql:dbname=' . ( getenv('DB_NAME') ) . ';host=' . getenv('DB_HOST'),
+	'store.sql.dsn' => 'mysql:dbname=' . ( getenv('DB_NAME') ) . ';host=' .  ( getenv('DB_PRIMARY_HOST') ?? getenv('DB_HOST') ),
 	'store.sql.username' => getenv('DB_USER'),
 	'store.sql.password' => getenv('DB_PASS'),
 	'store.sql.prefix' => ( getenv('DB_PREFIX') ) . 'SimpleSAMLphp_',
