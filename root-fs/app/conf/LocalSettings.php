@@ -277,6 +277,10 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'mws_data_stash';
 	$GLOBALS['wgSharedTables'][] = 'mws_title_index';
 	$GLOBALS['wgSharedTables'][] = 'page_excerpts';
+
+	$GLOBALS['wgSharedTables'][] = 'oauth2_access_tokens';
+	$GLOBALS['wgSharedTables'][] = 'oauth2_accepted_consumer';
+	$GLOBALS['wgSharedTables'][] = 'oauth2_registered_consumer';
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
