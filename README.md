@@ -51,9 +51,6 @@ docker build \
 | `DIAGRAM_PORT`               | `$WIKI_PORT`   | Port of a `bluespice/diagram` compatible service     | Yes      |
 | `DIAGRAM_PROTOCOL`           | `$WIKI_PROTOCOL`| Protocol of a `bluespice/diagram` compatible service| Yes      |
 | `EDITION`                    | `null`         | Edition of the wiki                                  | Yes      |
-| `FORMULA_HOST`               | `formula`      | Hostname of a `bluespice/formula` compatible service | Yes      |
-| `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |
-| `FORMULA_PROTOCOL`           | `http`         | Protocol of a `bluespice/formula` compatible service | Yes      |
 | `INTERNAL_CHAT_WIKI_ACCESS_TOKEN` | `null` | Access token `bluespice/chat` | No       |
 | `INTERNAL_SIMPLESAMLPHP_SESSION_API_TOKEN`| `null`         | Token for SAML session API endpoint. Auto-generated during installation | No      |
 | `INTERNAL_WIKI_SECRETKEY`    | `null`         | Secret key for the wiki                              | No       |
