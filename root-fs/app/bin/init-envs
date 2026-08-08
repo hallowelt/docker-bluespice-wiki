@@ -35,11 +35,6 @@ export DEV_WIKI_DEBUG_LOGCHANNELS=${DEV_WIKI_DEBUG_LOGCHANNELS:-}
 # Additional ones see below
 export DIAGRAM_PATH=${DIAGRAM_PATH:-/_diagram/}
 
-# Formula service defaults
-export FORMULA_HOST=${FORMULA_HOST:-formula}
-export FORMULA_PORT=${FORMULA_PORT:-10044}
-export FORMULA_PROTOCOL=${FORMULA_PROTOCOL:-http}
-
 # PDF service defaults
 export PDF_HOST=${PDF_HOST:-pdf}
 export PDF_PORT=${PDF_PORT:-8080}
