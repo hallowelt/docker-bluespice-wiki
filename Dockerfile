@@ -104,7 +104,7 @@ ENV GROUPNAME=$GROUPNAME
 RUN grep -q "^${GROUPNAME}:" /etc/group || addgroup -g ${GID} ${GROUPNAME} \
 	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
 	&& addgroup $USER nginx \
-	&& mkdir -p /app/bin /app/bluespice /app/conf /app/cron /app/simplesamlphp \
+	&& mkdir -p /app/bin /app/bluespice/w /app/conf /app/cron /app/simplesamlphp \
 	&& chown -R $USER:$GROUPNAME /app \
 	&& chmod -R g=u /app \
 	&& chmod -R 777 /var/log
@@ -139,7 +139,7 @@ RUN ln -sf /usr/sbin/php-fpm$VERSION /usr/bin/php-fpm \
 	&& ln -s /app/conf/90-bluespice-overrides.ini /etc/php$VERSION/conf.d/90-bluespice-overrides.ini \
 	&& ln -s /app/conf/nginx_bluespice /etc/nginx/sites-enabled/default \
 	&& chown -R $USER:$GROUPNAME /var/run/php \
-	&& chmod -R g=u /var/run/php \
+	&& chmod -R g=u /var/run/php /app/conf /app/cron /app/simplesamlphp/config /app/simplesamlphp/metadata \
 	&& mkdir -p /etc/clamav/ \
 	&& ln -s /app/bin/config/clamd.conf /etc/clamav/clamd.conf \
 	&& touch /app/.env \
