@@ -60,6 +60,15 @@ export SMTP_PASS=${SMTP_PASS:-}
 export SMTP_PORT=${SMTP_PORT:-25}
 export SMTP_USER=${SMTP_USER:-}
 
+# Statistics database defaults
+export STATISTICS_DB_HOST=${STATISTICS_DB_HOST:--}
+export STATISTICS_DB_NAME=${STATISTICS_DB_NAME:-statistics}
+# Fallback to wiki database password
+export STATISTICS_DB_PASS=${STATISTICS_DB_PASS:-$DB_PASS}
+export STATISTICS_DB_PORT=${STATISTICS_DB_PORT:-3306}
+export STATISTICS_DB_PREFIX=${STATISTICS_DB_PREFIX:-}
+export STATISTICS_DB_USER=${STATISTICS_DB_USER:-statistics}
+
 # Timezone defaults
 export TZ=${TZ:-UTC}
 
