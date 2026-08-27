@@ -40,6 +40,8 @@ docker build \
 | `DB_NAME`                    | `bluespice`    | Database name                                        | Yes      |
 | `DB_PASS`                    | `null`         | Database password                                    | No       |
 | `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
+| `DB_PRIMARY_HOST`            | `null`         | Primary database host; Overrides `DB_HOST`           | Yes      |
+| `DB_REPLICA_HOSTS`           | `null`         | Replica database hosts; Comma separated list         | Yes      |
 | `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
 | `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
 | `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
