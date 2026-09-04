@@ -80,6 +80,7 @@ RUN apk add \
 	procps \
 	python3 \
 	rsvg-convert \
+	ttyd \
 	tzdata \
 	vim \
 	vips-tools \
