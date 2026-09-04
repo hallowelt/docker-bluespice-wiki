@@ -387,6 +387,9 @@ if ( $s3Used ) {
 }
 
 if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
+	// Re-set this value for farm, as Dispatcher changed values
+	$GLOBALS['wgThumbnailScriptPath'] = $GLOBALS['wgScriptPath'] . '/thumb.php';
+	
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE;
 		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/' . trim( getenv( 'WIKI_ARTICLE_PATH' ) ?: 'wiki' ) . '/$1';
