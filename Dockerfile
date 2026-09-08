@@ -1,4 +1,12 @@
-FROM alpine:3 AS builder
+# The hardened "auswaertiges-amt/alpine" image is a scratch-based, distroless
+# runtime: musl + busybox only, no apk, no package manager, runs as UID 65534.
+# It can therefore only be used as the *final runtime* base. All work that needs
+# a package manager happens in upstream `alpine:3.24` stages, and the resulting
+# file trees are copied into the hardened base.
+ARG HARDENED_BASE=registry.opencode.de/oci-community/images/auswaertiges-amt/alpine:3.24.0
+ARG ALPINE_BUILD_BASE=alpine:3.24
+
+FROM ${ALPINE_BUILD_BASE} AS builder
 
 # We use SimpleSAMLphp SLIM version to reduce the image size
 ENV SIMPLESAMLPHP_VERSION=2.5.2
@@ -30,11 +38,25 @@ RUN mkdir -p /build/simplesamlphp && \
 	tar -xzf /build/simplesamlphp.tar.gz -C /build/simplesamlphp --strip-components=1
 RUN chmod -R g=u /build
 
-FROM alpine:3 AS base
-ENV LANG=C.UTF-8
-ENV LC_ALL=C.UTF-8
+# ---------------------------------------------------------------------------
+# Package stage: a real Alpine with a real apk. Packages are installed into a
+# staging root (/target) instead of into the image itself, so the resulting tree
+# can be copied onto the distroless hardened base.
+# ---------------------------------------------------------------------------
+FROM ${ALPINE_BUILD_BASE} AS pkgs
 ENV VERSION=84
-RUN apk add \
+
+# alpine-baselayout must be installed first and in its own transaction: it
+# provides /etc/passwd, /etc/group, /tmp and /root. Without it the pre-install
+# scripts of later packages cannot create their system users (nginx, ...).
+RUN mkdir -p /target/etc/apk \
+	&& cp -a /etc/apk/keys /target/etc/apk/ \
+	&& cp -a /etc/apk/repositories /target/etc/apk/ \
+	&& apk add --root /target --initdb --no-cache alpine-baselayout busybox
+
+RUN echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /target/etc/apk/repositories \
+	&& echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /target/etc/apk/repositories \
+	&& apk add --root /target --no-cache \
 	bash \
 	ca-certificates \
 	clamav-clamdscan \
@@ -85,10 +107,29 @@ RUN apk add \
 	tzdata \
 	vim \
 	xpdf \
-	&& echo "@testing https://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-	&& apk add php$VERSION-pecl-excimer@testing
-RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
-	&& apk add openjpeg@edge
+	php$VERSION-pecl-excimer@testing \
+	openjpeg@edge
+
+# The cloud edition needs curl at runtime. Decided here because this is the last
+# point at which a package manager is available.
+COPY --from=builder /build/bluespice/BLUESPICE-EDITION /tmp/BLUESPICE-EDITION
+RUN if [ "$(cat /tmp/BLUESPICE-EDITION)" = "cloud" ]; then \
+		apk add --root /target --no-cache curl; \
+	fi \
+	&& rm -f /tmp/BLUESPICE-EDITION
+
+# apk itself must never end up in the shipped image.
+RUN rm -rf /target/sbin/apk /target/etc/apk/repositories /target/etc/apk/keys /target/var/cache/apk
+
+# ---------------------------------------------------------------------------
+# Runtime base: hardened distroless image + the package tree built above.
+# ---------------------------------------------------------------------------
+FROM ${HARDENED_BASE} AS base
+USER root
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV VERSION=84
+COPY --from=pkgs /target/ /
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
@@ -152,9 +193,8 @@ ARG EDITION # Intentionally left uninitialized
 RUN if [ -n "$EDITION" ]; then \
 		echo "EDITION=$EDITION" > /app/.env; \
 	fi
-RUN if [[ $(cat /app/bluespice/w/BLUESPICE-EDITION) == "cloud" ]] ; then \
-	apk add curl; \
-	fi
+# NOTE: curl for the cloud edition is installed in the `pkgs` stage; no package
+# manager exists from here on.
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
 USER bluespice
