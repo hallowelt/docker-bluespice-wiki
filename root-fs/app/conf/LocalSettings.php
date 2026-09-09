@@ -136,6 +136,18 @@ $GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) );
 $GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) );
 $GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) );
 
+if ( getenv( 'STATISTICS_DB_HOST' ) && getenv( 'STATISTICS_DB_HOST' ) !== '-' ) {
+	$GLOBALS['bsgStatisticsDatabase'] = [
+		'type' => trim( getenv( 'DB_TYPE' ) ),
+		'host' => trim( getenv( 'STATISTICS_DB_HOST' ) ),
+		'port' => trim( getenv( 'STATISTICS_DB_PORT' ) ),
+		'dbname' => trim( getenv( 'STATISTICS_DB_NAME' ) ),
+		'user' => trim( getenv( 'STATISTICS_DB_USER' ) ),
+		'password' => trim( getenv( 'STATISTICS_DB_PASS' ) ),
+		'prefix' => trim( getenv( 'STATISTICS_DB_PREFIX' ) ),
+	];
+}
+
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL( 'PDF_PROTOCOL', 'PDF_HOST', 'PDF_PORT' );
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
 
