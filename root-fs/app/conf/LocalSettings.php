@@ -16,6 +16,32 @@ $GLOBALS['wgEmergencyContact'] = trim( getenv( 'WIKI_EMERGENCYCONTACT' ) );
 $GLOBALS['wgPasswordSender'] = trim( getenv( 'WIKI_PASSWORDSENDER' ) );
 $GLOBALS['wgDBtype'] = trim( getenv( 'DB_TYPE' ) );
 $GLOBALS['wgDBserver'] = trim( getenv( 'DB_HOST' ) );
+if ( getenv( 'DB_PRIMARY_HOST' ) ) {
+	$GLOBALS['wgDBserver'] = null;
+	$GLOBALS['wgDBservers'] = [
+		'host' => trim( getenv( 'DB_PRIMARY_HOST' ) ),
+		'dbname' => trim( getenv( 'DB_NAME' ) ),
+		'user' => trim( getenv( 'DB_USER' ) ),
+		'password' => trim( getenv( 'DB_PASS' ) ),
+		'type' => $GLOBALS['wgDBtype'],
+		'flags' => DBO_DEFAULT,
+		'load' => 0,
+	];
+	$replicaHosts = trim( getenv( 'DB_REPLICA_HOSTS' ) );
+	$replicaHosts = array_filter( array_map( 'trim', explode( ',', $replicaHosts ) ) );
+	foreach ( $replicaHosts as $replicaHost ) {
+		$GLOBALS['wgDBservers'][] = [
+			'host' => $replicaHost,
+			'dbname' => trim( getenv( 'DB_NAME' ) ),
+			'user' => trim( getenv( 'DB_USER' ) ),
+			'password' => trim( getenv( 'DB_PASS' ) ),
+			'type' => $GLOBALS['wgDBtype'],
+			'flags' => DBO_DEFAULT,
+			'load' => 1,
+		];
+	}
+	unset( $replicaHosts );
+}
 $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) );
 $GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) );
 $GLOBALS['wgDBpassword'] = trim(  getenv( 'DB_PASS' ) );
