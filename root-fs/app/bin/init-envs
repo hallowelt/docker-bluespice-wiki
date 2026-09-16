@@ -37,6 +37,12 @@ export FORMULA_HOST=${FORMULA_HOST:-formula}
 export FORMULA_PORT=${FORMULA_PORT:-10044}
 export FORMULA_PROTOCOL=${FORMULA_PROTOCOL:-http}
 
+# Maintenance shell defaults
+# MAINTENANCE_SHELL_PASS is mandatory for the `start-maintenance-shell` mode and has no default value
+export MAINTENANCE_SHELL_CHECK_ORIGIN=${MAINTENANCE_SHELL_CHECK_ORIGIN:-1}
+export MAINTENANCE_SHELL_PORT=${MAINTENANCE_SHELL_PORT:-9090}
+export MAINTENANCE_SHELL_USER=${MAINTENANCE_SHELL_USER:-maintenance}
+
 # PDF service defaults
 export PDF_HOST=${PDF_HOST:-pdf}
 export PDF_PORT=${PDF_PORT:-8080}

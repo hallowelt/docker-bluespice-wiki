@@ -23,6 +23,37 @@ docker build \
 	-t bluespice/wiki:latest .
 ```
 
+## Container modes
+
+The mode of a container is selected by the command it is started with:
+
+| Command                    | Mode                | Description                                                        |
+|----------------------------|---------------------|--------------------------------------------------------------------|
+| `start-web`                | `web`               | Serves the wiki (`nginx` + `php-fpm`) on port `9090`               |
+| `start-task`               | `task`              | Runs `runJobs` and/or the `ProcessRunner` (see `--runAll`)         |
+| `start-maintenance-shell`  | `maintenance-shell` | Serves a web terminal with a shell inside the container            |
+
+### `maintenance-shell` mode
+
+This mode starts [`ttyd`](https://github.com/tsl0922/ttyd), which exposes an interactive `bash` session in the browser. The shell runs as the container user, with the same environment as `docker exec`, so all maintenance commands (`run-maintenance`, `run-updates`, `rebuild-searchindex`, ...) are available. It is meant for environments where no direct `docker exec`/`kubectl exec` access is available.
+
+The terminal is protected by HTTP basic authentication. `MAINTENANCE_SHELL_PASS` is mandatory - the container refuses to start without it. It can also be provided as a Docker secret in `/run/secrets/MAINTENANCE_SHELL_PASS`.
+
+```yaml
+  wiki-maintenance:
+    image: bluespice/wiki:latest
+    command: start-maintenance-shell
+    environment:
+      MAINTENANCE_SHELL_USER: maintenance
+      MAINTENANCE_SHELL_PASS: <a-strong-password>
+    volumes:
+      - wiki-data:/data
+```
+
+By default the shell listens on port `9090`, the same port the `web` mode uses, so an existing port mapping or reverse proxy configuration can be reused when the container is started in this mode instead of `web`. Use `MAINTENANCE_SHELL_PORT` if both modes need to run side by side.
+
+Since basic authentication and the terminal traffic are not encrypted by the container itself, only expose this mode through a TLS terminating reverse proxy.
+
 ## ENV vars
 
 | Variable                     | Default Value  | Description                                          | Optional |
@@ -70,6 +101,10 @@ docker build \
 | `INTERNAL_WIRE_API_KEY`      | `null`         | API key for `bluespice/wire` service                     | No, if `WIRE_HOST` is set |
 | `JOBQUEUE_HOST`              | `jobqueue`     | Hostname of a `bluespice/jobqueue` compatible service| Yes      |
 | `JOBQUEUE_PORT`              | `6379`         | Port of a `bluespice/jobqueue` compatible service          | Yes      |
+| `MAINTENANCE_SHELL_CHECK_ORIGIN` | `1`        | Reject websocket connections from foreign origins in `maintenance-shell` mode *****) | Yes      |
+| `MAINTENANCE_SHELL_PASS`     | `null`         | Password for the `maintenance-shell` mode            | No, in `maintenance-shell` mode |
+| `MAINTENANCE_SHELL_PORT`     | `9090`         | Port the `maintenance-shell` mode listens on         | Yes      |
+| `MAINTENANCE_SHELL_USER`     | `maintenance`  | User name for the `maintenance-shell` mode           | Yes      |
 | `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)    | Yes      |
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
@@ -119,6 +154,8 @@ docker build \
 ***) For a farm with non-default `WIKI_ARTICLE_PATH`, set `FAMR_DEFAULT_INSTANCE` as well, e.g `w` the root farm instance.
 
 ****) Functions requiring `bluespice/chat` can be disabled by setting `-` as `CHAT_HOST`.
+
+*****) Set to `0` if the reverse proxy in front of the container does not pass through the original `Host` header.
 
 ## Directories and Volumes
 
@@ -203,4 +240,4 @@ If `WIKI_FARM_USE_SHARED_DB` is set to `1`, the `FARM` edition will store the wi
 # Liveness and readiness probes
 The container exposes the following commands for liveness and readiness probes:
 - `probe-liveness` - Exists with 0 if the application is healthy
-- `probe-readiness <type>` - Value of `<type>` can be `web` or `task`. Exists with 0 if the application is ready
+- `probe-readiness <type>` - Value of `<type>` can be `web`, `task` or `maintenance-shell`. Exists with 0 if the application is ready

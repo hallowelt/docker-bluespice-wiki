@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Must be run like this, where <type> can be "web" or "task"
+# Must be run like this, where <type> can be "web", "task" or "maintenance-shell"
 # docker exec -it <container_name> probe-readiness <type>
 
 type=$1
@@ -14,6 +14,13 @@ if [[ $type == "web" ]]; then
 	fi
 fi
 if [[ $type == "task" ]]; then
+	if grep -q "ready" /tmp/state; then
+		exit 0
+	else
+		exit 1
+	fi
+fi
+if [[ $type == "maintenance-shell" ]]; then
 	if grep -q "ready" /tmp/state; then
 		exit 0
 	else
