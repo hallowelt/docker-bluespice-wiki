@@ -1,6 +1,6 @@
 #!/bin/php
 <?php
-# Call me like ./substitutePlaceholders /app/bluespice/w/LocalSettings.php
+# Call me like ./substitutePlaceholders "${WIKI_DOCROOT}/w/LocalSettings.php"
 
 $file = $argv[1];
 

@@ -4,7 +4,7 @@ set -o nounset
 set -o pipefail
 
 timestamp=$(date +%Y%m%d%H%M%S)
-appDir=/app/bluespice/w
+appDir="${WIKI_DOCROOT}/w"
 
 baseVersion=""
 if [ -f /data/bluespice/logs/baseversion ]; then

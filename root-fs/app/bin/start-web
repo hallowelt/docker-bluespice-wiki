@@ -28,8 +28,8 @@ fi
 substitutePlaceholders /app/conf/nginx_bluespice
 
 if [[ "${WIKI_BASE_PATH:-/}" != "/" ]]; then
-	mkdir -p /app/bluespice${WIKI_BASE_PATH}
-	ln -sf /app/bluespice/w /app/bluespice${WIKI_BASE_PATH}w
+	mkdir -p "${WIKI_DOCROOT}${WIKI_BASE_PATH}"
+	ln -sf "${WIKI_DOCROOT}/w" "${WIKI_DOCROOT}${WIKI_BASE_PATH}w"
 fi
 
 echo ""

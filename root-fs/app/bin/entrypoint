@@ -1,5 +1,10 @@
 #!/bin/bash
 
+umask 0002
+
+init-envs
+source /app/.env
+
 cat <<EOF
   ____  _            ____        _
  | __ )| |_   _  ___/ ___| _ __ (_) ___ ___
@@ -8,17 +13,12 @@ cat <<EOF
  |____/|_|\__,_|\___|____/| .__/|_|\___\___|
                           |_|
 EOF
-blueSpiceVersion=$(cat /app/bluespice/w/BLUESPICE-VERSION)
-blueSpiceEdition=$(cat /app/bluespice/w/BLUESPICE-EDITION)
-blueSpiceBuildInfo=$(cat /app/bluespice/w/BUILDINFO)
+blueSpiceVersion=$(cat "${WIKI_DOCROOT}/w/BLUESPICE-VERSION")
+blueSpiceEdition=$(cat "${WIKI_DOCROOT}/w/BLUESPICE-EDITION")
+blueSpiceBuildInfo=$(cat "${WIKI_DOCROOT}/w/BUILDINFO")
 echo "🚀 BlueSpice $blueSpiceEdition $blueSpiceVersion+$blueSpiceBuildInfo"
 echo "---------------------------------------------"
 echo ""
-
-umask 0002
-
-init-envs
-source /app/.env
 
 substitutePlaceholders /app/bin/config/clamd.conf
 
