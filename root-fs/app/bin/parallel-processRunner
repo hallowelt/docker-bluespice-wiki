@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-appDir=/app/bluespice/w
+appDir="${WIKI_DOCROOT}/w"
 processRunnerScript=$appDir/vendor/mwstake/mediawiki-component-processmanager/maintenance/processRunner.php
 
 while true; do

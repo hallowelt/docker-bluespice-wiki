@@ -101,18 +101,20 @@ ENV GID=$GID
 ARG GROUPNAME=root
 ENV GROUPNAME=$GROUPNAME
 
+ENV WIKI_DOCROOT=/app/bluespice
+
 RUN grep -q "^${GROUPNAME}:" /etc/group || addgroup -g ${GID} ${GROUPNAME} \
 	&& adduser -u $UID -G $GROUPNAME --shell /bin/bash --disabled-password --gecos "" $USER \
 	&& addgroup $USER nginx \
-	&& mkdir -p /app/bin /app/bluespice/w /app/conf /app/cron /app/simplesamlphp \
+	&& mkdir -p /app/bin "${WIKI_DOCROOT}/w" /app/conf /app/cron /app/simplesamlphp \
 	&& chown -R $USER:$GROUPNAME /app \
 	&& chmod -R g=u /app \
 	&& chmod -R 777 /var/log
-COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice /app/bluespice/w
+COPY --chown=$USER:$GROUPNAME --from=builder /build/bluespice $WIKI_DOCROOT/w
 COPY --chown=$USER:$GROUPNAME --from=builder /build/simplesamlphp /app/simplesamlphp
-RUN if [ -f /app/bluespice/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php ]; then \
+RUN if [ -f "${WIKI_DOCROOT}/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php" ]; then \
 		mkdir -p /app/simplesamlphp/public/api && \
-		cp /app/bluespice/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php \
+		cp "${WIKI_DOCROOT}/w/extensions/SimpleSAMLphp/_simplesamlphp/public/api/session.php" \
 			/app/simplesamlphp/public/api/session.php && \
 		chown -R $USER:$GROUPNAME /app/simplesamlphp/public && \
 		chmod -R g=u /app/simplesamlphp/public; \
@@ -152,11 +154,12 @@ ARG EDITION # Intentionally left uninitialized
 RUN if [ -n "$EDITION" ]; then \
 		echo "EDITION=$EDITION" > /app/.env; \
 	fi
-RUN if [[ $(cat /app/bluespice/w/BLUESPICE-EDITION) == "cloud" ]] ; then \
+RUN if [[ $(cat "${WIKI_DOCROOT}/w/BLUESPICE-EDITION") == "cloud" ]] ; then \
 	apk add curl; \
 	fi
 FROM bluespice-prepare AS bluespice-final
 WORKDIR /app
+ENV WIKI_DOCROOT=/app/bluespice
 USER bluespice
 EXPOSE 9090
 HEALTHCHECK --interval=30s --timeout=5s CMD probe-liveness

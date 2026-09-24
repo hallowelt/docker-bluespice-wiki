@@ -9,7 +9,7 @@ echo ""
 echo "#############################################"
 echo "🧰 Running installation"
 
-appDir=/app/bluespice/w
+appDir="${WIKI_DOCROOT}/w"
 timestamp=$(date +%Y%m%d%H%M%S)
 adminUserName=${WIKI_INITIAL_ADMIN_USER:-Admin}
 adminPass=$(tr -dc A-Za-z0-9 </dev/urandom | head -c 20; echo)

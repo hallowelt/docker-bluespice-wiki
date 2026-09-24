@@ -2,7 +2,7 @@ environment:
     php: "/usr/bin/php"
 wiki:
     type: "###EDITION###"
-    path: "/app/bluespice/w"
+    path: "###WIKI_DOCROOT###/w"
 database:
     dbserver: "###DB_HOST###"
     dbport: 3306
