@@ -71,6 +71,7 @@ RUN apk add \
 	php$VERSION-posix \
 	php$VERSION-session \
 	php$VERSION-simplexml \
+	php$VERSION-sodium \
 	php$VERSION-sqlite3 \
 	php$VERSION-tokenizer \
 	php$VERSION-xml \
