@@ -136,6 +136,9 @@ $GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) );
 $GLOBALS['bsgESBackendUsername'] = trim( getenv( 'SEARCH_USER' ) );
 $GLOBALS['bsgESBackendPassword'] = trim( getenv( 'SEARCH_PASS' ) );
 
+// Static API token the `bluespice/statisticsdashboard` service uses to read the metrics
+$GLOBALS['bsgStatisticsApiKey'] = trim( getenv( 'INTERNAL_STATISTICS_API_KEY' ) );
+
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] = bsAssembleURL( 'PDF_PROTOCOL', 'PDF_HOST', 'PDF_PORT' );
 $GLOBALS['wgPDFCreatorOpenHtml2PdfServiceUrl'] .= '/Html2PDF/v1';
 
