@@ -435,6 +435,19 @@ if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 		// Original local FS backend configured in Extension:BlueSpiceWikiFarm is not used.
 		unset( $GLOBALS['wgFileBackends']['_instances'] );
 		$GLOBALS['wgWikiFarmConfig_instanceStorageBackend'] = $GLOBALS['mwsgFileStorageBackend'];
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public';
+
+		$GLOBALS['wgHooks']['SetupAfterCache'][] = static function () {
+			// Setup "global" repo for farm. Actual bucket root
+			$bucketName = $GLOBALS['wgAWSBucketName'];
+			$wikiId = \MediaWiki\WikiMap\WikiMap::getCurrentWikiId();
+			$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-instances-public"] = $bucketName;
+			$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-archive-public"] = "$bucketName/_archive";
+		};
+	} else {
+		// __global is a reserved name, do not change
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public/__global';
+		$GLOBALS['bsgAvatarBackend'] = '_instances';
 	}
 }
 
