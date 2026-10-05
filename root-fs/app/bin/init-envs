@@ -138,3 +138,9 @@ if [ -d /run/secrets/ ]; then
     echo "export $secret=$(cat /run/secrets/$secret)" >> /app/.env
   done
 fi
+
+# Infrastructure configuration of the codebase: Build time values of the edition. Only deployment
+# dependent values can be overridden by the runtime environment (see `init-infrastructure-envs`)
+/app/bin/init-infrastructure-envs runtime /app/.env.infrastructure.build /app/.env.infrastructure || exit 1
+echo "# Infrastructure configuration loaded from /app/.env.infrastructure" >> /app/.env
+echo "set -a; source /app/.env.infrastructure; set +a" >> /app/.env
