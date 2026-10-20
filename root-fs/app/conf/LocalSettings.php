@@ -260,6 +260,8 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
 	$GLOBALS['wgWikiFarmConfig_showInstancesMenu'] = true;
+	$GLOBALS['wgWikiFarmConfig_globalUploadPath'] = 'w/img_auth.php';
+	
 	// Share notifications
 	$GLOBALS['wgSharedTables'][] = 'notifications_event';
 	$GLOBALS['wgSharedTables'][] = 'notifications_instance';
@@ -291,6 +293,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'uto_tasks';
 	// Galaxy has uses only groups from this table, which are shared
 	$GLOBALS['wgSharedTables'][] = 'mwstake_dynamic_config';
+	$GLOBALS['wgSharedTables'][] = 'flexiskin';
 	// Make Privacy requests global - as user management is global
 	$GLOBALS['wgSharedTables'][] = 'bs_privacy_request';
 }
