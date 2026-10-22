@@ -261,7 +261,7 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
 	$GLOBALS['wgWikiFarmConfig_showInstancesMenu'] = true;
 	$GLOBALS['wgWikiFarmConfig_globalUploadPath'] = 'w/img_auth.php';
-	
+
 	// Share notifications
 	$GLOBALS['wgSharedTables'][] = 'notifications_event';
 	$GLOBALS['wgSharedTables'][] = 'notifications_instance';
@@ -291,6 +291,10 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'oauth2_registered_consumer';
 
 	$GLOBALS['wgSharedTables'][] = 'uto_tasks';
+
+	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_auth_tokens';
+	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_issues';
+
 	// Galaxy has uses only groups from this table, which are shared
 	$GLOBALS['wgSharedTables'][] = 'mwstake_dynamic_config';
 	$GLOBALS['wgSharedTables'][] = 'flexiskin';
@@ -394,7 +398,7 @@ if ( $s3Used ) {
 if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 	// Re-set this value for farm, as Dispatcher changed values
 	$GLOBALS['wgThumbnailScriptPath'] = $GLOBALS['wgScriptPath'] . '/thumb.php';
-	
+
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE;
 		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/' . trim( getenv( 'WIKI_ARTICLE_PATH' ) ?: 'wiki' ) . '/$1';
