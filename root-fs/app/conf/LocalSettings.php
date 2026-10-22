@@ -292,11 +292,12 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 
 	$GLOBALS['wgSharedTables'][] = 'uto_tasks';
 
+	// Galaxy has uses only groups from this table, which are shared
+	$GLOBALS['wgSharedTables'][] = 'mwstake_dynamic_config';
+
 	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_auth_tokens';
 	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_issues';
 
-	// Galaxy has uses only groups from this table, which are shared
-	$GLOBALS['wgSharedTables'][] = 'mwstake_dynamic_config';
 	$GLOBALS['wgSharedTables'][] = 'flexiskin';
 	// Make Privacy requests global - as user management is global
 	$GLOBALS['wgSharedTables'][] = 'bs_privacy_request';
