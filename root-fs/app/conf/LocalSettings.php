@@ -260,6 +260,8 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgWikiFarmConfig_shareUserSessions'] = true;
 	$GLOBALS['wgWikiFarmConfig_useSharedResources'] = true;
 	$GLOBALS['wgWikiFarmConfig_showInstancesMenu'] = true;
+	$GLOBALS['wgWikiFarmConfig_globalUploadPath'] = 'w/img_auth.php';
+
 	// Share notifications
 	$GLOBALS['wgSharedTables'][] = 'notifications_event';
 	$GLOBALS['wgSharedTables'][] = 'notifications_instance';
@@ -289,11 +291,16 @@ if ( getenv( 'EDITION' ) === 'galaxy' ) {
 	$GLOBALS['wgSharedTables'][] = 'oauth2_registered_consumer';
 
 	$GLOBALS['wgSharedTables'][] = 'uto_tasks';
+
 	// Galaxy has uses only groups from this table, which are shared
 	$GLOBALS['wgSharedTables'][] = 'mwstake_dynamic_config';
 
 	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_auth_tokens';
 	$GLOBALS['wgSharedTables'][] = 'issuetrackerlinks_issues';
+
+	$GLOBALS['wgSharedTables'][] = 'flexiskin';
+	// Make Privacy requests global - as user management is global
+	$GLOBALS['wgSharedTables'][] = 'bs_privacy_request';
 }
 
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
@@ -392,7 +399,7 @@ if ( $s3Used ) {
 if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 	// Re-set this value for farm, as Dispatcher changed values
 	$GLOBALS['wgThumbnailScriptPath'] = $GLOBALS['wgScriptPath'] . '/thumb.php';
-	
+
 	if( FARMER_IS_ROOT_WIKI_CALL === false ) {
 		$GLOBALS['wgScriptPath'] =  trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE;
 		$GLOBALS['wgArticlePath'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . FARMER_CALLED_INSTANCE . '/' . trim( getenv( 'WIKI_ARTICLE_PATH' ) ?: 'wiki' ) . '/$1';
@@ -438,6 +445,19 @@ if ( getenv( 'EDITION' ) === 'farm' || getenv( 'EDITION' ) === 'galaxy' ) {
 		// Original local FS backend configured in Extension:BlueSpiceWikiFarm is not used.
 		unset( $GLOBALS['wgFileBackends']['_instances'] );
 		$GLOBALS['wgWikiFarmConfig_instanceStorageBackend'] = $GLOBALS['mwsgFileStorageBackend'];
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public';
+
+		$GLOBALS['wgHooks']['SetupAfterCache'][] = static function () {
+			// Setup "global" repo for farm. Actual bucket root
+			$bucketName = $GLOBALS['wgAWSBucketName'];
+			$wikiId = \MediaWiki\WikiMap\WikiMap::getCurrentWikiId();
+			$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-instances-public"] = $bucketName;
+			$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-archive-public"] = "$bucketName/_archive";
+		};
+	} else {
+		// __global is a reserved name, do not change
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public/__global';
+		$GLOBALS['bsgAvatarBackend'] = '_instances';
 	}
 }
 
