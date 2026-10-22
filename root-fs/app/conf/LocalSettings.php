@@ -173,7 +173,7 @@ $GLOBALS['bsgInstanceStatusCheckAllowedIP'] = trim( getenv( 'WIKI_STATUSCHECK_AL
 
 $GLOBALS['wgSimpleSAMLphp_SAMLClient'] = 'http-client';
 $GLOBALS['wgSimpleSAMLphp_HTTPClientConfig'] = [
-	'baseUrl' => 'http://localhost:9090/_sp/',
+	'baseUrl' => 'http://localhost:9090' . ( trim( getenv( 'WIKI_BASE_PATH' ) ?: '/' ) ) . '_sp/',
 	// Keep aligned with `root-fs/app/simplesamlphp/config/config.php`
 	'sessionIdCookieName' => getenv('DB_NAME') . ( getenv('DB_PREFIX') ) . 'SAMLSessionID',
 	'authTokenCookieName' => getenv('DB_NAME') . ( getenv('DB_PREFIX') ) . 'SAMLAuthToken',
@@ -316,7 +316,7 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
 # By default limit to same subnet as the host (container)
 $GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
 	trim( getenv( 'WIKI_SERVICE_TOKEN_AUTH_ALLOWED' ) )
-	?? Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' );
+	?: Wikimedia\IPUtils::sanitizeRange( gethostbyname( gethostname() ?? '' ) . '/24' );
 
 // `bluespice/wire` service configuration
 $GLOBALS['mwsgWireServiceApiKey'] = getenv( 'INTERNAL_WIRE_API_KEY' );
