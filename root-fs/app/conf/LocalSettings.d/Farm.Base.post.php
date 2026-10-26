@@ -50,3 +50,15 @@ if ( $s3Used ) {
 	unset( $GLOBALS['wgFileBackends']['_instances'] );
 	$GLOBALS['wgWikiFarmConfig_instanceStorageBackend'] = $GLOBALS['mwsgFileStorageBackend'];
 }
+
+// Share avatars across the farm, as users are shared
+// The S3 container paths for `instances-public` are set up in `Common.FileStorage.post.php`
+if ( bsInfrastructureFlag( 'INTERNAL_ENABLE_FARM_SHARED_USER_SESSION' ) ) {
+	if ( $s3Used ) {
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public';
+	} else {
+		// __global is a reserved name, do not change
+		$GLOBALS['bsgAvatarContainer'] = 'instances-public/__global';
+		$GLOBALS['bsgAvatarBackend'] = '_instances';
+	}
+}
