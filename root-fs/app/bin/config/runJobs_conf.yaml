@@ -1,7 +1,8 @@
 environment:
     php: "/usr/bin/php"
 wiki:
-    type: "###EDITION###"
+    # Taken from `_bluespice/.env.infrastructure.<edition>` of the codebase
+    type: "###INTERNAL_PARALLEL_RUNJOBS_SERVICE_MODE###"
     path: "/app/bluespice/w"
 database:
     dbserver: "###DB_HOST###"
