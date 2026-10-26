@@ -39,6 +39,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 		if ( bsInfrastructureFlag( 'INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE' ) ) {
 			require_once "$settingsDir/Farm.SharedJobQueue.pre.php";
 		}
+		if ( bsInfrastructureFlag( 'INTERNAL_ENABLE_FARM_SHARED_RESOURCES' ) ) {
+			require_once "$settingsDir/Farm.SharedResources.pre.php";
+		}
 	}
 
 	require_once trim( getenv( 'WIKI_PRE_INIT_SETTINGS_FILE' ) );
