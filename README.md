@@ -53,6 +53,12 @@ The build fails if the selected edition is not available, if a value is invalid 
 
 `INTERNAL_ENABLE_FARM_*` flags only have an effect if `INTERNAL_ENABLE_FARM=true`.
 
+`INTERNAL_PRODUCT` and `INTERNAL_EDITION` are available as ENV variables to every PHP process of the container (web, CLI, `docker exec`), see `/app/conf/init.php`. The codebase should use them instead of its `BLUESPICE-PRODUCT`/`BLUESPICE-EDITION` files, because `BLUESPICE-EDITION` is only the default edition of a codebase that may serve several editions:
+
+```php
+$edition = getenv( 'INTERNAL_EDITION' ) ?: trim( file_get_contents( "$IP/BLUESPICE-EDITION" ) );
+```
+
 Example: Build a FARM image from a codebase that contains PRO (default edition) and FARM:
 
 ```bash

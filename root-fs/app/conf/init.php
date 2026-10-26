@@ -130,6 +130,18 @@ function bsInfrastructureFlag( string $name ): bool {
 	return bsInfrastructureConfig( $name ) === 'true';
 }
 
+// Contract with the codebase: product and edition of the image are available as ENV variables
+// `INTERNAL_PRODUCT` and `INTERNAL_EDITION` to every PHP process (web, CLI, `docker exec`).
+// The codebase should prefer them over its `BLUESPICE-PRODUCT`/`BLUESPICE-EDITION` files, as
+// `BLUESPICE-EDITION` is only the default edition of a codebase that may serve several editions.
+// The values of the image always win, as they can not be changed at runtime.
+foreach ( [ 'INTERNAL_PRODUCT', 'INTERNAL_EDITION' ] as $bsInfrastructureEnvName ) {
+	if ( bsInfrastructureConfig( $bsInfrastructureEnvName ) !== '' ) {
+		putenv( "$bsInfrastructureEnvName=" . bsInfrastructureConfig( $bsInfrastructureEnvName ) );
+	}
+}
+unset( $bsInfrastructureEnvName );
+
 // We must not set MW_CONFIG_FILE if we are running the CLI installer
 // in `run-installation`, because otherwise it will not allow us to install
 if (
