@@ -3,7 +3,7 @@
 
 # See https://github.com/edwardspec/mediawiki-aws-s3/tree/master?tab=readme-ov-file#using-another-s3-compatible-service-not-amazon-s3-itself
 $s3Used = false;
-if ( getenv( 'FILESTORE_HOST' ) ) {
+if ( getenv( 'FILESTORE_HOST' ) && getenv( 'FILESTORE_HOST' ) !== '-' ) {
 	$s3Used = true;
 	$GLOBALS['mwsgFileStorageUseS3'] = true;
 

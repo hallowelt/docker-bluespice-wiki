@@ -40,6 +40,7 @@ keys=(
 	INTERNAL_ENABLE_FARM_SHARED_USER_SESSION
 	INTERNAL_ENABLE_FARM_SHARED_DATABASE
 	INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE
+	INTERNAL_FARM_INSTANCE_LIMIT
 	INTERNAL_BOOTSTRAPER
 )
 declare -A values=(
@@ -51,6 +52,9 @@ declare -A values=(
 	[INTERNAL_ENABLE_FARM_SHARED_USER_SESSION]=false
 	[INTERNAL_ENABLE_FARM_SHARED_DATABASE]=false
 	[INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE]=false
+	# Maximum number of farm instances (sub-wikis). Empty or 0 means unlimited.
+	# Usually set by a build arg, e.g. `--build-arg INTERNAL_FARM_INSTANCE_LIMIT=30`
+	[INTERNAL_FARM_INSTANCE_LIMIT]=
 	[INTERNAL_BOOTSTRAPER]=/app/conf/StandardBootstrapper.php
 )
 
@@ -177,6 +181,10 @@ for key in "${keys[@]}"; do
 		echo "ERROR: $key must be 'true' or 'false', got '$value'" >&2
 		exit 1
 	fi
+	if [[ "$key" == INTERNAL_FARM_INSTANCE_LIMIT && ! "$value" =~ ^[0-9]*$ ]]; then
+		echo "ERROR: $key must be a non-negative number or empty (unlimited), got '$value'" >&2
+		exit 1
+	fi
 done
 
 if [ ! -f "${values[INTERNAL_BOOTSTRAPER]}" ]; then
@@ -185,7 +193,8 @@ if [ ! -f "${values[INTERNAL_BOOTSTRAPER]}" ]; then
 fi
 if [ "${values[INTERNAL_ENABLE_FARM]}" != "true" ]; then
 	for key in "${keys[@]}"; do
-		if [[ "$key" == INTERNAL_ENABLE_FARM_* && "${values[$key]}" == "true" ]]; then
+		if [[ "$key" == INTERNAL_ENABLE_FARM_* && "${values[$key]}" == "true" ]] \
+			|| [[ "$key" == INTERNAL_FARM_INSTANCE_LIMIT && -n "${values[$key]}" ]]; then
 			echo "WARNING: $key has no effect, as INTERNAL_ENABLE_FARM is not 'true'" >&2
 		fi
 	done

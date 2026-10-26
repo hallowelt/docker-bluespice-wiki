@@ -25,9 +25,11 @@ $GLOBALS['wgSharedTables'][] = 'mws_data_stash';
 $GLOBALS['wgSharedTables'][] = 'mws_title_index';
 $GLOBALS['wgSharedTables'][] = 'page_excerpts';
 
+// Share OAuth. Either all or none of these tables must be shared, as Extension:OAuth creates them
+// with a single schema file, based on the existence of `oauth_registered_consumer`
 $GLOBALS['wgSharedTables'][] = 'oauth2_access_tokens';
-$GLOBALS['wgSharedTables'][] = 'oauth2_accepted_consumer';
-$GLOBALS['wgSharedTables'][] = 'oauth2_registered_consumer';
+$GLOBALS['wgSharedTables'][] = 'oauth_accepted_consumer';
+$GLOBALS['wgSharedTables'][] = 'oauth_registered_consumer';
 
 $GLOBALS['wgSharedTables'][] = 'uto_tasks';
 // Galaxy has uses only groups from this table, which are shared
