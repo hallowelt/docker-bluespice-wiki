@@ -61,6 +61,9 @@ if ( !defined( 'MEDIAWIKI' ) ) {
 	}
 	if ( $isFarm ) {
 		require_once "$settingsDir/Farm.Base.post.php";
+		if ( bsInfrastructureFlag( 'INTERNAL_ENABLE_FARM_SHARED_SEARCH' ) ) {
+			require_once "$settingsDir/Farm.SharedSearch.post.php";
+		}
 		if ( bsInfrastructureFlag( 'INTERNAL_ENABLE_FARM_SHARED_DATABASE' ) ) {
 			require_once "$settingsDir/Farm.SharedDatabase.post.php";
 		}
