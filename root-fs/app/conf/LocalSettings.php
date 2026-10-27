@@ -50,7 +50,7 @@ if ( getenv( 'CACHE_HOST' ) !== '-' ) {
 	unset( $cachePort );
 }
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
-$GLOBALS['wgLocalisationCacheConf']['store'] = 'array';
+$GLOBALS['wgLocalisationCacheConf']['store'] = 'files';
 $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
