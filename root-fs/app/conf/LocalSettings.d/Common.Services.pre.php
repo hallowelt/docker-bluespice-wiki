@@ -82,6 +82,7 @@ $GLOBALS['mwsgTokenAuthenticatorServiceAllowedRestPaths'] = [
 	'/mws/v1/app-token/generate',
 	'/mws/v1/mcp/list_tools',
 	'/mws/v1/mcp/get_wiki_map',
+	'/mws/v1/mcp/list_skills',
 ];
 # By default limit to same subnet as the host (container)
 $GLOBALS['mwsgTokenAuthenticatorServiceCIDR'] =
