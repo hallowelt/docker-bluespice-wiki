@@ -122,7 +122,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |
 | `FORMULA_PROTOCOL`           | `http`         | Protocol of a `bluespice/formula` compatible service | Yes      |
 | `INTERNAL_CHAT_TOKEN`        | `null`         | Internal service token for `bluespice/chat`              | No, if `CHAT_HOST` is set |
-| `INTERNAL_CHAT_WIKI_ACCESS_TOKEN` | `null` | Access token `bluespice/chat` | No       |
+| `INTERNAL_CHAT_WIKI_API_KEY` | `null`     | Service token (`ApiKey`) of `bluespice/chat` for the wiki APIs | No, if `CHAT_HOST` is set |
 | `INTERNAL_SIMPLESAMLPHP_SESSION_API_TOKEN`| `null`         | Token for SAML session API endpoint. Auto-generated during installation | No      |
 | `INTERNAL_WIKI_SECRETKEY`    | `null`         | Secret key for the wiki                              | No       |
 | `INTERNAL_WIKI_TOKEN_AUTH_SALT` | `null`      | Salt for token-based service authentication              | No       |
