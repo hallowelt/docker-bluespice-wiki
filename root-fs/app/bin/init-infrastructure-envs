@@ -14,11 +14,12 @@
 #
 # 2. On container start (`init-envs`):
 #      init-infrastructure-envs runtime /app/.env.infrastructure.build /app/.env.infrastructure
-#    Environment variables of the container override the build time values, but only for the keys
-#    in `runtimeKeys` (deployment dependent). All other keys define the edition and are locked,
-#    so an image can not be switched to another edition at runtime.
+#    Environment variables of the container can only disable the features in `runtimeKeys`, e.g. if the
+#    stack does not provide the required service. They can not enable them, as they are part of the edition.
+#    All other keys define the edition and are locked, so an image can not be switched to another edition
+#    at runtime.
 #
-# Precedence: container defaults < codebase edition file < build args < runtime environment (`runtimeKeys` only)
+# Precedence: container defaults < codebase edition file < build args < runtime environment (`runtimeKeys`, `false` only)
 #
 # The resulting `/app/.env.infrastructure` is read by `/app/conf/init.php` and sourced by `/app/.env`.
 
@@ -60,8 +61,8 @@ declare -A values=(
 	[INTERNAL_BOOTSTRAPER]=/app/conf/StandardBootstrapper.php
 )
 
-# Keys that depend on the deployment (e.g. available services of the stack), not on the edition.
-# Only these can be overridden at runtime. All other keys (including unknown ones) are locked.
+# Features of the edition that depend on the deployment as well (e.g. available services of the stack).
+# These can be disabled at runtime, but not enabled. All other keys (including unknown ones) are locked.
 runtimeKeys=(
 	INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE
 )
@@ -160,9 +161,11 @@ elif [ "$mode" == "runtime" ]; then
 		if [ -z "${!key:-}" ] || [ "${!key}" == "${values[$key]}" ]; then
 			continue
 		fi
-		if [[ " ${runtimeKeys[*]} " == *" $key "* ]]; then
+		if [[ " ${runtimeKeys[*]} " == *" $key "* ]] && [ "${!key}" == "false" ]; then
 			echo "Overriding $key from environment: '${values[$key]}' -> '${!key}'"
 			values[$key]=${!key}
+		elif [[ " ${runtimeKeys[*]} " == *" $key "* ]]; then
+			echo "WARNING: Ignoring $key='${!key}' from environment, as it can only be disabled at runtime" >&2
 		else
 			echo "WARNING: Ignoring $key='${!key}' from environment, as it is defined by the edition '${values[INTERNAL_EDITION]}' of the image" >&2
 		fi
