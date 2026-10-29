@@ -69,14 +69,21 @@ $GLOBALS['wgSimpleSAMLphp_HTTPClientConfig'] = [
 $GLOBALS['mwsgTokenAuthenticatorSalt'] = getenv( 'INTERNAL_WIKI_TOKEN_AUTH_SALT' );
 
 // Static service tokens (`Authorization: ApiKey <token>`), one per service, each limited to the APIs that service
-// uses. Requests run as `mwsgTokenAuthenticatorServiceUser` (component default "Internal service user").
-// A token is only registered if set, as an empty token would match an empty `ApiKey` header.
+// uses and running as its own service account (created on first use). A token is only registered if set, as an
+// empty token would match an empty `ApiKey` header.
 // `bluespice/mcp` has no static token, it calls the wiki with the OAuth2 tokens of the users
+// NOTE: mwstake/mediawiki-component-token-authenticator 2.0.0 reads the account of a token from `context-user`
+// (documented as `user-context`)
 $GLOBALS['mwsgTokenAuthenticatorServiceTokens'] = [];
-// `bluespice/chat`
+// Account of the AppTokens (`/mws/v1/app-token/generate`, full access) and of tokens without `context-user`.
+// Currently not used by any service
+$GLOBALS['mwsgTokenAuthenticatorServiceUser'] = 'Service-Account-AppToken';
+// `bluespice/chat` (Extension:ChatBot, Extension:ChatIntegration)
+$GLOBALS['wgReservedUsernames'][] = 'Service-Account-Chat';
 if ( getenv( 'INTERNAL_CHAT_WIKI_API_KEY' ) ) {
 	$GLOBALS['mwsgTokenAuthenticatorServiceTokens'][] = [
 		'token' => getenv( 'INTERNAL_CHAT_WIKI_API_KEY' ),
+		'context-user' => 'Service-Account-Chat',
 		'api-modules' => [
 			ApiOpenSearch::class
 		],
