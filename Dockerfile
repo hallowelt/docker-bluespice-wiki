@@ -88,6 +88,14 @@ RUN apk add \
 	&& apk add php$VERSION-pecl-excimer@testing
 RUN echo "@edge https://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories \
 	&& apk add openjpeg@edge
+# CVE-2026-111497: brotli-libs >= 1.2.1-r0
+# CVE-2026-115557: python3 >= 3.14.10-r0 (with the matching pyc packages)
+RUN apk upgrade --no-cache \
+	brotli-libs \
+	pyc \
+	python3 \
+	python3-pyc \
+	python3-pycache-pyc0
 FROM base AS bluespice-prepare
 ENV PATH="/app/bin:${PATH}"
 ARG UID
