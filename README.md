@@ -136,6 +136,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `METADATASTORE_PORT`         | `3306`         | Port of a `bluespice/metadatastore` compatible service          | Yes      |
 | `METADATASTORE_USER`         | `null`         | User of a `bluespice/metadatastore` compatible service          | Yes      |
 | `METADATASTORE_PASS`         | `null`         | Password of a `bluespice/metadatastore` compatible service      | No       |
+| `PARALLEL_RUNJOBS_SERVICE_LOGLEVEL` | `$WIKI_LOG_LEVEL` | Log level of the job runner (`parallel-runjobs-service`): debug/info/notice/warn/error | Yes |
 | `PDF_HOST`                   | `pdf`          | Hostname of a `bluespice/pdf` compatible service     | Yes      |
 | `PDF_PORT`                   | `8080`         | Port of a `bluespice/pdf` compatible service         | Yes      |
 | `PDF_PROTOCOL`               | `http`         | Protocol of a `bluespice/pdf` compatible service     | Yes      |
