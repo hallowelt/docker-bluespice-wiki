@@ -10,8 +10,8 @@ ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespi
 ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
 
 
-ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.0.1/parallel-runjobs-service
-ENV PARALLELRUNJOBSSERVICE_SHA256=ec8ea7e8a79242baba862448bcba952376267c0db19785d6266ab9a01a29e241
+ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.1.1/parallel-runjobs-service
+ENV PARALLELRUNJOBSSERVICE_SHA256=e40059c4aeb827fdb4a63ca001da81634c7fa4bdc9099d516b02c30e34bcc3f4
 
 ARG BLUESPICE_VERSION=5.1.x
 ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release.git
