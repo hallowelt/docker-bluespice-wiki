@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Same condition as `Farm.SharedJobQueue.pre.php`: Let the job runner scan Redis/Valkey only if the wiki uses it as job queue
+if [[ "${INTERNAL_ENABLE_FARM:-}" == "true" && "${INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE:-}" == "true" \
+	&& -n "${JOBQUEUE_HOST:-}" && "${JOBQUEUE_HOST}" != "-" ]]; then
+	export PARALLEL_RUNJOBS_SERVICE_QUEUE=redis
+else
+	export PARALLEL_RUNJOBS_SERVICE_QUEUE=database
+fi
+
 ##add Variables to Scripts
 substitutePlaceholders /app/bin/config/runJobs_conf.yaml
 

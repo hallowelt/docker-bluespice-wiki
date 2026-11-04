@@ -4,6 +4,11 @@ wiki:
     # Taken from `_bluespice/.env.infrastructure.<edition>` of the codebase
     type: "###INTERNAL_PARALLEL_RUNJOBS_SERVICE_MODE###"
     path: "/app/bluespice/w"
+# `redis` if the farm uses the shared job queue (see `start-task`), `database` otherwise
+queue: "###PARALLEL_RUNJOBS_SERVICE_QUEUE|database###"
+redis:
+    host: "###JOBQUEUE_HOST|jobqueue###"
+    port: ###JOBQUEUE_PORT|6379###
 database:
     dbserver: "###DB_HOST###"
     dbport: 3306

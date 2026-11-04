@@ -128,7 +128,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `INTERNAL_WIKI_TOKEN_AUTH_SALT` | `null`      | Salt for token-based service authentication              | No       |
 | `INTERNAL_WIKI_UPGRADEKEY`   | `null`         | Upgrade key for the wiki                                 | No       |
 | `INTERNAL_WIRE_API_KEY`      | `null`         | API key for `bluespice/wire` service                     | No, if `WIRE_HOST` is set |
-| `JOBQUEUE_HOST`              | `null`         | Hostname of a `bluespice/jobqueue` compatible service. Only used with `INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE=true` | Yes      |
+| `JOBQUEUE_HOST`              | `null`         | Hostname of a `bluespice/jobqueue` compatible service. Only used with `INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE=true` (then also by the job runner, `queue: redis`) | Yes      |
 | `JOBQUEUE_PORT`              | `6379`         | Port of a `bluespice/jobqueue` compatible service          | Yes      |
 | `MAX_UPLOAD_SIZE`            | `1024m`        | Max upload size for single file (Allowed: m or g)    | Yes      |
 | `METADATASTORE_PROTOCOL`     | `http`         | Protocol of a `bluespice/metadatastore` compatible service      | Yes      |
