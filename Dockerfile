@@ -165,6 +165,10 @@ RUN /app/bin/init-infrastructure-envs build \
 		/app/bluespice/w \
 		/app/.env.infrastructure.build
 FROM bluespice-prepare AS bluespice-final
+# Build info: value of build arg BUILDINFO, `-` if not set
+ARG BUILDINFO
+RUN mkdir -p /image && echo "${BUILDINFO:--}" > /image/BUILDINFO
+
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
