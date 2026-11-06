@@ -165,6 +165,9 @@ RUN /app/bin/init-infrastructure-envs build \
 		/app/bluespice/w \
 		/app/.env.infrastructure.build
 FROM bluespice-prepare AS bluespice-final
+# Build timestamp (UTC, YmdHis)
+RUN mkdir -p /image && date -u +%Y%m%d%H%M%S > /image/BUILDINFO
+
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
