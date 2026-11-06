@@ -266,6 +266,19 @@ If you want to use a different user, you need to provide the `DB_ROOT_USER` and 
 
 If `WIKI_FARM_USE_SHARED_DB` is set to `1`, the `FARM` edition will store the wiki instance dbs in `DB_NAME` itself and `DB_USER` does not need permissions to create further databases with the `WIKI_FARM_DB_PREFIX` prefix.
 
+# Task modes
+The task container is started with `start-task <mode>`:
+
+| Mode | Updates | Job runner | Process runner | Instances |
+|------|---------|------------|----------------|-----------|
+| `--all` (alias: `--runAll`) | Runs them | Yes | Yes | Exactly one per stack |
+| `--jobrunner` | Waits for them | Yes | No | Any number. Requires the shared job queue (`INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE`, `JOBQUEUE_HOST`) |
+| `--processrunner` | Waits for them | No | Yes | Any number, but only once [processmanager#23](https://github.com/hallowelt/mwstake-mediawiki-component-processmanager/issues/23) is fixed (the `--all` instance runs a process runner as well) |
+| `--runJobs` (deprecated) | Runs them | Yes | No | One |
+| `--runProcessRunner` (deprecated) | No | No | Yes | One |
+
+"Waits for them": The instance starts its services only after the `--all` instance finished the updates to the version of the image (`/data/bluespice/logs/baseversion`), so all instances must share `/data`.
+
 # Liveness and readiness probes
 The container exposes the following commands for liveness and readiness probes:
 - `probe-liveness` - Exists with 0 if the application is healthy
