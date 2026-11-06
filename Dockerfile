@@ -154,6 +154,9 @@ RUN if [[ $(cat /app/bluespice/w/BLUESPICE-EDITION) == "cloud" ]] ; then \
 	apk add curl; \
 	fi
 FROM bluespice-prepare AS bluespice-final
+# Build timestamp (UTC, YmdHis)
+RUN mkdir -p /image && date -u +%Y%m%d%H%M%S > /image/BUILDINFO
+
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
