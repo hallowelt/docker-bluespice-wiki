@@ -6,7 +6,7 @@ lang=${WIKI_LANG:-en}
 name=${WIKI_NAME:-BlueSpice}
 
 echo "Installing database with values:"
-echo "dbserver: $DB_HOST"
+echo "dbserver: ${DB_PRIMARY_HOST:-$DB_HOST}"
 echo "dbname: $DB_NAME"
 echo "dbuser: $DB_USER"
 echo "dbpass: ${DB_PASS:0:1}********${DB_PASS: -1}"
@@ -26,7 +26,7 @@ if [ -f $appDir/LocalSettings.php ]; then
 fi
 
 php $appDir/maintenance/install.php \
-	--dbserver=$DB_HOST \
+	--dbserver=${DB_PRIMARY_HOST:-$DB_HOST} \
 	--dbname=$DB_NAME \
 	--installdbuser=$installdbuser \
 	--installdbpass=$installdbpass \

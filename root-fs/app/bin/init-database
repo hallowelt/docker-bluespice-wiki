@@ -1,7 +1,7 @@
 #!/bin/php
 <?php
 
-$dbHost = getenv('DB_HOST');
+$dbHost = getenv('DB_PRIMARY_HOST') ?? getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
 $dbName = getenv('DB_NAME');
 $dbNamePrefix = getenv('WIKI_FARM_DB_PREFIX');
