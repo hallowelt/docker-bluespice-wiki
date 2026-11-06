@@ -151,6 +151,9 @@ RUN if [ -n "$EDITION" ]; then \
 	fi
 
 FROM bluespice-prepare AS bluespice-final
+# Build timestamp (UTC, YmdHis)
+RUN mkdir -p /image && date -u +%Y%m%d%H%M%S > /image/BUILDINFO
+
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
