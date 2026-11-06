@@ -10,6 +10,7 @@ $GLOBALS['wgWikiFarmConfig_dbPrefix'] = trim( getenv( 'WIKI_FARM_DB_PREFIX' ) );
 $GLOBALS['wgWikiFarmConfig_LocalSettingsAppendPath'] = '/app/conf/StandardBootstrapper.php';
 $GLOBALS['wgWikiFarmConfig_useSharedDB'] = getenv( 'WIKI_FARM_USE_SHARED_DB' ) ? true : false;
 $GLOBALS['wgWikiFarmConfig_basePath'] = trim( getenv( 'WIKI_BASE_PATH' ) );
+$GLOBALS['wgWikiFarmConfig_initialAdminUser'] = trim( getenv( 'WIKI_INITIAL_ADMIN_USER' ) ?: 'Admin' );
 // Maximum number of instances, defined at build time of the image. Empty or `0` means unlimited
 $instanceLimit = bsInfrastructureConfig( 'INTERNAL_FARM_INSTANCE_LIMIT' );
 if ( ctype_digit( $instanceLimit ) && (int)$instanceLimit > 0 ) {
