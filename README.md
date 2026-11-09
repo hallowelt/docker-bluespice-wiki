@@ -162,6 +162,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
+| `WIKI_JWT_PRIVATE_KEY_FILE`  | `/data/bluespice/jwt_private.key` | Path to the RSA private key for signing JWTs (e.g. Extension:WOPI) | Yes |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_LOG_LEVEL`             | `error`        | Set php and Nginx log level (error/warn/debug)       | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                         | Yes      |
@@ -202,6 +203,7 @@ The main directory for application data is `/data/`. The setup routine will crea
 │   │   ├── postupdate
 │   │   └── baseversion          -> Stores the application version at the last container start. Used to determine if update scripts need to run.
 │   │
+│   ├── jwt_private.key          -> Automatically created during installation. Used to sign JWTs (e.g. Extension:WOPI)
 │   ├── oauth_private.key        -> Automatically created during installation. Used by Extension:OAuth
 │   ├── oauth_public.key         -> Automatically created during installation. Used by Extension:OAuth
 │   │

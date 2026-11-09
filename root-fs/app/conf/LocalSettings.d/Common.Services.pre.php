@@ -21,6 +21,8 @@ if ( getenv( 'AV_HOST' ) !== '-' ) {
 $GLOBALS['wgOAuth2PrivateKey'] = trim( getenv( 'WIKI_OAUTH2_PRIVATE_KEY_FILE' ) );
 $GLOBALS['wgOAuth2PublicKey'] = trim( getenv( 'WIKI_OAUTH2_PUBLIC_KEY_FILE' ) );
 
+$GLOBALS['mwsgJWTPrivateKeyFile'] = trim( getenv( 'WIKI_JWT_PRIVATE_KEY_FILE' ) ?: '' );
+
 $GLOBALS['bsgESBackendHost'] = trim( getenv( 'SEARCH_HOST' ) );
 $GLOBALS['bsgESBackendPort'] = trim( getenv( 'SEARCH_PORT' ) );
 $GLOBALS['bsgESBackendTransport'] = trim( getenv( 'SEARCH_PROTOCOL' ) );
