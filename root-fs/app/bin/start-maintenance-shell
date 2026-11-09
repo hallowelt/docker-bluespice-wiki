@@ -1,0 +1,42 @@
+#!/bin/bash
+
+MAINTENANCE_SHELL_PORT="${MAINTENANCE_SHELL_PORT:-9090}"
+MAINTENANCE_SHELL_USER="${MAINTENANCE_SHELL_USER:-maintenance}"
+
+echo ""
+echo "#############################################"
+echo "🖥️ Starting MaintenanceShell"
+
+if [[ -z "${MAINTENANCE_SHELL_PASS}" ]]; then
+	echo "❌ MAINTENANCE_SHELL_PASS is not set. Refusing to start an unauthenticated shell."
+	echo "   Provide it as an environment variable or as /run/secrets/MAINTENANCE_SHELL_PASS."
+	exit 1
+fi
+
+ttydArgs=(
+	--port "${MAINTENANCE_SHELL_PORT}"
+	--writable
+	--credential "${MAINTENANCE_SHELL_USER}:${MAINTENANCE_SHELL_PASS}"
+	--terminal-type xterm-256color
+	--client-option "titleFixed=BlueSpice MaintenanceShell"
+)
+
+# Reject websocket connections from foreign origins, unless explicitly disabled.
+# May need to be disabled if the reverse proxy in front does not pass through the original `Host` header.
+if [[ "${MAINTENANCE_SHELL_CHECK_ORIGIN:-1}" == "1" ]]; then
+	ttydArgs+=( --check-origin )
+fi
+
+# Align with the path the web frontend is served from, in case a reverse proxy mounts the container on a subpath
+if [[ "${WIKI_BASE_PATH:-/}" != "/" ]]; then
+	ttydArgs+=( --base-path "${WIKI_BASE_PATH%/}" )
+fi
+
+echo "" > /tmp/healthcheck
+echo "ttyd" >> /tmp/healthcheck
+
+echo "🔐 Listening on port ${MAINTENANCE_SHELL_PORT}, login as '${MAINTENANCE_SHELL_USER}'"
+
+echo "ready" > /tmp/state
+
+exec ttyd "${ttydArgs[@]}" bash
