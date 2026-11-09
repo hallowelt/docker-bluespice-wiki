@@ -20,3 +20,20 @@ unset( $instanceLimit );
 $GLOBALS['wgSharedDB'] = $GLOBALS['wgDBname'];
 $GLOBALS['wgSharedPrefix'] = $GLOBALS['wgDBprefix'];
 $GLOBALS['wgSharedTables'] = [ 'bs_translationtransfer_translations' ];
+
+if ( $cacheUsed === 'redis' || $cacheUsed === 'valkey' ) {
+	$GLOBALS['wgWikiFarmConfig_maintenanceScreenLoadCallback'] = static function () {
+		// This is a duplicate from Farm.Base.post.php - added here specifically to configure PR queue
+		// when showing "installation" maintenance screen
+		$GLOBALS['mwsgProcessManagerQueueConfig']['farm-redis'] = [
+			'class' => \BlueSpice\WikiFarm\ProcessQueue\FarmRedisProcessQueue::class,
+			'args' => [ [
+				'redisConfig' => [],
+				'redisServer' => $GLOBALS['wgObjectCaches']['redis']['servers'][0],
+				'isRoot' => FARMER_IS_ROOT_WIKI_CALL,
+				'forInstance' => FARMER_CALLED_INSTANCE
+			] ]
+		];
+		$GLOBALS['mwsgProcessManagerQueue'] = 'farm-redis';
+	};
+}
