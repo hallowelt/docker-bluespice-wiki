@@ -37,22 +37,45 @@ readFlatFile() {
 	printf '%s' "$default"
 }
 
-# Imports the files and `*.xml` of a directory into the main wiki or, with `--sfr=<path>`, into a farm wiki
+isFilesXml() {
+	[[ "$(basename "$1")" == files* ]]
+}
+
+# Imports the files and pages of a directory into the main wiki or, with `--sfr=<path>`, into a farm wiki
 importDirectory() {
 	local dir=$1
 	shift
 	local wikiArgs=( "$@" )
 	local result=0
+	local xmlfile filesDir hasFilesXml=false
 
-	for filesDir in "$dir/_files" "$dir/files" "$dir/images"; do
-		if [ -d "$filesDir" ]; then
-			echo "Importing files from $filesDir"
-			run-maintenance importImages "${wikiArgs[@]}" "$filesDir" || result=1
+	for xmlfile in "$dir"/*.xml; do
+		if [ -f "$xmlfile" ] && isFilesXml "$xmlfile"; then
+			hasFilesXml=true
 		fi
 	done
 
+	if [ "$hasFilesXml" == "true" ]; then
+		# Files with their versions. The directories next to the XML hold the data the XML refers to.
+		for xmlfile in "$dir"/files*.xml; do
+			if [ -f "$xmlfile" ]; then
+				echo "Importing files from $xmlfile"
+				run-maintenance BlueSpiceDistributionConnector:importFiles "${wikiArgs[@]}" --src="$xmlfile" \
+					|| result=1
+			fi
+		done
+	else
+		for filesDir in "$dir/_files" "$dir/files" "$dir/images"; do
+			if [ -d "$filesDir" ]; then
+				echo "Importing files from $filesDir"
+				run-maintenance importImages "${wikiArgs[@]}" "$filesDir" || result=1
+			fi
+		done
+	fi
+
+	# `pages*.xml`, and XML files without prefix for b/c
 	for xmlfile in "$dir"/*.xml; do
-		if [ -f "$xmlfile" ]; then
+		if [ -f "$xmlfile" ] && ! isFilesXml "$xmlfile"; then
 			echo "Importing pages from $xmlfile"
 			run-maintenance importDump "${wikiArgs[@]}" "$xmlfile" || result=1
 		fi

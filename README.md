@@ -226,13 +226,14 @@ The main directory for application data is `/data/`. The setup routine will crea
 ## Custom content import
 If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki (`/app/bin/import-contents`, called by `run-installation.d/055-import-contents`). In a farm, it can also create wikis (farm instances) and import content into them.
 
-| Path                    | Description |
-|-------------------------|-------------|
-| `*.xml`                 | Pages (MediaWiki XML export) for the main wiki, imported in alphabetical order of the file names |
-| `_files/`               | Files for the main wiki. `files/` and `images/` are also supported for b/c, the latter for results of "migrate-confluence" |
-| `wikis/`                | Farm only: One directory per wiki, named like the path of the wiki. Ignored with a warning if the wiki is not a farm |
-| `wikis/<path>/*.xml`    | Pages for this wiki |
-| `wikis/<path>/_files/`  | Files for this wiki |
+The same layout applies to the main wiki (top level) and to each wiki in `wikis/<path>/`:
+
+| Path            | Description |
+|-----------------|-------------|
+| `pages*.xml`    | Pages (MediaWiki XML export), imported with `importDump` in alphabetical order of the file names. XML files without the prefix `files` or `pages` are also imported as pages, for b/c |
+| `files*.xml`    | Files with their versions, imported with `BlueSpiceDistributionConnector:importFiles` in alphabetical order of the file names. The paths in the XML (`<data>`) are relative to the XML file |
+| `_files/`       | Files without versions, imported with `importImages`. Only if there is no `files*.xml`, as the folders then hold the data of the XML. `files/` and `images/` are also supported for b/c, the latter for results of "migrate-confluence" |
+| `wikis/`        | Farm only: One directory per wiki, named like the path of the wiki. Ignored with a warning if the wiki is not a farm |
 | `wikis/<path>/SITENAME` | Optional: Name of the wiki. Default: `<path>` |
 | `wikis/<path>/DESC`     | Optional: Description of the wiki |
 | `wikis/<path>/LANG`     | Optional: Content language of the wiki, e.g. `de`. Default: Language of the farm |
@@ -249,11 +250,13 @@ Example:
 
 ```
 /data/bluespice/content-install
-├── _files
-│   ├── HappyGnu.jpg
-│   └── Desiderata.pdf
-├── 01-templates.xml
-├── 02-pages.xml
+├── files
+│   └── …                           (data of the files XML)
+├── files-01-migration.xml
+├── files-02-knowledgebase.xml
+├── pages-01-templates.xml
+├── pages-02-blogs.xml
+├── pages-03-knowledgebase.xml
 └── wikis
     ├── PD
     │   ├── _files
@@ -263,7 +266,7 @@ Example:
     │   ├── DESC         (content: "Specifications and roadmaps of the product team")
     │   └── LANG         (content: "de")
     └── -shared
-        └── templates.xml
+        └── pages-templates.xml
 ```
 
 ## Custom SSL certificates
