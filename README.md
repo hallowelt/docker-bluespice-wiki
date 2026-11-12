@@ -224,17 +224,46 @@ The main directory for application data is `/data/`. The setup routine will crea
 ```
 
 ## Custom content import
-If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki.
+If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki (`/app/bin/import-contents`, called by `run-installation.d/055-import-contents`). In a farm, it can also create wikis (farm instances) and import content into them.
+
+| Path                    | Description |
+|-------------------------|-------------|
+| `*.xml`                 | Pages (MediaWiki XML export) for the main wiki, imported in alphabetical order of the file names |
+| `_files/`               | Files for the main wiki. `files/` and `images/` are also supported for b/c, the latter for results of "migrate-confluence" |
+| `wikis/`                | Farm only: One directory per wiki, named like the path of the wiki. Ignored with a warning if the wiki is not a farm |
+| `wikis/<path>/*.xml`    | Pages for this wiki |
+| `wikis/<path>/_files/`  | Files for this wiki |
+| `wikis/<path>/SITENAME` | Optional: Name of the wiki. Default: `<path>` |
+| `wikis/<path>/DESC`     | Optional: Description of the wiki |
+| `wikis/<path>/LANG`     | Optional: Content language of the wiki, e.g. `de`. Default: Language of the farm |
+
+Files are imported before pages. `SITENAME`, `DESC` and `LANG` are plain text files, surrounding whitespace is ignored.
+
+Wikis that do not exist yet are created with `BlueSpiceWikiFarm:CreateInstance`, with the initial admin (`WIKI_INITIAL_ADMIN_USER`) as administrator, and get their own search index. Existing wikis (e.g. the system wiki `-shared`) only get the pages and files. As the creation of a wiki is a process of the ProcessManager, `import-contents` runs its own ProcessRunner while it creates wikis, because the task container may not run yet at installation time.
+
+A failure of one wiki is reported, the remaining wikis are processed anyway. Errors of the import do not fail the installation, as the wiki itself is already installed at that point.
+
+`import-contents` can also be run manually in the container, e.g. `import-contents /data/bluespice/content-install`.
 
 Example:
 
 ```
 /data/bluespice/content-install
-├── files
-│   ├── HappyGnu.jpg
-│   └── Desiderata.pdf
+├── _files
+│   ├── HappyGnu.jpg
+│   └── Desiderata.pdf
 ├── 01-templates.xml
-└── 02-pages.xml
+├── 02-pages.xml
+└── wikis
+    ├── Product_Development
+    │   ├── _files
+    │   │   └── Roadmap.png
+    │   ├── pages.xml
+    │   ├── SITENAME     (content: "Product Development")
+    │   ├── DESC         (content: "Specifications and roadmaps of the product team")
+    │   └── LANG         (content: "de")
+    └── -shared
+        └── templates.xml
 ```
 
 ## Custom SSL certificates

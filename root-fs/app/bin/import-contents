@@ -1,25 +1,157 @@
 #!/bin/bash
 
-sourceDir=$1
+# Imports pages and files from a content directory, e.g. at installation time
+# (see `run-installation.d/055-import-contents`). In a farm, it also creates wikis (farm instances).
+# For the layout of the content directory see README.md, "Custom content import".
+#
+# Usage: import-contents <sourceDir>
+# The exit code is 1 if anything failed.
 
-if [ ! -d $sourceDir ]; then
+set -o nounset
+set -o pipefail
+
+sourceDir=${1:-}
+appDir=${appDir:-/app/bluespice/w}
+adminUserName=${adminUserName:-${WIKI_INITIAL_ADMIN_USER:-Admin}}
+processRunnerScript=$appDir/vendor/mwstake/mediawiki-component-processmanager/maintenance/processRunner.php
+
+failed=()
+processRunnerPid=""
+
+if [ -z "$sourceDir" ] || [ ! -d "$sourceDir" ]; then
 	echo "No content to import."
 	exit 0
 fi
 
-if [ -d $sourceDir/files ]; then
-	echo "Importing files from $sourceDir/files"
-	run-maintenance importImages $sourceDir/files
-fi
-# For b/c and compatibility to "migrate-confluence" results we also check for `images/` directory
-if [ -d $sourceDir/images ]; then
-	echo "Importing images from $sourceDir/images"
-	run-maintenance importImages $sourceDir/images
+# Prints the content of a flat file without surrounding whitespace and blank lines, or the default value
+readFlatFile() {
+	local file=$1 default=${2:-}
+	if [ -f "$file" ]; then
+		local value
+		value=$(sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' "$file" | sed -e '/./,$!d')
+		if [ -n "$value" ]; then
+			printf '%s' "$value"
+			return
+		fi
+	fi
+	printf '%s' "$default"
+}
+
+# Imports the files and `*.xml` of a directory into the main wiki or, with `--sfr=<path>`, into a farm wiki
+importDirectory() {
+	local dir=$1
+	shift
+	local wikiArgs=( "$@" )
+	local result=0
+
+	for filesDir in "$dir/_files" "$dir/files" "$dir/images"; do
+		if [ -d "$filesDir" ]; then
+			echo "Importing files from $filesDir"
+			run-maintenance importImages "${wikiArgs[@]}" "$filesDir" || result=1
+		fi
+	done
+
+	for xmlfile in "$dir"/*.xml; do
+		if [ -f "$xmlfile" ]; then
+			echo "Importing pages from $xmlfile"
+			run-maintenance importDump "${wikiArgs[@]}" "$xmlfile" || result=1
+		fi
+	done
+
+	return $result
+}
+
+# The creation of a wiki is a process of the ProcessManager. It is usually executed by the ProcessRunner of the
+# task container, which may not be running at installation time. So we run our own one while we create wikis.
+# Several runners can share the queue, each process is claimed by one of them.
+startProcessRunner() {
+	if [ -n "$processRunnerPid" ]; then
+		return
+	fi
+	echo "Starting a ProcessRunner for the creation of wikis"
+	php "$processRunnerScript" "$appDir/maintenance/Maintenance.php" --wait > >(sed -u 's/^/[ProcessRunner] /') 2>&1 &
+	processRunnerPid=$!
+	trap stopProcessRunner EXIT
+}
+
+stopProcessRunner() {
+	if [ -n "$processRunnerPid" ]; then
+		kill "$processRunnerPid" 2>/dev/null
+		wait "$processRunnerPid" 2>/dev/null
+		processRunnerPid=""
+	fi
+}
+
+wikiExists() {
+	run-maintenance BlueSpiceWikiFarm:ListInstances 2>/dev/null | grep -qxF "> $1"
+}
+
+createWiki() {
+	local path=$1 dir=$2
+	local sitename desc lang metadata
+	sitename=$(readFlatFile "$dir/SITENAME" "$path")
+	desc=$(readFlatFile "$dir/DESC")
+	lang=$(readFlatFile "$dir/LANG")
+
+	local args=( --path="$path" --display-name="$sitename" --user="$adminUserName" )
+	if [ -n "$lang" ]; then
+		args+=( --lang="$lang" )
+	fi
+	if [ -n "$desc" ]; then
+		# Same metadata key as the description of a wiki in the farm management
+		metadata=$(php -r 'echo json_encode( [ "desc" => $argv[1] ], JSON_UNESCAPED_UNICODE );' -- "$desc")
+		args+=( --metadata="$metadata" )
+	fi
+
+	echo "Creating wiki '$path' (name: '$sitename', language: '${lang:-default}')"
+	startProcessRunner
+	run-maintenance BlueSpiceWikiFarm:CreateInstance "${args[@]}"
+}
+
+provisionWiki() {
+	local dir=$1
+	local path
+	path=$(basename "$dir")
+
+	echo ""
+	echo "---------------------------------------------"
+	echo "Wiki '$path'"
+
+	if wikiExists "$path"; then
+		echo "Wiki '$path' exists, only importing content"
+	elif ! createWiki "$path" "$dir"; then
+		echo "❌ Could not create wiki '$path'"
+		failed+=( "$path (creation)" )
+		return
+	fi
+
+	if ! importDirectory "$dir" --sfr="$path"; then
+		echo "❌ Import into wiki '$path' failed"
+		failed+=( "$path (import)" )
+	fi
+	# The main wiki gets its index in `run-installation.d/060-build-initial-search-index`
+	rebuild-searchindex --sfr "$path" || failed+=( "$path (search index)" )
+}
+
+echo "Importing content from $sourceDir into the main wiki"
+importDirectory "$sourceDir" || failed+=( "main wiki (import)" )
+
+if [ -d "$sourceDir/wikis" ]; then
+	if [ "${INTERNAL_ENABLE_FARM:-false}" != "true" ]; then
+		echo "⚠️ $sourceDir/wikis is ignored, as this is not a wiki farm"
+	else
+		for wikiDir in "$sourceDir"/wikis/*/; do
+			if [ -d "$wikiDir" ]; then
+				provisionWiki "${wikiDir%/}"
+			fi
+		done
+		stopProcessRunner
+	fi
 fi
 
-for xmlfile in $sourceDir/*.xml; do
-	if [ -f "$xmlfile" ]; then
-		echo "Importing content from $xmlfile"
-		run-maintenance importDump "$xmlfile"
-	fi
-done
+if [ ${#failed[@]} -gt 0 ]; then
+	echo ""
+	echo "❌ Content import finished with errors:"
+	printf '  - %s\n' "${failed[@]}"
+	exit 1
+fi
