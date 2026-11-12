@@ -255,7 +255,7 @@ Example:
 ├── 01-templates.xml
 ├── 02-pages.xml
 └── wikis
-    ├── Product_Development
+    ├── PD
     │   ├── _files
     │   │   └── Roadmap.png
     │   ├── pages.xml
