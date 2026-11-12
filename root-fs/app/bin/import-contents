@@ -69,7 +69,8 @@ startProcessRunner() {
 		return
 	fi
 	echo "Starting a ProcessRunner for the creation of wikis"
-	php "$processRunnerScript" "$appDir/maintenance/Maintenance.php" --wait > >(sed -u 's/^/[ProcessRunner] /') 2>&1 &
+	php "$processRunnerScript" "$appDir/maintenance/Maintenance.php" --wait \
+		> >( while IFS= read -r line; do echo "[ProcessRunner] $line"; done ) 2>&1 &
 	processRunnerPid=$!
 	trap stopProcessRunner EXIT
 }
