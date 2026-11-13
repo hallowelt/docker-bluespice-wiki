@@ -11,12 +11,9 @@ set -o nounset
 set -o pipefail
 
 sourceDir=${1:-}
-appDir=${appDir:-/app/bluespice/w}
 adminUserName=${adminUserName:-${WIKI_INITIAL_ADMIN_USER:-Admin}}
-processRunnerScript=$appDir/vendor/mwstake/mediawiki-component-processmanager/maintenance/processRunner.php
 
 failed=()
-processRunnerPid=""
 
 if [ -z "$sourceDir" ] || [ ! -d "$sourceDir" ]; then
 	echo "No content to import."
@@ -84,28 +81,6 @@ importDirectory() {
 	return $result
 }
 
-# The creation of a wiki is a process of the ProcessManager. It is usually executed by the ProcessRunner of the
-# task container, which may not be running at installation time. So we run our own one while we create wikis.
-# Several runners can share the queue, each process is claimed by one of them.
-startProcessRunner() {
-	if [ -n "$processRunnerPid" ]; then
-		return
-	fi
-	echo "Starting a ProcessRunner for the creation of wikis"
-	php "$processRunnerScript" "$appDir/maintenance/Maintenance.php" --wait \
-		> >( while IFS= read -r line; do echo "[ProcessRunner] $line"; done ) 2>&1 &
-	processRunnerPid=$!
-	trap stopProcessRunner EXIT
-}
-
-stopProcessRunner() {
-	if [ -n "$processRunnerPid" ]; then
-		kill "$processRunnerPid" 2>/dev/null
-		wait "$processRunnerPid" 2>/dev/null
-		processRunnerPid=""
-	fi
-}
-
 wikiExists() {
 	run-maintenance BlueSpiceWikiFarm:ListInstances 2>/dev/null | grep -qxF "> $1"
 }
@@ -128,8 +103,8 @@ createWiki() {
 	fi
 
 	echo "Creating wiki '$path' (name: '$sitename', language: '${lang:-default}')"
-	startProcessRunner
-	run-maintenance BlueSpiceWikiFarm:CreateInstance "${args[@]}"
+	# `--sync` executes the creation steps directly, it does not need a ProcessRunner (e.g. at installation time)
+	run-maintenance BlueSpiceWikiFarm:CreateInstance --sync "${args[@]}"
 }
 
 provisionWiki() {
@@ -169,7 +144,6 @@ if [ -d "$sourceDir/wikis" ]; then
 				provisionWiki "${wikiDir%/}"
 			fi
 		done
-		stopProcessRunner
 	fi
 fi
 

@@ -240,7 +240,7 @@ The same layout applies to the main wiki (top level) and to each wiki in `wikis/
 
 Files are imported before pages. `SITENAME`, `DESC` and `LANG` are plain text files, surrounding whitespace is ignored.
 
-Wikis that do not exist yet are created with `BlueSpiceWikiFarm:CreateInstance`, with the initial admin (`WIKI_INITIAL_ADMIN_USER`) as administrator, and get their own search index. Existing wikis (e.g. the system wiki `-shared`) only get the pages and files. As the creation of a wiki is a process of the ProcessManager, `import-contents` runs its own ProcessRunner while it creates wikis, because the task container may not run yet at installation time.
+Wikis that do not exist yet are created with `BlueSpiceWikiFarm:CreateInstance`, with the initial admin (`WIKI_INITIAL_ADMIN_USER`) as administrator, and get their own search index. Existing wikis (e.g. the system wiki `-shared`) only get the pages and files. The creation runs directly (`--sync`), without the process queue, so it does not depend on the ProcessRunner of the task container. A failed creation is rolled back.
 
 A failure of one wiki is reported, the remaining wikis are processed anyway. Errors of the import do not fail the installation, as the wiki itself is already installed at that point.
 
