@@ -43,6 +43,7 @@ keys=(
 	INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE
 	INTERNAL_ENABLE_FARM_SHARED_RESOURCES
 	INTERNAL_FARM_INSTANCE_LIMIT
+	INTERNAL_USER_LIMIT
 	INTERNAL_BOOTSTRAPER
 )
 declare -A values=(
@@ -58,6 +59,9 @@ declare -A values=(
 	# Maximum number of farm instances (sub-wikis). Empty or 0 means unlimited.
 	# Usually set by a build arg, e.g. `--build-arg INTERNAL_FARM_INSTANCE_LIMIT=30`
 	[INTERNAL_FARM_INSTANCE_LIMIT]=
+	# Fixed maximum number of active users (BlueSpiceDistributionConnector), e.g. for GLACIER.
+	# Empty or 0 means no fixed limit, the limit is then derived from the subscription key (e.g. SKY, SAPPHIRE).
+	[INTERNAL_USER_LIMIT]=
 	[INTERNAL_BOOTSTRAPER]=/app/conf/StandardBootstrapper.php
 )
 
@@ -188,6 +192,10 @@ for key in "${keys[@]}"; do
 	fi
 	if [[ "$key" == INTERNAL_FARM_INSTANCE_LIMIT && ! "$value" =~ ^[0-9]*$ ]]; then
 		echo "ERROR: $key must be a non-negative number or empty (unlimited), got '$value'" >&2
+		exit 1
+	fi
+	if [[ "$key" == INTERNAL_USER_LIMIT && ! "$value" =~ ^[0-9]*$ ]]; then
+		echo "ERROR: $key must be a non-negative number or empty (limit of the subscription key), got '$value'" >&2
 		exit 1
 	fi
 done
