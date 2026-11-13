@@ -174,7 +174,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `WIKI_PROXY`                 | `null`         | IP address(es) of proxy server. Will fall back to `proxy` service of `bluespice-deploy` | Yes      |
 | `WIKI_SERVICE_TOKEN_AUTH_ALLOWED` | `null`    | CIDR range allowed to use service token authentication   | Yes      |
 | `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
-| `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
+| `WIKI_SUBSCRIPTION_KEY`      | `null`         | Sets the user limit of the PRO, SKY and SAPPHIRE editions. Overrides in-app config. GLACIER has a fixed limit of 10 users | Yes      |
 | `WIRE_HOST`                  | `wire`         | Hostname of a `bluespice/wire` compatible service    | Yes      |
 | `WIRE_PORT`                  | `3333`         | Port of a `bluespice/wire` compatible service        | Yes      |
 | `WIRE_PROTOCOL`              | `http`         | Protocol of a `bluespice/wire` compatible service    | Yes      |

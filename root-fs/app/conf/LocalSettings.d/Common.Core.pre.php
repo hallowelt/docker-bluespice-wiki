@@ -55,7 +55,7 @@ if ( getenv('WIKI_PROXY') ) {
 	} );
 }
 if ( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) {
-	$GLOBALS['bsgOverrideLicenseKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
+	$GLOBALS['bsgOverrideSubscriptionKey'] = trim( getenv( 'WIKI_SUBSCRIPTION_KEY' ) ) ;
 }
 
 $GLOBALS['wgPdfProcessor'] = '/usr/bin/gs';
