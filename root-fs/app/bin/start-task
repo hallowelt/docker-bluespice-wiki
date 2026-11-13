@@ -34,22 +34,74 @@ substitutePlaceholders /app/conf/90-bluespice-overrides.ini
 echo ""
 echo "#############################################"
 
-if [[ ($1 == "--runAll") ]]; then
-	echo "🏇 Starting TaskRunner"
-fi
+# Modes
+# - `--all` (or `--runAll`): Updates, job runner and process runner. Exactly one instance per stack
+# - `--jobrunner`: Only the job runner, waits for the updates of the `--all` instance. Can be scaled horizontally
+#   (requires the shared job queue)
+# - `--processrunner`: Only the process runner, waits for the updates of the `--all` instance. Must not be scaled
+#   horizontally yet, see https://github.com/hallowelt/mwstake-mediawiki-component-processmanager/issues/23
+# - `--runJobs` (deprecated): Updates and job runner
+# - `--runProcessRunner` (deprecated): Only the process runner
+runUpdates=false
+waitForUpdates=false
+runJobRunner=false
+runProcessRunner=false
+case "${1:-}" in
+	--all|--runAll)
+		echo "🏇 Starting TaskRunner"
+		runUpdates=true
+		runJobRunner=true
+		runProcessRunner=true
+		;;
+	--jobrunner)
+		echo "🏇 Starting TaskRunner (job runner only)"
+		if [[ "${PARALLEL_RUNJOBS_SERVICE_QUEUE}" != "redis" ]]; then
+			echo "⚠️  WARNING: Without the shared job queue, multiple job runners will process the same instances" >&2
+		fi
+		waitForUpdates=true
+		runJobRunner=true
+		;;
+	--processrunner)
+		echo "🏇 Starting TaskRunner (process runner only)"
+		echo "⚠️  WARNING: Multiple process runners may execute the same process, see" \
+			"https://github.com/hallowelt/mwstake-mediawiki-component-processmanager/issues/23" >&2
+		waitForUpdates=true
+		runProcessRunner=true
+		;;
+	--runJobs)
+		runUpdates=true
+		runJobRunner=true
+		;;
+	--runProcessRunner)
+		runProcessRunner=true
+		;;
+	*)
+		echo "ERROR: Unknown mode '${1:-}', use one of --all, --jobrunner, --processrunner" >&2
+		exit 1
+		;;
+esac
 
 echo "" > /tmp/healthcheck
-if [[ ($1 == "--runJobs" ) || ( "$1" == "--runAll" ) ]]; then
+if [[ "$runUpdates" == "true" ]]; then
 	echo "Starting update"
 	date > /data/maintenance
 	run-updates
 	rm /data/maintenance
-
+fi
+if [[ "$waitForUpdates" == "true" ]]; then
+	# The `--all` instance writes the version after all updates succeeded
+	version=$(cat /app/bluespice/w/BLUESPICE-VERSION)
+	until [[ "$(cat /data/bluespice/logs/baseversion 2>/dev/null)" == "$version" && ! -f /data/maintenance ]]; do
+		echo "Waiting for the updates to version $version"
+		sleep 10
+	done
+fi
+if [[ "$runJobRunner" == "true" ]]; then
 	echo "Starting runJobs"
 	echo "parallel-runJobsService" >> /tmp/healthcheck
 	/app/bin/parallel-runJobsService > /proc/1/fd/1 2>&1 &
 fi
-if [[ ( $1 == "--runProcessRunner" ) || ( "$1" == "--runAll" ) ]]; then
+if [[ "$runProcessRunner" == "true" ]]; then
 	echo "Starting ProcessRunner"
 	echo "parallel-processRunner" >> /tmp/healthcheck
 	/app/bin/parallel-processRunner > /proc/1/fd/1 2>&1 &
