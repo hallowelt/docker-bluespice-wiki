@@ -93,9 +93,9 @@ ENV UID=1002
 ARG USER
 ENV USER=bluespice
 ENV PATH="/app/bin:${PATH}"
-ARG GID=0
+ARG GID=1002
 ENV GID=$GID
-ARG GROUPNAME=root
+ARG GROUPNAME=bluespice
 ENV GROUPNAME=$GROUPNAME
 
 RUN grep -q "^${GROUPNAME}:" /etc/group || addgroup -g ${GID} ${GROUPNAME} \
