@@ -123,6 +123,7 @@ COPY --chown=$USER:$GROUPNAME --from=builder --chmod=775 /build/parallel-runjobs
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
 COPY ./root-fs/etc/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./root-fs/var/www/html /var/www/html
 
 ENV BASH_ENV=/app/.env
 
