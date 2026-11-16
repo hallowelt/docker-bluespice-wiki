@@ -35,6 +35,7 @@ fi
 echo ""
 echo "#############################################"
 echo "🌐 Starting WebFrontend"
+echo "URL: ${WIKI_PROTOCOL}://${WIKI_HOST}:${WIKI_PORT}${WIKI_BASE_PATH}"
 
 echo "" > /tmp/healthcheck
 echo "php-fpm" >> /tmp/healthcheck # Process name is `php-fpm`, not `php-fpm8.5`
