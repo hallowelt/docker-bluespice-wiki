@@ -5,10 +5,6 @@ ENV SIMPLESAMLPHP_VERSION=2.5.3.1
 ENV SIMPLESAMLPHP_URL=https://github.com/simplesamlphp/simplesamlphp/releases/download/v${SIMPLESAMLPHP_VERSION}/simplesamlphp-${SIMPLESAMLPHP_VERSION}-slim.tar.gz
 ENV SIMPLESAMLPHP_SHA256=38d81fc60f358b46a58df38617b02f97f57793dcbf8e491c1abcedb6706ffe3c
 
-# HINT: This version is valid for 5.1 and 5.2; Later versions don't use this tool anymore. For the sake of reproducable builds, we hardcode the version here and adapt manually on demand
-ENV MATHOIDREMOTE_URL=https://raw.githubusercontent.com/hallowelt/docker-bluespice-formula/80786798646fe1bb105db2228a07c86f546d9f56/_client/mathoid-remote
-ENV MATHOIDREMOTE_SHA256=9a562346e8fcc662f2d4b1c2a674c23862782365807d30de317a1fe77affc36a
-
 ENV PARALLELRUNJOBSSERVICE_URL=https://github.com/hallowelt/misc-parallel-runjobs-service/releases/download/2.1.4/parallel-runjobs-service
 ENV PARALLELRUNJOBSSERVICE_SHA256=f918273335bd0161cc18379634ed5220be31277161d9b405129bcdd0b469e38c
 
@@ -17,7 +13,6 @@ ARG BLUESPICE_URL=https://github.com/BlueSpice-Wiki/bluespice-free-release.git
 
 WORKDIR /build
 ADD --checksum=sha256:${SIMPLESAMLPHP_SHA256} ${SIMPLESAMLPHP_URL} /build/simplesamlphp.tar.gz
-ADD --checksum=sha256:${MATHOIDREMOTE_SHA256} ${MATHOIDREMOTE_URL} /build/mathoid-remote
 ADD --checksum=sha256:${PARALLELRUNJOBSSERVICE_SHA256} ${PARALLELRUNJOBSSERVICE_URL} /build/parallel-runjobs-service
 # HINT: Based on the type of URL, this can already be a tarball ( "Release-URL" ) or a git repository checkout ( "pre-release"/"custom-edition" )
 ADD ${BLUESPICE_URL}#${BLUESPICE_VERSION} /build/bluespice
@@ -118,7 +113,6 @@ COPY --chown=$USER:$GROUPNAME --chmod=775 ./root-fs/app/bin /app/bin
 COPY --chown=$USER:$GROUPNAME --chmod=666 ./root-fs/app/bin/config /app/bin/config
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/conf /app/conf
 COPY --chown=$USER:$GROUPNAME ./root-fs/app/simplesamlphp/ /app/simplesamlphp
-COPY --chown=$USER:$GROUPNAME --from=builder --chmod=775 /build/mathoid-remote /app/bin
 COPY --chown=$USER:$GROUPNAME --from=builder --chmod=775 /build/parallel-runjobs-service /app/bin
 COPY ./root-fs/etc/php/8.x/fpm/php-fpm.conf /etc/php$VERSION
 COPY ./root-fs/etc/php/8.x/fpm/pool.d/www.conf /etc/php$VERSION/php-fpm.d/
