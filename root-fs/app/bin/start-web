@@ -28,8 +28,8 @@ fi
 substitutePlaceholders /app/conf/nginx_bluespice
 
 if [[ "${WIKI_BASE_PATH:-/}" != "/" ]]; then
-	mkdir -p /app/bluespice${WIKI_BASE_PATH}
-	ln -sf /app/bluespice/w /app/bluespice${WIKI_BASE_PATH}w
+	mkdir -p "/app/bluespice${WIKI_BASE_PATH}"
+	ln -sf /app/bluespice/w "/app/bluespice${WIKI_BASE_PATH}w"
 fi
 
 echo ""
@@ -40,4 +40,38 @@ echo "" > /tmp/healthcheck
 echo "php-fpm" >> /tmp/healthcheck # Process name is `php-fpm`, not `php-fpm8.4`
 echo "nginx" >> /tmp/healthcheck
 
-php-fpm -D && nginx -g "daemon off;"
+is_alive() {
+  local s
+  { s=$(< "/proc/$1/stat"); } 2>/dev/null || return
+  s=${s##) }
+  [[ ${s:0:1} != Z ]] && return
+  # reap zombie if we're init
+  [[ $$ == 1 ]] && wait
+  return 1
+}
+
+signal() { kill 2>/dev/null -s "$@" || :; }
+
+graceful() {
+  local pid i
+  echo "Starting graceful shutdown"
+  nginx -s quit || :
+  pid=$(< /run/php/php-fpm.pid) || return 0
+  for ((i=0; i<15; i++)); do
+    is_alive "$pid" || break
+    (( i == 0 )) && signal QUIT "$pid"
+    sleep 1
+  done
+  (( i == 15 )) && { signal TERM "$pid"; wait; }
+  echo "Graceful shutdown complete"
+  exit
+}
+
+# handle TERM signal
+trap graceful TERM
+
+{
+  php-fpm -D && nginx -g "daemon off;" &
+  wait
+  exit
+}

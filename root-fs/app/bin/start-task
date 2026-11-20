@@ -60,4 +60,19 @@ fi
 
 echo "ready" > /tmp/state
 
-sleep inf
+graceful() {
+  echo "Starting graceful shutdown"
+  kill $(jobs -p)
+  wait
+  echo "Graceful shutdown complete"
+  exit
+}
+
+# handle TERM signal
+trap graceful TERM
+
+{
+  sleep inf &
+  wait
+  exit
+}
