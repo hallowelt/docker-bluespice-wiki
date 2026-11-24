@@ -18,6 +18,10 @@ $GLOBALS['wgDBname'] = trim( getenv( 'DB_NAME' ) );
 $GLOBALS['wgDBuser'] = trim( getenv( 'DB_USER' ) );
 $GLOBALS['wgDBpassword'] = trim(  getenv( 'DB_PASS' ) );
 $GLOBALS['wgDBprefix'] = trim(  getenv( 'DB_PREFIX' ) );
+if ( $GLOBALS['wgDBtype'] === 'postgres' ) {
+	// Keep in sync with `--dbschema` of `run-installation.d/020-install-database`
+	$GLOBALS['wgDBmwschema'] = trim( getenv( 'DB_SCHEMA' ) ) ?: 'mediawiki';
+}
 $GLOBALS['wgDBTableOptions'] = "ENGINE=InnoDB, DEFAULT CHARSET=binary";
 $GLOBALS['wgMessageCacheType'] = CACHE_ACCEL;
 $GLOBALS['wgLocalisationCacheConf']['store'] = 'files';

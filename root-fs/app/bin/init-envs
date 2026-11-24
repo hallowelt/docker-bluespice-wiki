@@ -24,6 +24,9 @@ export DB_NAME=${DB_NAME:-bluespice}
 export DB_PREFIX=${DB_PREFIX:-}
 export DB_ROOT_PASS=${DB_ROOT_PASS:-}
 export DB_ROOT_USER=${DB_ROOT_USER:-}
+# Schema of the MediaWiki tables, only used with DB_TYPE=postgres
+export DB_SCHEMA=${DB_SCHEMA:-mediawiki}
+# `mysql` or `postgres`
 export DB_TYPE=${DB_TYPE:-mysql}
 export DB_USER=${DB_USER:-bluespice}
 

@@ -1,8 +1,10 @@
 #!/bin/php
 <?php
 
+$dbType = getenv('DB_TYPE') ?: 'mysql';
 $dbHost = getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
+$dbPass = getenv('DB_PASS');
 $dbName = getenv('DB_NAME');
 $dbNamePrefix = getenv('WIKI_FARM_DB_PREFIX');
 // Attention: In contrast to the `install-database` script, we must not fall
@@ -16,18 +18,28 @@ if ( !$dbRootUser || !$dbRootPass ) {
 }
 
 echo "#############################################\n";
-echo "Initializing database '$dbName' on $dbHost ... \n";
+echo "Initializing $dbType database '$dbName' on $dbHost ... \n";
 
 try {
-	$pdo = new PDO(
-		"mysql:host=$dbHost",
-		$dbRootUser,
-		$dbRootPass
-	);
-	$pdo->setAttribute(
-		PDO::ATTR_ERRMODE,
-		PDO::ERRMODE_EXCEPTION
-	);
+	if ( $dbType === 'postgres' ) {
+		initPostgres( $dbHost, $dbName, $dbUser, $dbPass, $dbRootUser, $dbRootPass );
+	} else {
+		initMySQL( $dbHost, $dbName, $dbNamePrefix, $dbUser, $dbRootUser, $dbRootPass );
+	}
+	echo "OK\n";
+	exit( 0 );
+} catch ( PDOException $e ) {
+	$message = $e->getMessage();
+	echo "FAILED\n$message\n";
+	echo "User: $dbRootUser\n";
+	echo "Pass: " . substr( $dbRootPass, 0, 1 ) . "..." . substr( $dbRootPass, -1 ) . "\n";
+	echo "Host: $dbHost\n";
+	exit( 2 );
+}
+
+function initMySQL( $dbHost, $dbName, $dbNamePrefix, $dbUser, $dbRootUser, $dbRootPass ) {
+	$pdo = new PDO( "mysql:host=$dbHost", $dbRootUser, $dbRootPass );
+	$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 
 	# Create the database
 	$pdo->exec( "CREATE DATABASE IF NOT EXISTS `$dbName`" );
@@ -38,14 +50,32 @@ try {
 		$pdo->exec( "GRANT ALL PRIVILEGES ON `$dbNamePrefix%`.* TO `$dbUser`@`%`" );
 	}
 	$pdo->exec( "FLUSH PRIVILEGES" );
+}
 
-	echo "OK\n";
-	exit( 0 );
-} catch ( PDOException $e ) {
-	$message = $e->getMessage();
-	echo "FAILED\n$message\n";
-	echo "User: $dbRootUser\n";
-	echo "Pass: " . substr( $dbRootPass, 0, 1 ) . "..." . substr( $dbRootPass, -1 ) . "\n";
-	echo "Host: $dbHost\n";
-	exit( 2 );
+/**
+ * In contrast to MySQL, the PostgreSQL image only creates the superuser (`DB_ROOT_USER`).
+ * The wiki user and its database are created here. Wildcard grants (farm instance databases
+ * with `WIKI_FARM_DB_PREFIX`) do not exist in PostgreSQL. Farm instance databases are
+ * created by the farm with the root credentials.
+ */
+function initPostgres( $dbHost, $dbName, $dbUser, $dbPass, $dbRootUser, $dbRootPass ) {
+	$pdo = new PDO( "pgsql:host=$dbHost;dbname=postgres", $dbRootUser, $dbRootPass );
+	$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+	$quotedUser = '"' . str_replace( '"', '""', $dbUser ) . '"';
+	$quotedName = '"' . str_replace( '"', '""', $dbName ) . '"';
+
+	if ( $dbUser !== $dbRootUser ) {
+		$stmt = $pdo->prepare( 'SELECT 1 FROM pg_roles WHERE rolname = ?' );
+		$stmt->execute( [ $dbUser ] );
+		$verb = $stmt->fetchColumn() ? 'ALTER' : 'CREATE';
+		$pdo->exec( "$verb ROLE $quotedUser WITH LOGIN PASSWORD " . $pdo->quote( $dbPass ) );
+	}
+
+	$stmt = $pdo->prepare( 'SELECT 1 FROM pg_database WHERE datname = ?' );
+	$stmt->execute( [ $dbName ] );
+	if ( !$stmt->fetchColumn() ) {
+		$pdo->exec( "CREATE DATABASE $quotedName OWNER $quotedUser ENCODING 'UTF8' TEMPLATE template0" );
+	}
+	$pdo->exec( "ALTER DATABASE $quotedName OWNER TO $quotedUser" );
+	$pdo->exec( "GRANT ALL PRIVILEGES ON DATABASE $quotedName TO $quotedUser" );
 }

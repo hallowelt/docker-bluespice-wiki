@@ -103,7 +103,8 @@ $wgSomething = 'value';                     // Silently ignored!
 | `DB_PREFIX`                  | `''`           | Database prefix **)                                  | Yes      |
 | `DB_ROOT_PASS`               | ``             | Database root password **)                           | Yes      |
 | `DB_ROOT_USER`               | `root`         | Database root user                                   | Yes      |
-| `DB_TYPE`                    | `mysql`        | Database type                                        | Yes      |
+| `DB_SCHEMA`                  | `mediawiki`    | Schema of the MediaWiki tables (`postgres` only)     | Yes      |
+| `DB_TYPE`                    | `mysql`        | Database type: `mysql` or `postgres`                 | Yes      |
 | `DB_USER`                    | `bluespice`    | Database user                                        | Yes      |
 | `DEV_WIKI_DEBUG`             | `null`         | Enable debug mode                                    | Yes      |
 | `DEV_WIKI_DEBUG_LOGCHANNELS` | `null`         | Debug log channels, comma separated                  | Yes      |
