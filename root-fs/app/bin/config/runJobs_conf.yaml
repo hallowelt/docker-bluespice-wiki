@@ -10,8 +10,11 @@ redis:
     host: "###JOBQUEUE_HOST|jobqueue###"
     port: ###JOBQUEUE_PORT|6379###
 database:
+    # `mysql` or `postgres`. The port defaults to the standard port of the type
+    dbtype: "###DB_TYPE|mysql###"
     dbserver: "###DB_HOST###"
-    dbport: 3306
+    # `postgres` only (`$wgDBmwschema`)
+    dbschema: "###DB_SCHEMA|mediawiki###"
     dbname: "###DB_NAME###"
     dbuser: "###DB_USER###"
     dbpassword: "###DB_PASS###"
