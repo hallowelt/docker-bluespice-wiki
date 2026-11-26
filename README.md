@@ -50,6 +50,7 @@ The build fails if the selected edition is not available, if a value is invalid 
 | `INTERNAL_ENABLE_FARM_SHARED_JOBQUEUE`     | `false`                              | Disable only | Redis/Valkey job queue. Requires `JOBQUEUE_HOST` |
 | `INTERNAL_ENABLE_FARM_SHARED_RESOURCES`    | `false`                              | No      | Shared resources wiki (`-shared`) for templates, files, etc. of all farm instances |
 | `INTERNAL_FARM_INSTANCE_LIMIT`             | `''`                                 | No      | Maximum number of farm instances (sub-wikis). Empty or `0` means unlimited. Not bound to an edition, set it by build arg, e.g. `--build-arg INTERNAL_FARM_INSTANCE_LIMIT=30` |
+| `INTERNAL_USER_LIMIT`                      | `''`                                 | No      | Fixed maximum number of active users, e.g. `10` for GLACIER. Replaces the limit of `WIKI_SUBSCRIPTION_KEY`. Empty or `0` means the limit is derived from the subscription key (e.g. SKY, SAPPHIRE) |
 | `INTERNAL_BOOTSTRAPER`                     | `/app/conf/StandardBootstrapper.php` | No      | Bootstrapper of the codebase. Farms use `/app/bluespice/w/extensions/BlueSpiceWikiFarm/WikiFarm.setup.php`, which includes the Standard Bootstrapper through `$wgWikiFarmConfig_LocalSettingsAppendPath` |
 
 `INTERNAL_ENABLE_FARM_*` flags only have an effect if `INTERNAL_ENABLE_FARM=true`.
@@ -118,9 +119,6 @@ $wgSomething = 'value';                     // Silently ignored!
 | `FILESTORE_PROTOCOL`       | `http`             | Protocol of a `bluespice/filestore` compatible service   | Yes      |
 | `FILESTORE_REGION`         | `eu-north-1`        | AWS region for `bluespice/filestore` compatible service  | Yes      |
 | `FILESTORE_TOKEN`          | `''`               | Security token for `bluespice/filestore` compatible service | Yes   |
-| `FORMULA_HOST`               | `formula`      | Hostname of a `bluespice/formula` compatible service | Yes      |
-| `FORMULA_PORT`               | `10044`        | Port of a `bluespice/formula` compatible service     | Yes      |
-| `FORMULA_PROTOCOL`           | `http`         | Protocol of a `bluespice/formula` compatible service | Yes      |
 | `INTERNAL_CHAT_TOKEN`        | `null`         | Internal service token for `bluespice/chat`              | No, if `CHAT_HOST` is set |
 | `INTERNAL_CHAT_WIKI_API_KEY` | `null`     | Service token (`ApiKey`) of `bluespice/chat` for the wiki APIs | No, if `CHAT_HOST` is set |
 | `INTERNAL_SIMPLESAMLPHP_SESSION_API_TOKEN`| `null`         | Token for SAML session API endpoint. Auto-generated during installation | No      |
@@ -162,6 +160,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `WIKI_HOST`                  | `localhost`    | Host for the wiki                                    | Yes      |
 | `WIKI_INITIAL_ADMIN_PASS`    | `null`         | Initial admin password. Uses random, if not set      | Yes      |
 | `WIKI_INITIAL_ADMIN_USER`    | `Admin`        | Admin user name use during initial installation      | Yes      |
+| `WIKI_JWT_PRIVATE_KEY_FILE`  | `/data/bluespice/jwt_private.key` | Path to the RSA private key for signing JWTs (e.g. Extension:WOPI) | Yes |
 | `WIKI_LANG`                  | `en`           | Language code for the wiki                           | Yes      |
 | `WIKI_LOG_LEVEL`             | `error`        | Set php and Nginx log level (error/warn/debug)       | Yes      |
 | `WIKI_NAME`                  | `BlueSpice`    | Name of the wiki                                         | Yes      |
@@ -173,7 +172,7 @@ $wgSomething = 'value';                     // Silently ignored!
 | `WIKI_PROXY`                 | `null`         | IP address(es) of proxy server. Will fall back to `proxy` service of `bluespice-deploy` | Yes      |
 | `WIKI_SERVICE_TOKEN_AUTH_ALLOWED` | `null`    | CIDR range allowed to use service token authentication   | Yes      |
 | `WIKI_STATUSCHECK_ALLOWED`   | `null`         | IP or CIDR range for status check REST endpoint      | Yes      |
-| `WIKI_SUBSCRIPTION_KEY`      | `null`         | Only used by PRO edition. Overrides in-app config    | Yes      |
+| `WIKI_SUBSCRIPTION_KEY`      | `null`         | Sets the user limit of the PRO, SKY and SAPPHIRE editions. Overrides in-app config. GLACIER has a fixed limit of 10 users | Yes      |
 | `WIRE_HOST`                  | `wire`         | Hostname of a `bluespice/wire` compatible service    | Yes      |
 | `WIRE_PORT`                  | `3333`         | Port of a `bluespice/wire` compatible service        | Yes      |
 | `WIRE_PROTOCOL`              | `http`         | Protocol of a `bluespice/wire` compatible service    | Yes      |
@@ -202,6 +201,7 @@ The main directory for application data is `/data/`. The setup routine will crea
 │   │   ├── postupdate
 │   │   └── baseversion          -> Stores the application version at the last container start. Used to determine if update scripts need to run.
 │   │
+│   ├── jwt_private.key          -> Automatically created during installation. Used to sign JWTs (e.g. Extension:WOPI)
 │   ├── oauth_private.key        -> Automatically created during installation. Used by Extension:OAuth
 │   ├── oauth_public.key         -> Automatically created during installation. Used by Extension:OAuth
 │   │
@@ -222,17 +222,49 @@ The main directory for application data is `/data/`. The setup routine will crea
 ```
 
 ## Custom content import
-If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki.
+If the directory `/data/bluespice/content-install` exists during installation, the content found in there will be imported into the wiki (`/app/bin/import-contents`, called by `run-installation.d/055-import-contents`). In a farm, it can also create wikis (farm instances) and import content into them.
+
+The same layout applies to the main wiki (top level) and to each wiki in `wikis/<path>/`:
+
+| Path            | Description |
+|-----------------|-------------|
+| `pages*.xml`    | Pages (MediaWiki XML export), imported with `importDump` in alphabetical order of the file names. XML files without the prefix `files` or `pages` are also imported as pages, for b/c |
+| `files*.xml`    | Files with their versions, imported with `BlueSpiceDistributionConnector:importFiles` in alphabetical order of the file names. The paths in the XML (`<data>`) are relative to the XML file |
+| `_files/`       | Files without versions, imported with `importImages`. Only if there is no `files*.xml`, as the folders then hold the data of the XML. `files/` and `images/` are also supported for b/c, the latter for results of "migrate-confluence" |
+| `wikis/`        | Farm only: One directory per wiki, named like the path of the wiki. Ignored with a warning if the wiki is not a farm |
+| `wikis/<path>/SITENAME` | Optional: Name of the wiki. Default: `<path>` |
+| `wikis/<path>/DESC`     | Optional: Description of the wiki |
+| `wikis/<path>/LANG`     | Optional: Content language of the wiki, e.g. `de`. Default: Language of the farm |
+
+Files are imported before pages. `SITENAME`, `DESC` and `LANG` are plain text files, surrounding whitespace is ignored.
+
+Wikis that do not exist yet are created with `BlueSpiceWikiFarm:CreateInstance`, with the initial admin (`WIKI_INITIAL_ADMIN_USER`) as administrator, and get their own search index. Existing wikis (e.g. the system wiki `-shared`) only get the pages and files. The creation runs directly (`--sync`), without the process queue, so it does not depend on the ProcessRunner of the task container. A failed creation is rolled back.
+
+A failure of one wiki is reported, the remaining wikis are processed anyway. Errors of the import do not fail the installation, as the wiki itself is already installed at that point.
+
+`import-contents` can also be run manually in the container, e.g. `import-contents /data/bluespice/content-install`.
 
 Example:
 
 ```
 /data/bluespice/content-install
 ├── files
-│   ├── HappyGnu.jpg
-│   └── Desiderata.pdf
-├── 01-templates.xml
-└── 02-pages.xml
+│   └── …                           (data of the files XML)
+├── files-01-migration.xml
+├── files-02-knowledgebase.xml
+├── pages-01-templates.xml
+├── pages-02-blogs.xml
+├── pages-03-knowledgebase.xml
+└── wikis
+    ├── PD
+    │   ├── _files
+    │   │   └── Roadmap.png
+    │   ├── pages.xml
+    │   ├── SITENAME     (content: "Product Development")
+    │   ├── DESC         (content: "Specifications and roadmaps of the product team")
+    │   └── LANG         (content: "de")
+    └── -shared
+        └── pages-templates.xml
 ```
 
 ## Custom SSL certificates

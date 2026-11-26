@@ -8,6 +8,7 @@ $GLOBALS['wgHooks']['SetupAfterCache'][] = static function () {
 	$wikiId = \MediaWiki\WikiMap\WikiMap::getCurrentWikiId();
 	$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-instances-public"] = $bucketName;
 	$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-archive-public"] = "$bucketName/_archive";
+	$GLOBALS['wgFileBackends']['s3']['containerPaths']["$wikiId-export-import"] = "$bucketName/_export_import";
 
 	/**
 	 * Extension:AWS adds the $wgAWSBucketTopSubdirectory to the Zone-URLs. While this technically works,

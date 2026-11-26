@@ -34,6 +34,15 @@ server {
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
+	# Internal redirects of `error_page` to the maintenance and error pages must neither be rewritten to MediaWiki
+	# nor run into `return 503` again. `break` skips all further server-level rewrite directives, including `if`.
+	rewrite ^/(maintenance|error)\.html$ $uri break;
+
+	# Must be checked before the rewrites below, as `rewrite ... last` skips all further server-level directives
+	if (-f /data/maintenance) {
+		return 503;
+	}
+
 	# NOT a no-op, do not remove. Server-level rewrites run BEFORE location
 	# matching, so without this line a /.well-known/* request never reaches
 	# the location above: it falls through to the farm catch-all
@@ -67,26 +76,25 @@ server {
 	rewrite ^###WIKI_BASE_PATH|/###([^/]*)/(.+)$ ###WIKI_BASE_PATH|/###w/$2 last;
 	rewrite ^###WIKI_BASE_PATH|/###([^/]+)/?$ ###WIKI_BASE_PATH|/###w/index.php?sfr=$1 last;
 
-	if (-f /data/maintenance) {
-		return 503;
-	}
-
 	error_page 503 /maintenance.html;
 	location = /maintenance.html {
 		root /var/www/html;
 		internal;
-		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-		add_header Pragma "no-cache";
-		add_header Expires "0";
+		# `always`, as `add_header` is otherwise ignored for error responses
+		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+		add_header Pragma "no-cache" always;
+		add_header Expires "0" always;
 	}
 
+	# Only errors of nginx itself (e.g. PHP-FPM not available). Error responses of MediaWiki are passed through,
+	# as they contain the request ID of the exception in the log (no `fastcgi_intercept_errors`)
 	error_page 500 502 504 505 /error.html;
-	location = /var/www/html {
-		root /var/www/error_pages;
+	location = /error.html {
+		root /var/www/html;
 		internal;
-		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0";
-		add_header Pragma "no-cache";
-		add_header Expires "0";
+		add_header Cache-Control "no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0" always;
+		add_header Pragma "no-cache" always;
+		add_header Expires "0" always;
 	}
 
 	location /w {
