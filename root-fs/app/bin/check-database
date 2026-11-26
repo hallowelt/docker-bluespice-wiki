@@ -1,29 +1,35 @@
 #!/bin/php
 <?php
 
+$dbType = getenv('DB_TYPE') ?: 'mysql';
 $dbHost = getenv('DB_HOST');
 $dbUser = getenv('DB_USER');
 $dbPass = getenv('DB_PASS');
 $dbName = getenv('DB_NAME');
+$dbSchema = getenv('DB_SCHEMA') ?: 'mediawiki';
 
 echo "\n";
 echo "#############################################\n";
-echo "Checking for database '$dbName' on $dbHost ... \n";
+echo "Checking for $dbType database '$dbName' on $dbHost ... \n";
 
 try {
-	$pdo = new PDO(
-		"mysql:host=$dbHost;dbname=$dbName",
-		$dbUser,
-		$dbPass
-	);
-	$pdo->setAttribute(
-		PDO::ATTR_ERRMODE,
-		PDO::ERRMODE_EXCEPTION
-	);
+	if ( $dbType === 'postgres' ) {
+		$pdo = new PDO( "pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass );
+		$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$stmt = $pdo->prepare(
+			'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = ?'
+		);
+		$stmt->execute( [ $dbSchema ] );
+	} else {
+		$pdo = new PDO( "mysql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass );
+		$pdo->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
+		$stmt = $pdo->query(
+			'SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE()'
+		);
+	}
 
 	# Check if the database is empty
-	$tables = $pdo->query( "SHOW TABLES" );
-	if ( $tables->rowCount() == 0 ) {
+	if ( (int)$stmt->fetchColumn() === 0 ) {
 		echo "FAILED\nDatabase is empty\n";
 		exit( 1 );
 	}
