@@ -24,6 +24,10 @@ $GLOBALS['wgLocalisationCacheConf']['store'] = 'files';
 $GLOBALS['wgLocalisationCacheConf']['storeDirectory'] = "/tmp/cache/l10n";
 $GLOBALS['wgEnableUploads'] = true;
 $GLOBALS['wgUploadPath'] = $GLOBALS['wgScriptPath'] . '/img_auth.php';
+// WebDAV: Token-less endpoint is "<WIKI_BASE_PATH>_webdav/", MS Office links use
+// "<WIKI_BASE_PATH>_webdav-<TOKEN>/" (see nginx_bluespice). Farm instances: `Farm.Base.post.php`
+$GLOBALS['wgWebDAVBaseUri'] = trim( getenv( 'WIKI_BASE_PATH' ) ) . '_webdav/';
+$GLOBALS['wgWebDAVAuthType'] = 'token';
 $GLOBALS['wgNativeImageLazyLoading'] = true;
 $GLOBALS['wgUseImageMagick'] = true;
 $GLOBALS['wgImageMagickConvertCommand'] = "/usr/bin/magick";
