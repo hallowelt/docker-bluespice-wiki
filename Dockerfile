@@ -151,6 +151,10 @@ RUN if [ -n "$EDITION" ]; then \
 	fi
 
 FROM bluespice-prepare AS bluespice-final
+# Build info: value of build arg BUILDINFO, `-` if not set
+ARG BUILDINFO
+RUN mkdir -p /image && echo "${BUILDINFO:--}" > /image/BUILDINFO
+
 WORKDIR /app
 USER bluespice
 EXPOSE 9090
