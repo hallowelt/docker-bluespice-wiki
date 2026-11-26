@@ -7,7 +7,7 @@ server {
 	listen 9090 default_server;
 	root /app/bluespice;
 	client_max_body_size ###MAX_UPLOAD_SIZE|1024m###;
-	access_log /proc/1/fd/1;
+	access_log /proc/1/fd/1 json_combined;
 	error_log /proc/1/fd/2 ###WIKI_LOG_LEVEL###;
 	server_tokens off;
 
@@ -61,10 +61,11 @@ server {
 	# rewrite phase, so the farm catch-all rules below do not mangle the URI and the WebDAV
 	# locations below get picked. The original URI must reach PHP unchanged as REQUEST_URI
 	# (fastcgi.conf passes $request_uri), as SabreDAV calculates the resource path from it.
-	#  - Token-in-BaseUri (MS Office): ###WIKI_BASE_PATH|/###[<instance>/]webdav-<TOKEN>/Media/File.docx
-	#  - Token-less (Basic Auth, network drives): ###WIKI_BASE_PATH|/###[<instance>/]webdav/...
-	rewrite ^(###WIKI_BASE_PATH|/###(?:[^/]+/)?webdav-[A-Za-z0-9]+(?:/.*)?)$ $1 last;
-	rewrite ^(###WIKI_BASE_PATH|/###(?:[^/]+/)?webdav(?:/.*)?)$ $1 last;
+	#  - Token-in-BaseUri (MS Office): ###WIKI_BASE_PATH|/###[<instance>/]_webdav-<TOKEN>/Media/File.docx
+	#  - Token-less (Basic Auth, network drives): ###WIKI_BASE_PATH|/###[<instance>/]_webdav/...
+	# The leading underscore avoids collisions with the paths of farm instances (like `_sp`)
+	rewrite ^(###WIKI_BASE_PATH|/###(?:[^/]+/)?_webdav-[A-Za-z0-9]+(?:/.*)?)$ $1 last;
+	rewrite ^(###WIKI_BASE_PATH|/###(?:[^/]+/)?_webdav(?:/.*)?)$ $1 last;
 	rewrite ^###WIKI_BASE_PATH|/######WIKI_ARTICLE_PATH|wiki###/(.*?).php/(.+)$ ###WIKI_BASE_PATH|/###w/$1.php?sfr=w&title=$2 last;
 	rewrite ^###WIKI_BASE_PATH|/######WIKI_ARTICLE_PATH|wiki###/(.+)$ ###WIKI_BASE_PATH|/###w/index.php?title=$1&sfr=w last;
 	rewrite ^###WIKI_BASE_PATH|/######WIKI_ARTICLE_PATH|wiki###/([^/]+)/?$ ###WIKI_BASE_PATH|/###w/index.php?title=$1&sfr=w last;
@@ -101,10 +102,10 @@ server {
 		deny all;
 	}
 
-	# WebDAV: Root wiki with token, e.g. /webdav-0123abcd/Media/File.docx
+	# WebDAV: Root wiki with token, e.g. /_webdav-0123abcd/Media/File.docx
 	# The token is passed as WEBDAV_TOKEN; the webdav.php entrypoint uses
-	# "/webdav-<TOKEN>/" as SabreDAV BaseUri, so MS Office keeps the token in all requests
-	location ~ ^###WIKI_BASE_PATH|/###webdav-(?<webdav_token>[A-Za-z0-9]+)(?:/.*)?$ {
+	# "/_webdav-<TOKEN>/" as SabreDAV BaseUri, so MS Office keeps the token in all requests
+	location ~ ^###WIKI_BASE_PATH|/###_webdav-(?<webdav_token>[A-Za-z0-9]+)(?:/.*)?$ {
 		include fastcgi.conf;
 		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
 		fastcgi_param SCRIPT_NAME ###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
@@ -113,8 +114,8 @@ server {
 		fastcgi_pass unix:/var/run/php/php-fpm.sock;
 	}
 
-	# WebDAV: Farm instance with token, e.g. /<instance>/webdav-0123abcd/Media/File.docx
-	location ~ ^###WIKI_BASE_PATH|/###(?<webdav_instance>[^/]+)/webdav-(?<webdav_token>[A-Za-z0-9]+)(?:/.*)?$ {
+	# WebDAV: Farm instance with token, e.g. /<instance>/_webdav-0123abcd/Media/File.docx
+	location ~ ^###WIKI_BASE_PATH|/###(?<webdav_instance>[^/]+)/_webdav-(?<webdav_token>[A-Za-z0-9]+)(?:/.*)?$ {
 		include fastcgi.conf;
 		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
 		fastcgi_param SCRIPT_NAME ###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
@@ -124,7 +125,7 @@ server {
 	}
 
 	# WebDAV: Root wiki without token (HTTP Basic Auth / session cookie)
-	location ~ ^###WIKI_BASE_PATH|/###webdav(?:/.*)?$ {
+	location ~ ^###WIKI_BASE_PATH|/###_webdav(?:/.*)?$ {
 		include fastcgi.conf;
 		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
 		fastcgi_param SCRIPT_NAME ###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
@@ -133,7 +134,7 @@ server {
 	}
 
 	# WebDAV: Farm instance without token
-	location ~ ^###WIKI_BASE_PATH|/###(?<webdav_instance>[^/]+)/webdav(?:/.*)?$ {
+	location ~ ^###WIKI_BASE_PATH|/###(?<webdav_instance>[^/]+)/_webdav(?:/.*)?$ {
 		include fastcgi.conf;
 		fastcgi_param SCRIPT_FILENAME $document_root###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
 		fastcgi_param SCRIPT_NAME ###WIKI_BASE_PATH|/###w/extensions/WebDAV/entrypoints/webdav.php;
